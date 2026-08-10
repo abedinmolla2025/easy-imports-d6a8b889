@@ -58,8 +58,9 @@ export const useQuranData = () => {
         } else {
           setError("Failed to fetch surahs");
         }
-      } catch (err) {
-        setError("Network error");
+      } catch (err: any) {
+        setError(`Network error: ${err.message}`);
+        console.error("Fetch surahs failed:", err);
       } finally {
         setLoading(false);
       }
@@ -100,8 +101,9 @@ export const useSurahDetail = (surahNumber: number, language: Language = "bengal
         if (translationJson.code === 200) {
           setTranslationData(translationJson.data);
         }
-      } catch (err) {
-        setError("Failed to load surah");
+      } catch (err: any) {
+        setError(`Failed to load surah: ${err.message}`);
+        console.error("Fetch surah detail failed:", err);
       } finally {
         setLoading(false);
       }
