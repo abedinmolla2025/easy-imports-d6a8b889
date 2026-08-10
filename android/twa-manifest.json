@@ -13,11 +13,11 @@
   "backgroundColor": "#0A1A14",
   "enableNotifications": true,
   "startUrl": "/",
-  "iconUrl": "/home/ubuntu/noorapp/icon.png",
-  "maskableIconUrl": "/home/ubuntu/noorapp/icon.png",
+  "iconUrl": "icon.png",
+  "maskableIconUrl": "icon.png",
   "splashScreenFadeOutDuration": 300,
   "signingKey": {
-    "path": "/home/ubuntu/noorapp/android.keystore",
+    "path": "android.keystore",
     "alias": "android"
   },
   "appVersionName": "2",
