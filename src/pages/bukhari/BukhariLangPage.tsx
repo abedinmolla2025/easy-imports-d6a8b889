@@ -353,7 +353,16 @@ export default function BukhariLangPage() {
 
   const kitabMap = useMemo(() => {
     const m = new Map<number, KitabInfo>();
-    if (kitabData) for (const k of kitabData) m.set(k.chapter_number, k);
+    if (kitabData) {
+      for (const k of kitabData) {
+        // Manual fix for Chapter 97 title if it's wrong in DB
+        if (k.chapter_number === 97 && (!k.title_bn || k.title_bn.includes("হারানো"))) {
+          m.set(97, { ...k, title: "Tawheed", title_bn: "তাওহীদ (আল্লাহর একত্ববাদ)" });
+        } else {
+          m.set(k.chapter_number, k);
+        }
+      }
+    }
     return m;
   }, [kitabData]);
 
@@ -453,7 +462,7 @@ export default function BukhariLangPage() {
     }
 
     return () => { cancelled = true; };
-  }, [cfg.source, cfg.file, cfg.field, cfg.dbField, t.error]);
+  }, [cfg.source, cfg.file, cfg.field, cfg.dbField, t.error, selectedChapter, activeTab]);
 
   // ── URL path params → state ────────────────────────────────
   useEffect(() => {
