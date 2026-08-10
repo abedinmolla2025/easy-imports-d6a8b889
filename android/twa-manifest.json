@@ -1,0 +1,51 @@
+{
+  "packageId": "in.noorapp.islamic",
+  "host": "noorapp.in",
+  "name": "NOORAPP-ISLAMIC",
+  "launcherName": "Noor",
+  "display": "standalone",
+  "themeColor": "#0D9F6E",
+  "themeColorDark": "#000000",
+  "navigationColor": "#000000",
+  "navigationColorDark": "#000000",
+  "navigationDividerColor": "#000000",
+  "navigationDividerColorDark": "#000000",
+  "backgroundColor": "#0A1A14",
+  "enableNotifications": true,
+  "startUrl": "/",
+  "iconUrl": "/home/ubuntu/noorapp/icon.png",
+  "maskableIconUrl": "/home/ubuntu/noorapp/icon.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "/home/ubuntu/noorapp/android.keystore",
+    "alias": "android"
+  },
+  "appVersionName": "2",
+  "appVersionCode": 2,
+  "shortcuts": [],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://noorapp.in/manifest.json",
+  "fallbackType": "customtabs",
+  "features": {
+    "locationDelegation": {
+      "enabled": true
+    }
+  },
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "fullScopeUrl": "https://noorapp.in/",
+  "minSdkVersion": 21,
+  "orientation": "portrait",
+  "fingerprints": [],
+  "additionalTrustedOrigins": [],
+  "retainedBundles": [],
+  "protocolHandlers": [],
+  "fileHandlers": [],
+  "launchHandlerClientMode": "",
+  "displayOverride": [],
+  "appVersion": "2"
+}
