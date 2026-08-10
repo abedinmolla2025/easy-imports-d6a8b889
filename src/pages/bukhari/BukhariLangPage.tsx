@@ -372,13 +372,18 @@ export default function BukhariLangPage() {
 
     const processHadiths = (mapped: Hadith[]) => {
       if (cancelled) return;
-      const chapMap = new Map<number, number>();
-      for (const h of mapped) chapMap.set(h.chapterId, (chapMap.get(h.chapterId) || 0) + 1);
-      const chapArr = Array.from(chapMap.entries())
-        .sort((a, b) => a[0] - b[0])
-        .map(([id, count]) => ({ id, count }));
       setAllHadiths(mapped);
-      setChapters(chapArr);
+      
+      // Only derive chapters from hadiths if we loaded the whole book
+      if (!selectedChapter) {
+        const chapMap = new Map<number, number>();
+        for (const h of mapped) chapMap.set(h.chapterId, (chapMap.get(h.chapterId) || 0) + 1);
+        const chapArr = Array.from(chapMap.entries())
+          .sort((a, b) => a[0] - b[0])
+          .map(([id, count]) => ({ id, count }));
+        setChapters(chapArr);
+      }
+      
       setLoading(false);
     };
 
