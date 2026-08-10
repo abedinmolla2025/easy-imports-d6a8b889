@@ -13,15 +13,15 @@ import TasbihPage from "./pages/TasbihPage";
 import DuaPage from "./pages/DuaPage";
 import DuaDetailPage from "./pages/dua/DuaDetailPage";
 import DuaCategoryPage from "./pages/dua/DuaCategoryPage";
-import QuranPage from "./pages/QuranPage";
+const QuranPage = React.lazy(() => import("./pages/QuranPage"));
 import NamesOfAllahPage from "./pages/NamesOfAllahPage";
 import PrayerTimesPage from "./pages/PrayerTimesPage";
 
-import BukhariLanguageSelectPage from "./pages/bukhari/BukhariLanguageSelectPage";
-import BukhariLangPage from "./pages/bukhari/BukhariLangPage";
-import HadithPage from "./pages/HadithPage";
-import HadithBookPlaceholder from "./pages/hadith/HadithBookPlaceholder";
-import HadithDetailPage from "./pages/hadith/HadithDetailPage";
+const BukhariLanguageSelectPage = React.lazy(() => import("./pages/bukhari/BukhariLanguageSelectPage"));
+const BukhariLangPage = React.lazy(() => import("./pages/bukhari/BukhariLangPage"));
+const HadithPage = React.lazy(() => import("./pages/HadithPage"));
+const HadithBookPlaceholder = React.lazy(() => import("./pages/hadith/HadithBookPlaceholder"));
+const HadithDetailPage = React.lazy(() => import("./pages/hadith/HadithDetailPage"));
 import IslamicCalendarPage from "./pages/IslamicCalendarPage";
 import SettingsPage from "./pages/SettingsPage";
 import NotificationsPage from "./pages/NotificationsPage";
@@ -30,30 +30,31 @@ import QuizPage from "./pages/QuizPage";
 import PrayerGuidePage from "./pages/PrayerGuidePage";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import TermsPage from "./pages/TermsPage";
-import AdminDashboard from "./pages/admin/AdminDashboard";
-import AdminUsers from "./pages/admin/AdminUsers";
-import AdminContent from "./pages/admin/AdminContent";
-import AdminContentWorkflowPage from "./pages/admin/AdminContentWorkflow";
-import AdminAuditPage from "./pages/admin/AdminAudit";
-import AdminMonetization from "./pages/admin/AdminMonetization";
-import AdminNotifications from "./pages/admin/AdminNotifications";
-import AdminNotificationsHistory from "./pages/admin/AdminNotificationsHistory";
-import AdminNotificationsDiagnostics from "./pages/admin/AdminNotificationsDiagnostics";
-import AdminOccasions from "./pages/admin/AdminOccasions";
-import AdminMedia from "./pages/admin/AdminMedia";
-import AdminAnalytics from "./pages/admin/AdminAnalytics";
-import AdminSettings from "./pages/admin/AdminSettings";
-import AdminSecurity from "./pages/admin/AdminSecurity";
-import AdminAds from "./pages/admin/AdminAds";
-import AdminLayoutControl from "./pages/admin/AdminLayoutControl";
-import AdminSeoPage from "./pages/admin/AdminSeo";
-import AdminPageBuilder from "./pages/admin/AdminPageBuilder";
-import AdminQuiz from "./pages/admin/AdminQuiz";
-import AdminSplashScreens from "./pages/admin/AdminSplashScreens";
-import AdminReports from "./pages/admin/AdminReports";
-import AdminFinance from "./pages/admin/AdminFinance";
-import AdminSchedulers from "./pages/admin/AdminSchedulers";
+const AdminDashboard = React.lazy(() => import("./pages/admin/AdminDashboard"));
+const AdminUsers = React.lazy(() => import("./pages/admin/AdminUsers"));
+const AdminContent = React.lazy(() => import("./pages/admin/AdminContent"));
+const AdminContentWorkflowPage = React.lazy(() => import("./pages/admin/AdminContentWorkflow"));
+const AdminAuditPage = React.lazy(() => import("./pages/admin/AdminAudit"));
+const AdminMonetization = React.lazy(() => import("./pages/admin/AdminMonetization"));
+const AdminNotifications = React.lazy(() => import("./pages/admin/AdminNotifications"));
+const AdminNotificationsHistory = React.lazy(() => import("./pages/admin/AdminNotificationsHistory"));
+const AdminNotificationsDiagnostics = React.lazy(() => import("./pages/admin/AdminNotificationsDiagnostics"));
+const AdminOccasions = React.lazy(() => import("./pages/admin/AdminOccasions"));
+const AdminMedia = React.lazy(() => import("./pages/admin/AdminMedia"));
+const AdminAnalytics = React.lazy(() => import("./pages/admin/AdminAnalytics"));
+const AdminSettings = React.lazy(() => import("./pages/admin/AdminSettings"));
+const AdminSecurity = React.lazy(() => import("./pages/admin/AdminSecurity"));
+const AdminAds = React.lazy(() => import("./pages/admin/AdminAds"));
+const AdminLayoutControl = React.lazy(() => import("./pages/admin/AdminLayoutControl"));
+const AdminSeoPage = React.lazy(() => import("./pages/admin/AdminSeo"));
+const AdminPageBuilder = React.lazy(() => import("./pages/admin/AdminPageBuilder"));
+const AdminQuiz = React.lazy(() => import("./pages/admin/AdminQuiz"));
+const AdminSplashScreens = React.lazy(() => import("./pages/admin/AdminSplashScreens"));
+const AdminReports = React.lazy(() => import("./pages/admin/AdminReports"));
+const AdminFinance = React.lazy(() => import("./pages/admin/AdminFinance"));
+const AdminSchedulers = React.lazy(() => import("./pages/admin/AdminSchedulers"));
 
+import React, { Suspense } from "react";
 import { AppSettingsProvider } from "./context/AppSettingsContext";
 import { AdminProvider } from "./contexts/AdminContext";
 import { AdminLayout } from "./components/admin/AdminLayout";
@@ -69,13 +70,19 @@ import ContactPage from "./pages/ContactPage";
 import IslamicAppPage from "./pages/IslamicAppPage";
 import SitemapPage from "./pages/SitemapPage";
 import DownloadPage from "./pages/DownloadPage";
-import StoriesPage from "./pages/StoriesPage";
-import StoryDetailPage from "./pages/StoryDetailPage";
-import StoryCategoryPage from "./pages/StoryCategoryPage";
+const StoriesPage = React.lazy(() => import("./pages/StoriesPage"));
+const StoryDetailPage = React.lazy(() => import("./pages/StoryDetailPage"));
+const StoryCategoryPage = React.lazy(() => import("./pages/StoryCategoryPage"));
 import DataSourcesPage from "./pages/DataSourcesPage";
 import CookieConsentBanner from "./components/CookieConsentBanner";
 
 const queryClient = new QueryClient();
+
+const LoadingFallback = () => (
+  <div className="min-h-screen flex items-center justify-center bg-[hsl(158,64%,18%)]">
+    <div className="text-white/70 text-sm">Loading...</div>
+  </div>
+);
 
 const AppRoutes = () => {
   usePageTracking();
@@ -83,6 +90,7 @@ const AppRoutes = () => {
   <>
     <SeoHead />
     <AnnouncementTicker />
+    <Suspense fallback={<LoadingFallback />}>
     <Routes>
       <Route path="/" element={<Index />} />
       <Route path="/baby-names" element={<NamesPage />} />
@@ -93,6 +101,8 @@ const AppRoutes = () => {
       <Route path="/dua/category/:slug" element={<DuaCategoryPage />} />
       <Route path="/dua/:slug" element={<DuaDetailPage />} />
       <Route path="/quran" element={<QuranPage />} />
+      <Route path="/quran/:surahId" element={<QuranPage />} />
+      <Route path="/quran/:surahId/:ayahId" element={<QuranPage />} />
       <Route path="/99-names" element={<NamesOfAllahPage />} />
       <Route path="/prayer-times" element={<PrayerTimesPage />} />
 
@@ -330,6 +340,7 @@ const AppRoutes = () => {
       />
       <Route path="*" element={<NotFound />} />
     </Routes>
+    </Suspense>
   </>
   );
 };

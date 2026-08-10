@@ -233,6 +233,7 @@ function flattenBooks(json: Record<string, RawHadith[]>): RawHadith[] {
 }
 
 // ── Load from database (Bangla) ──────────────────────────────
+// Load all hadiths without timeout — fetches efficiently in batches
 async function loadFromDbUnbounded(dbField: string): Promise<Hadith[]> {
   const all: Hadith[] = [];
   const batchSize = 1000;
@@ -273,11 +274,33 @@ async function loadFromDbUnbounded(dbField: string): Promise<Hadith[]> {
   return all;
 }
 
+// Load hadiths by chapter for faster initial rendering
+async function loadChapterFromDb(dbField: string, chapterId: number): Promise<Hadith[]> {
+  const { data, error } = await (supabase as any)
+    .from("hadiths")
+    .select("id, chapter_id, hadith_number, arabic, slug, " + dbField)
+    .eq("book_key", "bukhari")
+    .eq("chapter_id", chapterId)
+    .order("hadith_number", { ascending: true });
+
+  if (error) throw error;
+  if (!data) return [];
+
+  return data
+    .filter((row) => row.arabic && row[dbField])
+    .map((row) => ({
+      id: row.id,
+      chapterId: row.chapter_id,
+      number: row.hadith_number,
+      arabic: row.arabic,
+      translation: row[dbField],
+      slug: row.slug ?? null,
+    }));
+}
+
+// No timeout — load all hadiths efficiently
 async function loadFromDb(dbField: string): Promise<Hadith[]> {
-  const timeout = new Promise<never>((_, reject) =>
-    window.setTimeout(() => reject(new Error("hadith database timeout")), 8000),
-  );
-  return Promise.race([loadFromDbUnbounded(dbField), timeout]);
+  return loadFromDbUnbounded(dbField);
 }
 
 // ── Pagination ───────────────────────────────────────────────

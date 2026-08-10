@@ -17,4 +17,18 @@ export default defineConfig(({ mode }) => ({
     // Prevent duplicate React instances
     dedupe: ["react", "react-dom", "react/jsx-runtime"],
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Vendor chunks for better caching
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-ui': ['framer-motion', '@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu'],
+          'vendor-data': ['@tanstack/react-query', '@supabase/supabase-js'],
+        },
+      },
+    },
+    // Optimize chunk size
+    chunkSizeWarningLimit: 1000,
+  },
 }));
