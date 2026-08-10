@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "in.noorapp.islamic",
+      "sha256_cert_fingerprints": [
+        "FB:61:29:75:65:11:FF:A8:18:91:34:83:7F:87:18:D1:AF:DF:44:93:AA:A4:2F:D7:56:D0:BF:9B:EA:59:94:92"
+      ]
+    }
+  }
+]
