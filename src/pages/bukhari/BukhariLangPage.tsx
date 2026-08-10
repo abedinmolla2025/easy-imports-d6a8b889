@@ -374,15 +374,29 @@ export default function BukhariLangPage() {
       if (cancelled) return;
       setAllHadiths(mapped);
       
-      // Only derive chapters from hadiths if we loaded the whole book
-      if (!selectedChapter) {
-        const chapMap = new Map<number, number>();
-        for (const h of mapped) chapMap.set(h.chapterId, (chapMap.get(h.chapterId) || 0) + 1);
-        const chapArr = Array.from(chapMap.entries())
-          .sort((a, b) => a[0] - b[0])
-          .map(([id, count]) => ({ id, count }));
-        setChapters(chapArr);
-      }
+      // Derive chapters from hadiths
+      const chapMap = new Map<number, number>();
+      for (const h of mapped) chapMap.set(h.chapterId, (chapMap.get(h.chapterId) || 0) + 1);
+      const chapArr = Array.from(chapMap.entries())
+        .sort((a, b) => a[0] - b[0])
+        .map(([id, count]) => ({ id, count }));
+      
+      setChapters(prev => {
+        // If we loaded a single chapter, update just that chapter in the list
+        if (selectedChapter && prev.length > 0) {
+          const newChapters = [...prev];
+          const idx = newChapters.findIndex(c => c.id === selectedChapter);
+          if (idx !== -1) {
+            newChapters[idx] = { id: selectedChapter, count: mapped.length };
+          } else {
+            newChapters.push({ id: selectedChapter, count: mapped.length });
+            newChapters.sort((a, b) => a.id - b.id);
+          }
+          return newChapters;
+        }
+        // Otherwise (JSON or full DB load), use the derived list
+        return chapArr;
+      });
       
       setLoading(false);
     };
