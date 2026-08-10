@@ -40,22 +40,27 @@ jobs:
       - name: Build with Bubblewrap
         working-directory: android
         run: |
+          # Ensure gradlew is executable
+          chmod +x gradlew
+          
           # Create a dummy config for bubblewrap
           mkdir -p ~/.bubblewrap
-          # In GitHub Actions, the JDK path for temurin 17 is usually here:
           echo "{\"jdkPath\":\"$JAVA_HOME\",\"androidSdkPath\":\"$ANDROID_HOME\"}" > ~/.bubblewrap/config.json
           
           # Run build
           # Skip regeneration prompt, then provide keystore pass, then key pass
-          printf "n\n${{ secrets.KEYSTORE_PASSWORD }}\n${{ secrets.KEY_PASSWORD }}\n" | bubblewrap build
+          # We use 'No' for the prompt
+          printf "No\n${{ secrets.KEYSTORE_PASSWORD }}\n${{ secrets.KEY_PASSWORD }}\n" | bubblewrap build
 
       - name: Upload APK
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: app-release-apk
           path: android/*.apk
 
       - name: Upload AAB
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: app-release-bundle

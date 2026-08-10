@@ -24,7 +24,7 @@
   "appVersionCode": 2,
   "shortcuts": [],
   "generatorApp": "bubblewrap-cli",
-  "webManifestUrl": "https://noorapp.in/manifest.json",
+  "webManifestUrl": "manifest.json",
   "fallbackType": "customtabs",
   "features": {
     "locationDelegation": {
