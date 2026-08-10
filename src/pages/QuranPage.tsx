@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, BookOpen, Search, Loader2, Star, BookMarked, Clock, Sparkles } from "lucide-react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuranData, Surah } from "@/hooks/useQuranData";
@@ -8,13 +8,15 @@ import SurahReader from "@/components/SurahReader";
 
 const QuranPage = () => {
   const navigate = useNavigate();
+  const { surahId, ayahId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const { surahs, loading, error } = useQuranData();
   const [selectedSurah, setSelectedSurah] = useState<Surah | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState<"surah" | "juz" | "bookmark">("surah");
 
-  const surahParam = searchParams.get("surah");
+  // Support both /quran/:surahId and /quran?surah=N
+  const surahParam = surahId || searchParams.get("surah");
   const surahNumberParam = surahParam ? Number(surahParam) : null;
 
   const surahByNumber = useMemo(() => {
@@ -49,7 +51,7 @@ const QuranPage = () => {
   );
 
   const openSurah = (s: Surah) => {
-    setSearchParams({ surah: String(s.number) }, { replace: false });
+    navigate(`/quran/${s.number}`);
   };
 
   const goBack = () => navigate(-1);
@@ -127,6 +129,7 @@ const QuranPage = () => {
               surahNumber={selectedSurah.number}
               surahName={selectedSurah.englishName}
               arabicName={selectedSurah.name}
+              initialAyah={ayahId ? Number(ayahId) : undefined}
             />
           </motion.div>
         ) : (

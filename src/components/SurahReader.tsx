@@ -8,23 +8,35 @@ interface SurahReaderProps {
   surahNumber: number;
   surahName: string;
   arabicName: string;
+  initialAyah?: number;
 }
 
-const SurahReader = ({ surahNumber, surahName, arabicName }: SurahReaderProps) => {
+const SurahReader = ({ surahNumber, surahName, arabicName, initialAyah }: SurahReaderProps) => {
   const [language, setLanguage] = useState<Language>("bengali");
-  const [currentAyah, setCurrentAyah] = useState<number | null>(null);
+  // currentAyah is 0-indexed internal index
+  const [currentAyah, setCurrentAyah] = useState<number | null>(
+    initialAyah ? initialAyah - 1 : null
+  );
   const { arabicData, translationData, loading, error } = useSurahDetail(surahNumber, language);
   const ayahRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  // Sync with initialAyah if it changes
+  useEffect(() => {
+    if (initialAyah) {
+      setCurrentAyah(initialAyah - 1);
+    }
+  }, [initialAyah]);
 
   // Auto scroll to current ayah
   useEffect(() => {
     if (currentAyah !== null && ayahRefs.current[currentAyah]) {
+      const isInitial = initialAyah === currentAyah + 1;
       ayahRefs.current[currentAyah]?.scrollIntoView({
-        behavior: "smooth",
+        behavior: isInitial ? "auto" : "smooth",
         block: "center",
       });
     }
-  }, [currentAyah]);
+  }, [currentAyah, initialAyah]);
 
   const handlePlayAyah = (ayahIndex: number) => {
     setCurrentAyah(ayahIndex);

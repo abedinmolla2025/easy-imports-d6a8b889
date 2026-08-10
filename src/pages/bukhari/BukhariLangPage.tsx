@@ -321,7 +321,9 @@ export default function BukhariLangPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedHadith, setSelectedHadith] = useState<Hadith | null>(null);
   const [selectedChapter, setSelectedChapter] = useState<number | null>(null);
-  const [activeTab, setActiveTab] = useState<"chapters" | "hadiths">("hadiths");
+  const [activeTab, setActiveTab] = useState<"chapters" | "hadiths">(
+    effectiveChapterParam ? "hadiths" : "chapters"
+  );
   const [page, setPage] = useState(1);
 
   const [allHadiths, setAllHadiths] = useState<Hadith[]>([]);
@@ -358,6 +360,13 @@ export default function BukhariLangPage() {
   // ── Load data ──────────────────────────────────────────────
   useEffect(() => {
     let cancelled = false;
+    
+    // For DB source (Bengali), we only load if a chapter is selected or if we're on the hadiths tab
+    if (cfg.source === "db" && !selectedChapter && activeTab === "chapters") {
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
@@ -374,14 +383,27 @@ export default function BukhariLangPage() {
     };
 
     if (cfg.source === "db") {
-      loadFromDb(cfg.dbField || "bengali")
-        .then(processHadiths)
-        .catch((err) => {
-          if (cancelled) return;
-          console.error("DB load failed:", err);
-          setError(t.error);
-          setLoading(false);
-        });
+      // If a specific chapter is selected, load ONLY that chapter for speed
+      if (selectedChapter) {
+        loadChapterFromDb(cfg.dbField || "bengali", selectedChapter)
+          .then(processHadiths)
+          .catch((err) => {
+            if (cancelled) return;
+            console.error("Chapter load failed:", err);
+            setError(t.error);
+            setLoading(false);
+          });
+      } else {
+        // Load everything only if user is on "All Hadiths" tab or searching
+        loadFromDb(cfg.dbField || "bengali")
+          .then(processHadiths)
+          .catch((err) => {
+            if (cancelled) return;
+            console.error("DB load failed:", err);
+            setError(t.error);
+            setLoading(false);
+          });
+      }
     } else {
       fetch(cfg.file!)
         .then((res) => {
@@ -420,6 +442,7 @@ export default function BukhariLangPage() {
     if (effectiveChapterParam) {
       const cid = Number(effectiveChapterParam.replace("chapter-", ""));
       setSelectedChapter(cid && Number.isFinite(cid) ? cid : null);
+      setActiveTab("hadiths");
     } else {
       setSelectedChapter(null);
     }
@@ -638,8 +661,9 @@ export default function BukhariLangPage() {
 
               {activeTab === "hadiths" ? (
                 <div className="space-y-3">
-                  {paginatedHadiths.length === 0 && <p className="text-center text-white/50 py-10">{t.noResults}</p>}
-                  {paginatedHadiths.map((hadith, index) => (
+                  {loading && <div className="flex justify-center py-10"><Loader2 className="animate-spin text-emerald-300" /></div>}
+                  {!loading && paginatedHadiths.length === 0 && <p className="text-center text-white/50 py-10">{t.noResults}</p>}
+                  {!loading && paginatedHadiths.map((hadith, index) => (
                     <motion.div
                       key={hadith.id}
                       initial={index < PAGE_SIZE ? { opacity: 0, y: 16 } : false}
@@ -684,8 +708,9 @@ export default function BukhariLangPage() {
                 </div>
               ) : (
                 <div className="space-y-3">
-                  {chapters.map((chapter, index) => (
-                    <motion.button key={chapter.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.02 }} onClick={() => openChapter(chapter.id)} className="w-full text-left bg-white/10 backdrop-blur-md rounded-2xl p-4 hover:bg-white/15 transition-all active:scale-[0.98] shadow-xl border border-white/20">
+                  {/* Use kitabData for the chapter list if available, otherwise fallback to derived chapters */}
+                  {(kitabData && kitabData.length > 0 ? kitabData.map(k => ({ id: k.chapter_number, count: k.hadith_count })) : chapters).map((chapter, index) => (
+                    <motion.button key={chapter.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.01 }} onClick={() => openChapter(chapter.id)} className="w-full text-left bg-white/10 backdrop-blur-md rounded-2xl p-4 hover:bg-white/15 transition-all active:scale-[0.98] shadow-xl border border-white/20">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
                           <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center border border-white/30">
