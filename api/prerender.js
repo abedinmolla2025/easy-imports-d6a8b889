@@ -1,4 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
+import fs from "fs";
+import path from "path";
 
 const SITE_ORIGIN = "https://noorapp.in";
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
@@ -14,16 +16,16 @@ const FALLBACK_SURAHS = [
   {"number": 5, "english_name": "Al-Ma'idah", "name": "المائدة", "number_of_ayahs": 120, "english_name_translation": "The Table"},
   {"number": 6, "english_name": "Al-An'am", "name": "الأنعام", "number_of_ayahs": 165, "english_name_translation": "The Cattle"},
   {"number": 7, "english_name": "Al-A'raf", "name": "الأعراف", "number_of_ayahs": 206, "english_name_translation": "The Heights"},
-  {"number": 8, "english_name": "Al-Anfal", "name": "الأنفাল", "number_of_ayahs": 75, "english_name_translation": "The Spoils of War"},
+  {"number": 8, "english_name": "Al-Anfal", "name": "الأنفال", "number_of_ayahs": 75, "english_name_translation": "The Spoils of War"},
   {"number": 9, "english_name": "At-Tawbah", "name": "التوبة", "number_of_ayahs": 129, "english_name_translation": "The Repentance"},
   {"number": 10, "english_name": "Yunus", "name": "يونس", "number_of_ayahs": 109, "english_name_translation": "Yunus"},
   {"number": 11, "english_name": "Hud", "name": "هود", "number_of_ayahs": 123, "english_name_translation": "Hud"},
   {"number": 12, "english_name": "Yusuf", "name": "يوسف", "number_of_ayahs": 111, "english_name_translation": "Yusuf"},
   {"number": 13, "english_name": "Ar-Ra'd", "name": "الرعد", "number_of_ayahs": 43, "english_name_translation": "The Thunder"},
-  {"number": 14, "english_name": "Ibrahim", "name": "إবراهيم", "number_of_ayahs": 52, "english_name_translation": "Ibrahim"},
+  {"number": 14, "english_name": "Ibrahim", "name": "إبراهيم", "number_of_ayahs": 52, "english_name_translation": "Ibrahim"},
   {"number": 15, "english_name": "Al-Hijr", "name": "الحجر", "number_of_ayahs": 99, "english_name_translation": "The Rocky Tract"},
   {"number": 16, "english_name": "An-Nahl", "name": "النحل", "number_of_ayahs": 128, "english_name_translation": "The Bee"},
-  {"number": 17, "english_name": "Al-Isra", "name": "الإسراء", "number_of_ayahs": 111, "english_name_translation": "The Night Journey"},
+  {"number": 17, "english_name": "Al-Isra", "name": "الإসরা", "number_of_ayahs": 111, "english_name_translation": "The Night Journey"},
   {"number": 18, "english_name": "Al-Kahf", "name": "الكهف", "number_of_ayahs": 110, "english_name_translation": "The Cave"},
   {"number": 19, "english_name": "Maryam", "name": "মরম", "number_of_ayahs": 98, "english_name_translation": "Maryam"},
   {"number": 20, "english_name": "Ta-Ha", "name": "طه", "number_of_ayahs": 135, "english_name_translation": "Ta-Ha"},
@@ -83,7 +85,7 @@ const FALLBACK_SURAHS = [
   {"number": 74, "english_name": "Al-Muddaththir", "name": "المدثر", "number_of_ayahs": 56, "english_name_translation": "The Cloaked One"},
   {"number": 75, "english_name": "Al-Qiyamah", "name": "القيامة", "number_of_ayahs": 40, "english_name_translation": "The Resurrection"},
   {"number": 76, "english_name": "Al-Insan", "name": "الإنسان", "number_of_ayahs": 31, "english_name_translation": "The Man"},
-  {"number": 77, "english_name": "Al-Mursalat", "name": "المرسلات", "number_of_ayahs": 50, "english_name_translation": "The Emissaries"},
+  {"number": 77, "english_name": "Al-Mursalat", "name": "المرসলাত", "number_of_ayahs": 50, "english_name_translation": "The Emissaries"},
   {"number": 78, "english_name": "An-Naba", "name": "النبإ", "number_of_ayahs": 40, "english_name_translation": "The Tidings"},
   {"number": 79, "english_name": "An-Nazi'at", "name": "النازعات", "number_of_ayahs": 46, "english_name_translation": "Those who drag forth"},
   {"number": 80, "english_name": "Abasa", "name": "عبস", "number_of_ayahs": 42, "english_name_translation": "He Frowned"},
@@ -106,7 +108,7 @@ const FALLBACK_SURAHS = [
   {"number": 97, "english_name": "Al-Qadr", "name": "القدر", "number_of_ayahs": 5, "english_name_translation": "The Power"},
   {"number": 98, "english_name": "Al-Bayyinah", "name": "البينة", "number_of_ayahs": 8, "english_name_translation": "The Clear Proof"},
   {"number": 99, "english_name": "Az-Zalzalah", "name": "الزلزلة", "number_of_ayahs": 8, "english_name_translation": "The Earthquake"},
-  {"number": 100, "english_name": "Al-Adiyat", "name": "العاديات", "number_of_ayahs": 11, "english_name_translation": "The Courser"},
+  {"number": 100, "english_name": "Al-Adiyat", "name": "العাদিয়াত", "number_of_ayahs": 11, "english_name_translation": "The Courser"},
   {"number": 101, "english_name": "Al-Qari'ah", "name": "القارعة", "number_of_ayahs": 11, "english_name_translation": "The Calamity"},
   {"number": 102, "english_name": "At-Takathur", "name": "التكاثر", "number_of_ayahs": 8, "english_name_translation": "The Rivalry in world increase"},
   {"number": 103, "english_name": "Al-Asr", "name": "العصر", "number_of_ayahs": 3, "english_name_translation": "The Declining Day"},
@@ -133,89 +135,29 @@ const esc = (s) => {
     .replace(/'/g, "&#039;");
 };
 
-const humanizeSlug = (slug) => {
-  if (!slug) return "";
-  return slug
-    .split("-")
-    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" ");
+// Helper to read app.html
+const getAppTemplate = () => {
+  try {
+    const filePath = path.join(process.cwd(), "dist", "app.html");
+    return fs.readFileSync(filePath, "utf8");
+  } catch (e) {
+    console.error("Template read error:", e);
+    return `<!DOCTYPE html><html><head><title>{{TITLE}}</title></head><body><div id="root">{{BODY}}</div></body></html>`;
+  }
 };
 
-// Base HTML template extracted from built index.html
-const BASE_HTML = `<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>{{TITLE}}</title>
-    <meta name="description" content="{{DESCRIPTION}}" />
-    <link rel="canonical" href="{{CANONICAL}}" />
-    <meta name="author" content="NOOR" />
-    <meta name="theme-color" content="#0d9f6e" />
-    <meta name="msvalidate.01" content="BD28A1AD6076D784011352F0CB5D0B75" />
-    <link rel="manifest" href="/manifest.json" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Cinzel:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;500;600;700&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&family=Cormorant+Garamond:wght@400;500;600;700&family=Crimson+Pro:wght@300;400;500;600;700&family=Amiri:wght@400;700&family=Reem+Kufi:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Noor Islamic App" />
-    <meta property="og:title" content="{{TITLE}}" />
-    <meta property="og:description" content="{{DESCRIPTION}}" />
-    <meta property="og:image" content="https://noorapp.in/og-image.png" />
-    <meta property="og:url" content="{{CANONICAL}}" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="{{TITLE}}" />
-    <meta name="twitter:description" content="{{DESCRIPTION}}" />
-    <meta name="twitter:image" content="https://noorapp.in/og-image.png" />
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){ dataLayer.push(arguments); }
-      window.gtag = gtag;
-      gtag('consent', 'default', {
-        ad_storage: 'denied',
-        ad_user_data: 'denied',
-        ad_personalization: 'denied',
-        analytics_storage: 'denied',
-        functionality_storage: 'granted',
-        security_storage: 'granted',
-        wait_for_update: 500
-      });
-    </script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2770098542057651" crossorigin="anonymous"></script>
-    <meta name="google-adsense-account" content="ca-pub-2770098542057651">
-    <script type="module" crossorigin src="/assets/index-DADGngc0.js"></script>
-    <link rel="modulepreload" crossorigin href="/assets/vendor-data--_x5elLo.js">
-    <link rel="modulepreload" crossorigin href="/assets/vendor-react-Ba1AxkWB.js">
-    <link rel="modulepreload" crossorigin href="/assets/vendor-ui-QY8IYcbR.js">
-    <link rel="stylesheet" crossorigin href="/assets/index-DewLekkf.css">
-  </head>
-  <body class="bg-background">
-    <div id="root">{{BODY}}</div>
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js');
-        });
-      }
-    </script>
-  </body>
-</html>`;
-
 export default async function handler(req, res) {
-  const { path = "/" } = req.query;
-  console.log("[PRERENDER] Restoring Original UI for Path:", path);
+  const { path: routePath = "/" } = req.query;
+  console.log("[PRERENDER] Restoring Original UI for Path:", routePath);
   
   let title = "Noor – Prayer Times, Quran & More";
   let description = "Read authentic Quran, Hadith, Dua, Prayer Times, Qibla, Islamic Stories and Baby Names in Bengali with a fast and beautiful Islamic app.";
   let bodyContent = "";
-  let canonicalUrl = `${SITE_ORIGIN}${path}`;
+  let canonicalUrl = `${SITE_ORIGIN}${routePath}`;
 
   try {
     // --- Homepage ---
-    if (path === "/") {
+    if (routePath === "/") {
       bodyContent = `
         <div class="min-h-screen bg-background pb-20 w-full overflow-x-hidden">
           <main class="w-full px-3 py-4">
@@ -226,27 +168,21 @@ export default async function handler(req, res) {
               </section>
               <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                 <a href="/quran" class="p-6 rounded-2xl bg-card border border-border flex flex-col items-center gap-3">
-                  <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary text-2xl">📖</div>
                   <span class="font-bold">Quran</span>
                 </a>
                 <a href="/hadith" class="p-6 rounded-2xl bg-card border border-border flex flex-col items-center gap-3">
-                  <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary text-2xl">📚</div>
                   <span class="font-bold">Hadith</span>
                 </a>
                 <a href="/dua" class="p-6 rounded-2xl bg-card border border-border flex flex-col items-center gap-3">
-                  <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary text-2xl">🤲</div>
                   <span class="font-bold">Dua</span>
                 </a>
                 <a href="/stories" class="p-6 rounded-2xl bg-card border border-border flex flex-col items-center gap-3">
-                  <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary text-2xl">✨</div>
                   <span class="font-bold">Stories</span>
                 </a>
                 <a href="/prayer-times" class="p-6 rounded-2xl bg-card border border-border flex flex-col items-center gap-3">
-                  <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary text-2xl">🕌</div>
                   <span class="font-bold">Prayer</span>
                 </a>
                 <a href="/qibla" class="p-6 rounded-2xl bg-card border border-border flex flex-col items-center gap-3">
-                  <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary text-2xl">🧭</div>
                   <span class="font-bold">Qibla</span>
                 </a>
               </div>
@@ -257,7 +193,7 @@ export default async function handler(req, res) {
     }
 
     // --- Quran Root Page ---
-    else if (path === "/quran") {
+    else if (routePath === "/quran") {
       title = "Quran Reader — পবিত্র কুরআন | NOOR";
       description = "Read the Holy Quran with Arabic text, Bengali translation & audio recitation.";
       
@@ -291,49 +227,51 @@ export default async function handler(req, res) {
     }
 
     // --- Quran Surah Pages ---
-    else if (path.match(/^\/quran\/\d+$/)) {
-      const surahNum = parseInt(path.split("/")[2]);
+    else if (routePath.match(/^\/quran\/\d+$/)) {
+      const surahNum = parseInt(routePath.split("/")[2]);
       const surah = FALLBACK_SURAHS.find(s => s.number === surahNum);
       
       if (surah) {
         title = `Surah ${surah.english_name} (${surah.name}) - Read Online | Noor`;
         
         try {
-          const apiRes = await fetch(\`https://api.alquran.cloud/v1/surah/\${surahNum}/bn.bengali\`);
-          const apiData = await apiRes.json();
+          const { data: ayahs } = await supabase
+            .from("quran_ayahs")
+            .select("ayah_number, text, bengali_translation")
+            .eq("surah_number", surahNum)
+            .order("ayah_number")
+            .limit(20);
+
+          const ayahsHtml = (ayahs || []).map(a => `
+            <div class="p-4 border-b border-white/10">
+              <p class="text-right text-2xl font-arabic mb-3" dir="rtl">${esc(a.text)}</p>
+              <p class="text-white/80">${esc(a.bengali_translation)}</p>
+            </div>
+          `).join("");
           
-          if (apiData.code === 200) {
-            const ayahsHtml = apiData.data.ayahs.slice(0, 30).map(a => `
-              <div class="p-4 border-b border-white/10">
-                <p class="text-right text-2xl font-arabic mb-3" dir="rtl">${esc(a.text)}</p>
-                <p class="text-white/80">${esc(a.text)}</p>
-              </div>
-            `).join("");
-            
-            bodyContent = `
-              <div class="min-h-screen bg-[hsl(158,64%,18%)] text-white">
-                <header class="sticky top-0 bg-[hsl(158,55%,22%)] border-b border-white/10 p-4 flex justify-between items-center">
-                  <div>
-                    <h1 class="text-lg font-bold">${surah.english_name}</h1>
-                    <p class="text-xs text-white/60">${surah.english_name_translation}</p>
-                  </div>
-                  <span class="text-2xl font-arabic text-[hsl(45,93%,58%)]">${surah.name}</span>
-                </header>
-                <div class="max-w-3xl mx-auto">
-                  ${ayahsHtml}
+          bodyContent = `
+            <div class="min-h-screen bg-[hsl(158,64%,18%)] text-white">
+              <header class="sticky top-0 bg-[hsl(158,55%,22%)] border-b border-white/10 p-4 flex justify-between items-center">
+                <div>
+                  <h1 class="text-lg font-bold">${surah.english_name}</h1>
+                  <p class="text-xs text-white/60">${surah.english_name_translation}</p>
                 </div>
+                <span class="text-2xl font-arabic text-[hsl(45,93%,58%)]">${surah.name}</span>
+              </header>
+              <div class="max-w-3xl mx-auto">
+                ${ayahsHtml}
               </div>
-            `;
-          }
+            </div>
+          `;
         } catch (e) {
-          bodyContent = \`<div class="min-h-screen bg-[hsl(158,64%,18%)] flex items-center justify-center text-white">Loading...</div>\`;
+          bodyContent = `<div class="min-h-screen bg-[hsl(158,64%,18%)] flex items-center justify-center text-white">Loading...</div>`;
         }
       }
     }
 
     // --- Hadith Language Pages ---
-    else if (path.match(/^\/hadith\/sahih-bukhari\/(bangla|english|urdu)$/)) {
-      const lang = path.split("/")[3];
+    else if (routePath.match(/^\/hadith\/sahih-bukhari\/(bangla|english|urdu)$/)) {
+      const lang = routePath.split("/")[3];
       const langLabels = { bangla: "সহিহ বুখারী শরীফ", english: "Sahih Al-Bukhari", urdu: "صحیح البخاری" };
       title = langLabels[lang] || "Sahih Bukhari";
       
@@ -364,7 +302,7 @@ export default async function handler(req, res) {
     }
 
     // --- Dua Root Page ---
-    else if (path === "/dua") {
+    else if (routePath === "/dua") {
       title = "Daily Duas & Supplications | Noor";
       
       const { data: duas } = await supabase
@@ -390,7 +328,7 @@ export default async function handler(req, res) {
     }
 
     // --- Stories Root Page ---
-    else if (path === "/stories") {
+    else if (routePath === "/stories") {
       title = "Islamic Stories | NoorApp";
       
       const { data: stories } = await supabase
@@ -422,7 +360,7 @@ export default async function handler(req, res) {
     }
 
     // --- Contact Page ---
-    else if (path === "/contact") {
+    else if (routePath === "/contact") {
       title = "Contact Us | Noor";
       bodyContent = `
         <div class="min-h-screen bg-background p-4">
@@ -443,28 +381,30 @@ export default async function handler(req, res) {
 
     // --- Fallback ---
     if (!bodyContent) {
-      bodyContent = \`
+      bodyContent = `
         <div class="min-h-screen flex items-center justify-center p-4">
           <div class="text-center">
-            <h1 class="text-2xl font-bold mb-2">\${esc(title)}</h1>
-            <p class="text-muted-foreground">\${esc(description)}</p>
+            <h1 class="text-2xl font-bold mb-2">${esc(title)}</h1>
+            <p class="text-muted-foreground">Loading...</p>
           </div>
         </div>
-      \`;
+      `;
     }
 
-    // Inject into template
-    const finalHtml = BASE_HTML
-      .replace(/{{TITLE}}/g, esc(title))
-      .replace(/{{DESCRIPTION}}/g, esc(description))
-      .replace(/{{CANONICAL}}/g, esc(canonicalUrl))
-      .replace(/{{BODY}}/g, bodyContent);
+    // Use actual app.html as base
+    const appTemplate = getAppTemplate();
+    const finalHtml = appTemplate
+      .replace(/<title>[^<]*<\/title>/, `<title>${esc(title)}</title>`)
+      .replace(/<meta name="description" content="[^"]*"/, `<meta name="description" content="${esc(description)}"`)
+      .replace(/<link rel="canonical" href="[^"]*"/, `<link rel="canonical" href="${esc(canonicalUrl)}"`)
+      // Inject body into #root
+      .replace('<div id="root"></div>', `<div id="root">${bodyContent}</div>`);
 
     res.setHeader("Content-Type", "text/html; charset=utf-8");
     res.setHeader("Cache-Control", "public, s-maxage=86400, stale-while-revalidate=3600, max-age=60");
     res.status(200).send(finalHtml);
   } catch (error) {
     console.error("Prerender error:", error);
-    res.status(200).send(BASE_HTML.replace("{{BODY}}", ""));
+    res.status(200).send(getAppTemplate());
   }
 }
