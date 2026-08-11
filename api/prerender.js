@@ -347,28 +347,122 @@ export default async function handler(req, res) {
 
     // --- Dua Root Page ---
     else if (routePath === "/dua") {
-      title = "Daily Duas & Supplications | Noor";
+      title = "Daily Duas & Supplications — দোয়া সমূহ | Noor";
+      description = "দৈনন্দিন জীবনের প্রয়োজনীয় দোয়া ও জিকিরসমূহ অর্থ ও ফজিলতসহ পড়ুন।";
       
       const { data: duas } = await supabase
         .from("admin_content")
-        .select("slug, title")
+        .select("slug, title, category")
         .eq("content_type", "dua")
-        .eq("status", "published");
+        .eq("status", "published")
+        .limit(50);
 
       const duaList = (duas || []).map(d => `
-        <a href="/dua/${d.slug}" class="block p-4 bg-card border border-border rounded-xl mb-2 hover:border-primary transition-colors">
-          <h3 class="font-bold">${esc(d.title)}</h3>
+        <a href="/dua/${d.slug}" class="flex items-center justify-between p-4 bg-card border border-border rounded-2xl mb-3 hover:shadow-md transition-all group">
+          <div class="flex-1">
+            <h3 class="font-bold text-lg group-hover:text-primary transition-colors">${esc(d.title)}</h3>
+            <p class="text-xs text-muted-foreground uppercase tracking-wider mt-1">${esc(d.category || "General")}</p>
+          </div>
+          <span class="text-primary opacity-50 group-hover:opacity-100 transition-opacity">→</span>
         </a>
       `).join("");
 
       bodyContent = `
-        <div class="min-h-screen bg-background p-4">
-          <h1 class="text-2xl font-bold mb-6">Daily Duas</h1>
-          <div class="grid gap-3 max-w-2xl mx-auto">
-            ${duaList || '<p class="text-center text-muted-foreground">No duas found.</p>'}
+        <div class="min-h-screen bg-background">
+          <header class="bg-gradient-to-br from-emerald-600 to-teal-700 p-8 text-white text-center">
+            <h1 class="text-3xl font-bold mb-2">দোয়া সংকলন</h1>
+            <p class="text-white/80 max-w-md mx-auto">দৈনন্দিন জীবনের প্রয়োজনীয় দোয়া ও জিকিরসমূহ</p>
+          </header>
+          <div class="p-4 max-w-2xl mx-auto -mt-6">
+            <div class="bg-card rounded-2xl shadow-xl p-2">
+              ${duaList || '<p class="text-center p-8 text-muted-foreground">দোয়া লোড হচ্ছে...</p>'}
+            </div>
           </div>
         </div>
       `;
+    }
+
+    // --- Dua Detail Page ---
+    else if (routePath.startsWith("/dua/")) {
+      const slug = routePath.split("/")[2];
+      const { data: dua } = await supabase
+        .from("admin_content")
+        .select("*")
+        .eq("slug", slug)
+        .eq("content_type", "dua")
+        .eq("status", "published")
+        .maybeSingle();
+
+      if (dua) {
+        title = `${dua.title} — বাংলা অর্থ, ফজিলত ও আরবি টেক্সট | Noor`;
+        description = esc(dua.explanation_bn || dua.content || `${dua.title} এর আরবি, বাংলা উচ্চারণ, অর্থ ও ফজিলত পড়ুন।`);
+        
+        bodyContent = `
+          <div class="min-h-screen bg-background pb-20">
+            <header class="bg-gradient-to-br from-emerald-600 to-teal-700 p-6 text-white sticky top-0 z-30">
+              <div class="max-w-3xl mx-auto flex items-center gap-4">
+                <a href="/dua" class="p-2 bg-white/10 rounded-full">←</a>
+                <h1 class="text-xl font-bold truncate">${esc(dua.title)}</h1>
+              </div>
+            </header>
+            
+            <main class="max-w-3xl mx-auto p-4 space-y-6">
+              <!-- Arabic Card -->
+              <div class="bg-card border border-border rounded-3xl shadow-sm overflow-hidden">
+                <div class="p-6 bg-emerald-50/50 dark:bg-emerald-950/20 border-b border-emerald-100 dark:border-emerald-900">
+                  <p class="text-right text-3xl font-arabic leading-relaxed text-emerald-900 dark:text-emerald-100" dir="rtl">
+                    ${esc(dua.content_arabic)}
+                  </p>
+                </div>
+                
+                <div class="p-6 space-y-6">
+                  <!-- Pronunciation -->
+                  <div class="space-y-2">
+                    <h3 class="text-xs font-bold text-emerald-600 uppercase tracking-widest">উচ্চারণ</h3>
+                    <p class="text-lg leading-relaxed">${esc(dua.content_pronunciation)}</p>
+                  </div>
+                  
+                  <!-- Meaning -->
+                  <div class="space-y-2">
+                    <h3 class="text-xs font-bold text-amber-600 uppercase tracking-widest">অর্থ</h3>
+                    <p class="text-lg leading-relaxed text-muted-foreground">${esc(dua.content)}</p>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Virtues & Explanation -->
+              ${dua.virtue ? `
+                <div class="bg-amber-50 dark:bg-amber-950/20 border border-amber-100 dark:border-amber-900 rounded-3xl p-6">
+                  <h3 class="text-amber-700 dark:text-amber-400 font-bold mb-3 flex items-center gap-2">
+                    <span>✨</span> ফজিলত
+                  </h3>
+                  <p class="text-amber-900 dark:text-amber-100 italic leading-relaxed">
+                    ${esc(dua.virtue)}
+                  </p>
+                  ${dua.virtue_reference ? `<p class="mt-4 text-xs text-amber-700/60">[রেফারেন্স: ${esc(dua.virtue_reference)}]</p>` : ''}
+                </div>
+              ` : ''}
+              
+              ${dua.explanation_bn ? `
+                <div class="bg-card border border-border rounded-3xl p-6">
+                  <h3 class="font-bold mb-3 flex items-center gap-2">
+                    <span>📚</span> বিস্তারিত ব্যাখ্যা
+                  </h3>
+                  <div class="prose prose-emerald dark:prose-invert max-w-none text-muted-foreground leading-relaxed">
+                    ${esc(dua.explanation_bn)}
+                  </div>
+                </div>
+              ` : ''}
+              
+              <!-- Footer Reference -->
+              <div class="text-center py-8 opacity-50 text-xs">
+                <p>উৎস: ${esc(dua.reference || "হাদিস সংকলন")}</p>
+                <p class="mt-1">© Noor Islamic App</p>
+              </div>
+            </main>
+          </div>
+        `;
+      }
     }
 
     // --- Stories Root Page ---
