@@ -5,8 +5,10 @@ const ORIGIN = "https://noorapp.in";
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
 
-function xmlEscape(value: string) {
+function xmlEscape(value) {
+  if (!value) return "";
   return value
+    .toString()
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
@@ -42,7 +44,8 @@ const BASE_ROUTES = [
   "/islamic-app",
 ];
 
-export default async function handler(_req: any, res: any) {
+export default async function handler(req, res) {
+  console.log("[SITEMAP] Generating sitemap...");
   try {
     const routes = [...BASE_ROUTES];
     
@@ -65,11 +68,15 @@ export default async function handler(_req: any, res: any) {
         const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         
         // Stories and Duas
-        const { data: content } = await supabase
+        console.log("[SITEMAP] Fetching admin_content...");
+        const { data: content, error: contentError } = await supabase
           .from("admin_content")
           .select("slug, content_type")
+          .eq("status", "published")
           .in("content_type", ["story", "dua"]);
         
+        if (contentError) console.error("[SITEMAP] contentError:", contentError);
+
         if (content) {
           for (const item of content) {
             const prefix = item.content_type === "story" ? "/stories" : "/dua";
@@ -77,23 +84,28 @@ export default async function handler(_req: any, res: any) {
           }
         }
 
-        // Hadith detail slugs (Top 2000 for SEO)
-        const { data: hadiths } = await supabase
+        // Hadith detail slugs (Top 100 for speed)
+        console.log("[SITEMAP] Fetching hadiths...");
+        const { data: hadiths, error: hadithError } = await supabase
           .from("hadiths")
           .select("slug")
           .not("slug", "is", null)
           .order("id", { ascending: true })
-          .limit(500);
+          .limit(100);
         
+        if (hadithError) console.error("[SITEMAP] hadithError:", hadithError);
+
         if (hadiths) {
           for (const h of hadiths) {
             routes.push(`/hadith/h/${h.slug}`);
           }
         }
       } catch (e) {
-        console.error("Supabase sitemap fetch failed:", e);
+        console.error("[SITEMAP] Supabase sitemap fetch failed:", e);
       }
     }
+
+    console.log(`[SITEMAP] Total routes: ${routes.length}`);
 
     const body = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -111,9 +123,10 @@ ${routes
       "Cache-Control",
       "public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400",
     );
+    console.log("[SITEMAP] Sending response...");
     return res.status(200).send(body);
   } catch (err) {
-    console.error("Sitemap generation error:", err);
+    console.error("[SITEMAP] Error:", err);
     return res.status(500).send("Error generating sitemap");
   }
 }
