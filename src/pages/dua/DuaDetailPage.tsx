@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { ArrowLeft, BookOpen, Sparkles, Heart, Star, Clock, ScrollText, ChevronRight, ChevronLeft, Share2 } from "lucide-react";
+import { ArrowLeft, BookOpen, Sparkles, Heart, Star, Clock, ScrollText, ChevronRight, ChevronLeft, Share2, Loader2 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import DuaAudioPlayer from "@/components/DuaAudioPlayer";
@@ -449,8 +450,40 @@ const DuaDetailPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[hsl(158,64%,18%)] grid place-items-center">
-        <p className="text-white/70 text-sm">দোয়া লোড হচ্ছে...</p>
+      <div className="min-h-screen bg-[hsl(158,64%,12%)]" style={{ backgroundImage: ISLAMIC_PATTERN }}>
+        <div className="max-w-3xl mx-auto px-4 py-10 space-y-8 animate-pulse">
+          <div className="flex flex-col items-center justify-center py-10 gap-3">
+            <div className="relative">
+              <Loader2 className="w-12 h-12 text-[hsl(45,93%,58%)] animate-spin" />
+              <Sparkles className="absolute -top-1 -right-1 w-5 h-5 text-[hsl(45,93%,58%)] animate-pulse" />
+            </div>
+            <p className="text-white/60 animate-pulse font-medium tracking-widest text-xs uppercase">Preparing Dua Details...</p>
+          </div>
+          
+          {/* Skeleton Cards */}
+          <div className="relative bg-gradient-to-br from-[hsl(158,55%,25%)] to-[hsl(158,64%,20%)] rounded-3xl p-8 border border-white/10 shadow-xl overflow-hidden opacity-60">
+            <div className="space-y-4">
+              <Skeleton className="h-4 w-24 bg-white/10 mx-auto rounded" />
+              <Skeleton className="h-10 w-full bg-white/10 rounded-lg" />
+              <Skeleton className="h-10 w-4/5 mx-auto bg-white/10 rounded-lg" />
+            </div>
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full animate-[shimmer_3s_infinite]" />
+          </div>
+
+          <div className="space-y-4">
+            {[1, 2].map((i) => (
+              <div key={i} className="relative bg-white/5 rounded-2xl p-6 border border-white/10 overflow-hidden opacity-50">
+                <div className="flex items-center gap-3 mb-4">
+                  <Skeleton className="h-4 w-4 bg-white/10 rounded-full" />
+                  <Skeleton className="h-3 w-32 bg-white/10 rounded" />
+                </div>
+                <Skeleton className="h-4 w-full bg-white/5 rounded mb-2" />
+                <Skeleton className="h-4 w-5/6 bg-white/5 rounded" />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full animate-[shimmer_2s_infinite]" />
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     );
   }

@@ -317,7 +317,7 @@ const HadithSkeleton = () => (
           <Skeleton className="h-4 w-full bg-white/5 rounded-md" />
           <Skeleton className="h-4 w-2/3 bg-white/5 rounded-md" />
         </div>
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full animate-[shimmer_2s_infinite]" />
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full animate-[shimmer_3s_infinite]" />
       </div>
     ))}
   </div>
