@@ -63,7 +63,9 @@ export default function StoriesPage() {
 
   const categoryCounts = useMemo(() => {
     const map: Record<string, number> = {};
-    for (const s of stories) map[s.category] = (map[s.category] || 0) + 1;
+    for (const s of stories) {
+      if (s.category) map[s.category] = (map[s.category] || 0) + 1;
+    }
     return map;
   }, [stories]);
 
@@ -71,7 +73,7 @@ export default function StoriesPage() {
     return stories.filter((s) => {
       if (activeCat !== "all" && s.category !== activeCat) return false;
       if (q) {
-        const hay = `${s.title_en} ${s.title_bn} ${s.seo.meta_description}`.toLowerCase();
+        const hay = `${s.title_en || ""} ${s.title_bn || ""} ${s.seo?.meta_description || ""}`.toLowerCase();
         if (!hay.includes(q.toLowerCase())) return false;
       }
       return true;

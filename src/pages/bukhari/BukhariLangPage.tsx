@@ -520,8 +520,8 @@ export default function BukhariLangPage() {
       list = list.filter(
         (h) =>
           h.number.toString().includes(q) ||
-          h.translation.toLowerCase().includes(q) ||
-          h.arabic.includes(q)
+          (h.translation || "").toLowerCase().includes(q) ||
+          (h.arabic || "").includes(q)
       );
     }
     return list;

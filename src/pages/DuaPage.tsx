@@ -573,20 +573,20 @@ const DuaPage = () => {
   }, [categoryParam, duaParam, duas]);
 
   const categories = useMemo(
-    () => [...new Set(duas.map((d) => d.translations.english.category))],
+    () => [...new Set(duas.map((d) => d.translations.english?.category || "Dua"))],
     [duas]
   );
 
   const filteredDuas = useMemo(() => {
     return duas.filter((dua) => {
-    const translation = dua.translations[language];
+    const translation = dua.translations[language] || { title: "", translation: "", category: "" };
     const matchesSearch =
-      translation.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (translation.title || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
       (dua.bengaliTransliteration || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
       (dua.pronunciationEn || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
       (dua.pronunciationHi || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
       (dua.pronunciationUr || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
-      translation.translation.toLowerCase().includes(searchQuery.toLowerCase());
+      (translation.translation || "").toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = !selectedCategory || translation.category === selectedCategory;
     return matchesSearch && matchesCategory;
     });
@@ -762,9 +762,9 @@ const DuaPage = () => {
                     {SECTION_LABELS.translation[language]}
                   </p>
                 </div>
-                <p className="text-white text-lg md:text-xl leading-relaxed">
-                  {selectedDua.translations[language].translation}
-                </p>
+<p className="text-white text-lg md:text-xl leading-relaxed">
+	                  {selectedDua.translations[language]?.translation || ""}
+	                </p>
               </motion.div>
 
               {/* Audio Player */}
@@ -834,9 +834,9 @@ const DuaPage = () => {
                           {UI_LABELS.todayDua[language]}
                         </span>
                       </div>
-                      <p className="text-base font-bold text-white line-clamp-1">
-                        {daily.translations[language].title}
-                      </p>
+<p className="text-base font-bold text-white line-clamp-1">
+	                        {daily.translations[language]?.title || ""}
+	                      </p>
                       <p
                         dir="rtl"
                         className="mt-2 text-sm text-white/80 font-arabic line-clamp-2 leading-loose"
@@ -891,9 +891,9 @@ const DuaPage = () => {
                               to={`/dua/${d.slug}`}
                               className="p-3 rounded-2xl bg-gradient-to-br from-[hsl(158,55%,25%)] to-[hsl(158,64%,20%)] border border-white/10 hover:border-[hsl(45,93%,58%)]/40 transition"
                             >
-                              <p className="text-sm font-semibold text-white line-clamp-1">
-                                {d.translations[language].title}
-                              </p>
+<p className="text-sm font-semibold text-white line-clamp-1">
+	                                {d.translations[language]?.title || ""}
+	                              </p>
                               <p className="text-xs text-white/60 line-clamp-1 mt-1 font-arabic">
                                 {d.arabic}
                               </p>

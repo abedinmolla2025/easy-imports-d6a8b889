@@ -32,9 +32,9 @@ export default function StoriesHeroSlider() {
       .map((s) => ({
         slug: s.slug,
         title: s.title_bn || s.title_en,
-        description: s.seo.meta_description || "",
+        description: s.seo?.meta_description || "",
         image: s.og_image_url || "/assets/stories/og-stories-default.jpg",
-        alt: s.title_en,
+        alt: s.title_en || "",
       }));
   }, [stories]);
 
