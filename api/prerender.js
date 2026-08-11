@@ -454,7 +454,10 @@ export default async function handler(req, res) {
             <header class="bg-gradient-to-br from-emerald-600 to-teal-700 p-6 text-white sticky top-0 z-30">
               <div class="max-w-3xl mx-auto flex items-center gap-4">
                 <a href="/dua" class="p-2 bg-white/10 rounded-full">←</a>
-                <h1 class="text-xl font-bold truncate">${esc(dua.title)}</h1>
+                <div class="min-w-0">
+                  <h1 class="text-xl font-bold truncate">${esc(dua.title)}</h1>
+                  <p class="text-[10px] uppercase tracking-widest opacity-70">বিভাগ: ${esc(getCategoryLabel(dua.category))}</p>
+                </div>
               </div>
             </header>
             
