@@ -72,26 +72,26 @@
    "destination": "/api/sitemap"
   },
   {
-   "source": "/((?!assets|favicon|og-|pwa-|manifest|robots|sitemap\\.xml|sw\\.js|data|api|\\.well-known/).*)",
-   "has": [
-    {
-     "type": "header",
-     "key": "user-agent",
-     "value": ".*(Googlebot|googlebot|AdsBot-Google|facebookexternalhit|WhatsApp|Twitterbot|TelegramBot|Discordbot|LinkedInBot|Pinterest|slackbot|Applebot).*"
-    }
-   ],
-   "destination": "/api/prerender?path=/$1"
-  },
-  {
    "source": "/",
    "has": [
     {
      "type": "header",
      "key": "user-agent",
-     "value": ".*(Googlebot|googlebot|AdsBot-Google|facebookexternalhit|WhatsApp|Twitterbot|TelegramBot|Discordbot|LinkedInBot|Pinterest|slackbot|Applebot).*"
+     "value": ".*(Googlebot|googlebot|AdsBot-Google|AdsBot|Mediapartners-Google|facebookexternalhit|WhatsApp|Twitterbot|TelegramBot|Discordbot|LinkedInBot|Pinterest|slackbot|Applebot).*"
     }
    ],
    "destination": "/api/prerender?path=/"
+  },
+  {
+   "source": "/((?!assets|favicon|og-|pwa-|manifest|robots|sitemap\\.xml|sw\\.js|data|api|\\.well-known/).*)",
+   "has": [
+    {
+     "type": "header",
+     "key": "user-agent",
+     "value": ".*(Googlebot|googlebot|AdsBot-Google|AdsBot|Mediapartners-Google|facebookexternalhit|WhatsApp|Twitterbot|TelegramBot|Discordbot|LinkedInBot|Pinterest|slackbot|Applebot).*"
+    }
+   ],
+   "destination": "/api/prerender?path=/$1"
   },
   {
    "source": "/((?!\\.well-known/).*)",
