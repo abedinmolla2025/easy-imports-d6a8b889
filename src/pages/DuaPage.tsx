@@ -794,7 +794,8 @@ const DuaPage = () => {
                   return (
                     <Link
                       to={`/dua/${daily.slug}`}
-                      className="block p-4 rounded-2xl bg-gradient-to-br from-[hsl(45,93%,58%)]/20 to-[hsl(45,93%,48%)]/5 border border-[hsl(45,93%,58%)]/40 hover:border-[hsl(45,93%,58%)] transition"
+                      className="block p-4 rounded-2xl bg-gradient-to-br from-[hsl(45,93%,58%)]/20 to-[hsl(45,93%,48%)]/5 border border-[hsl(45,93%,58%)]/40 hover:border-[hsl(45,93%,58%)] transition overflow-hidden relative"
+                      style={{ backgroundImage: ISLAMIC_PATTERN }}
                     >
                       <div className="flex items-center gap-2 mb-2">
                         <Sparkles className="w-4 h-4 text-[hsl(45,93%,58%)]" />

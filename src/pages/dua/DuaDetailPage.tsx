@@ -123,6 +123,8 @@ const getCategoryLabel = (cat: string | null) => {
   return CATEGORY_MAP[cat] || cat;
 };
 
+const ISLAMIC_PATTERN = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M30 0l2.5 7.5L40 10l-7.5 2.5L30 20l-2.5-7.5L20 10l7.5-2.5L30 0zm0 40l2.5 7.5L40 50l-7.5 2.5L30 60l-2.5-7.5L20 50l7.5-2.5L30 40zM0 30l7.5-2.5L10 20l2.5 7.5L20 30l-7.5 2.5L10 40l-2.5-7.5L0 30zm40 0l7.5-2.5L50 20l2.5 7.5L60 30l-7.5 2.5L50 40l-2.5-7.5L40 30z' fill='%23ffffff' fill-opacity='0.05'/%3E%3C/svg%3E")`;
+
 const LANG_SUFFIX: Record<DuaLang, "" | "_en" | "_hi" | "_ur"> = {
   bengali: "",
   english: "_en",
@@ -583,7 +585,10 @@ const DuaDetailPage = () => {
 
         {/* Arabic */}
         {dua.content_arabic && (
-          <section className="relative bg-gradient-to-br from-[hsl(158,55%,25%)] to-[hsl(158,64%,20%)] rounded-3xl p-6 border border-[hsl(45,93%,58%)]/20 shadow-lg overflow-hidden">
+          <section 
+            className="relative bg-gradient-to-br from-[hsl(158,55%,25%)] to-[hsl(158,64%,20%)] rounded-3xl p-6 border border-[hsl(45,93%,58%)]/20 shadow-lg overflow-hidden"
+            style={{ backgroundImage: `${ISLAMIC_PATTERN}, linear-gradient(to bottom right, hsl(158,55%,25%), hsl(158,64%,20%))` }}
+          >
             <div className="absolute top-0 right-0 w-32 h-32 bg-[hsl(45,93%,58%)]/10 rounded-full blur-2xl" />
             <div className="relative">
               <div className="flex items-center justify-center gap-2 mb-4">
@@ -600,7 +605,10 @@ const DuaDetailPage = () => {
 
         {/* Pronunciation */}
         {text.pronunciation && (
-          <section className="bg-white/5 rounded-2xl p-5 border border-white/10">
+          <section 
+            className="bg-white/5 rounded-2xl p-5 border border-white/10"
+            style={{ backgroundImage: ISLAMIC_PATTERN }}
+          >
             <h2 className="flex items-center gap-2 text-xs font-medium text-[hsl(45,93%,58%)] uppercase tracking-wide mb-3">
               <Sparkles className="w-4 h-4" /> {SECTION_LABELS.pronunciation[language]}
             </h2>
@@ -610,7 +618,10 @@ const DuaDetailPage = () => {
 
         {/* Meaning */}
         {text.meaning && (
-          <section className="bg-gradient-to-br from-[hsl(45,93%,58%)]/10 to-transparent rounded-2xl p-5 border border-[hsl(45,93%,58%)]/20">
+          <section 
+            className="bg-gradient-to-br from-[hsl(45,93%,58%)]/10 to-transparent rounded-2xl p-5 border border-[hsl(45,93%,58%)]/20"
+            style={{ backgroundImage: `${ISLAMIC_PATTERN}, linear-gradient(to bottom right, hsla(45,93%,58%,0.1), transparent)` }}
+          >
             <h2 className="flex items-center gap-2 text-xs font-medium text-[hsl(45,93%,58%)] uppercase tracking-wide mb-3">
               <Heart className="w-4 h-4" /> {SECTION_LABELS.meaning[language]}
             </h2>

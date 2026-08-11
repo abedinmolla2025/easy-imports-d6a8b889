@@ -516,26 +516,23 @@ export default async function handler(req, res) {
             
             <main class="max-w-3xl mx-auto p-4 space-y-6">
               <!-- Arabic Card -->
-              <div class="bg-card border border-border rounded-3xl shadow-sm overflow-hidden">
-                <div class="p-6 bg-emerald-50/50 dark:bg-emerald-950/20 border-b border-emerald-100 dark:border-emerald-900">
-                  <p class="text-right text-3xl font-arabic leading-relaxed text-emerald-900 dark:text-emerald-100" dir="rtl">
-                    ${esc(dua.content_arabic)}
-                  </p>
+              <div class="relative bg-gradient-to-br from-[hsl(158,55%,25%)] to-[hsl(158,64%,20%)] border border-amber-400/20 rounded-3xl shadow-lg overflow-hidden" style="background-image: ${ISLAMIC_PATTERN}, linear-gradient(to bottom right, hsl(158,55%,25%), hsl(158,64%,20%))">
+                <div class="p-8 text-center relative z-10">
+                  <p class="text-amber-400 text-[10px] font-bold uppercase tracking-[0.2em] mb-4 opacity-80">আরবি</p>
+                  <p dir="rtl" class="text-3xl md:text-5xl font-arabic leading-[2.2] text-white">${esc(dua.content_arabic)}</p>
                 </div>
-                
-                <div class="p-6 space-y-6">
-                  <!-- Pronunciation -->
-                  <div class="space-y-2">
-                    <h3 class="text-xs font-bold text-emerald-600 uppercase tracking-widest">উচ্চারণ</h3>
-                    <p class="text-lg leading-relaxed">${esc(dua.content_pronunciation)}</p>
-                  </div>
-                  
-                  <!-- Meaning -->
-                  <div class="space-y-2">
-                    <h3 class="text-xs font-bold text-amber-600 uppercase tracking-widest">অর্থ</h3>
-                    <p class="text-lg leading-relaxed text-muted-foreground">${esc(dua.content)}</p>
-                  </div>
-                </div>
+              </div>
+
+              <!-- Pronunciation Card -->
+              <div class="bg-white/5 border border-white/10 rounded-2xl p-6 relative overflow-hidden shadow-sm" style="background-image: ${ISLAMIC_PATTERN}">
+                <h2 class="text-[10px] font-bold text-amber-400 uppercase tracking-[0.2em] mb-3 opacity-80">উচ্চারণ</h2>
+                <p class="text-white/90 text-lg md:text-xl leading-relaxed">${esc(dua.content_pronunciation)}</p>
+              </div>
+
+              <!-- Meaning Card -->
+              <div class="bg-gradient-to-br from-amber-400/10 to-transparent border border-amber-400/20 rounded-2xl p-6 relative overflow-hidden shadow-sm" style="background-image: ${ISLAMIC_PATTERN}, linear-gradient(to bottom right, rgba(251, 191, 36, 0.1), transparent)">
+                <h2 class="text-[10px] font-bold text-amber-400 uppercase tracking-[0.2em] mb-3 opacity-80">অর্থ</h2>
+                <p class="text-white text-lg md:text-xl leading-relaxed">${esc(dua.content)}</p>
               </div>
               
               <!-- Virtues & Explanation -->
