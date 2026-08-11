@@ -176,7 +176,7 @@ export default function HadithPage() {
                 {book.title_bn}
               </p>
               <p className="mt-0.5 text-[11px] text-gray-400">
-                {book.total_chapters} chapters · {book.total_hadiths.toLocaleString()} hadiths
+                {(book.total_chapters ?? 0)} chapters · {(book.total_hadiths ?? 0).toLocaleString()} hadiths
               </p>
             </div>
 

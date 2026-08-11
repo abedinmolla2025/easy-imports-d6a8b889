@@ -10,7 +10,7 @@ const QuranPage = () => {
   const navigate = useNavigate();
   const { surahId, ayahId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
-  const { surahs, loading, error } = useQuranData();
+  const { surahs, loading, error, retry } = useQuranData();
   const [selectedSurah, setSelectedSurah] = useState<Surah | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState<"surah" | "juz" | "bookmark">("surah");
@@ -76,8 +76,16 @@ const QuranPage = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[hsl(158,64%,18%)] flex items-center justify-center">
-        <p className="text-red-400">{error}</p>
+      <div className="min-h-screen bg-[hsl(158,64%,18%)] flex items-center justify-center px-4">
+        <div className="text-center">
+          <p className="text-red-400 mb-4">{error}</p>
+          <button
+            onClick={() => retry()}
+            className="px-6 py-2 bg-[hsl(45,93%,58%)] text-[hsl(158,64%,15%)] rounded-xl font-bold hover:opacity-90 transition-opacity"
+          >
+            আবার চেষ্টা করুন (Retry)
+          </button>
+        </div>
       </div>
     );
   }

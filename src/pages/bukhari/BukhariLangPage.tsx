@@ -233,47 +233,6 @@ function flattenBooks(json: Record<string, RawHadith[]>): RawHadith[] {
 }
 
 // ── Load from database (Bangla) ──────────────────────────────
-// Load all hadiths without timeout — fetches efficiently in batches
-async function loadFromDbUnbounded(dbField: string): Promise<Hadith[]> {
-  const all: Hadith[] = [];
-  const batchSize = 1000;
-  let from = 0;
-  let hasMore = true;
-
-  while (hasMore) {
-    const { data, error } = await (supabase as any)
-      .from("hadiths")
-      .select("id, chapter_id, hadith_number, arabic, slug, " + dbField)
-      .eq("book_key", "bukhari")
-      .order("hadith_number", { ascending: true })
-      .range(from, from + batchSize - 1);
-
-    if (error) throw error;
-    if (!data || data.length === 0) {
-      hasMore = false;
-      break;
-    }
-
-    for (const row of data) {
-      if (row.arabic && row[dbField]) {
-        all.push({
-          id: row.id,
-          chapterId: row.chapter_id,
-          number: row.hadith_number,
-          arabic: row.arabic,
-          translation: row[dbField],
-          slug: row.slug ?? null,
-        });
-      }
-    }
-
-    if (data.length < batchSize) hasMore = false;
-    else from += batchSize;
-  }
-
-  return all;
-}
-
 // Load hadiths by chapter for faster initial rendering
 async function loadChapterFromDb(dbField: string, chapterId: number): Promise<Hadith[]> {
   const { data, error } = await (supabase as any)
@@ -281,26 +240,50 @@ async function loadChapterFromDb(dbField: string, chapterId: number): Promise<Ha
     .select("id, chapter_id, hadith_number, arabic, slug, " + dbField)
     .eq("book_key", "bukhari")
     .eq("chapter_id", chapterId)
+    .not(dbField, "is", null)
     .order("hadith_number", { ascending: true });
 
   if (error) throw error;
   if (!data) return [];
 
-  return data
-    .filter((row) => row.arabic && row[dbField])
-    .map((row) => ({
-      id: row.id,
-      chapterId: row.chapter_id,
-      number: row.hadith_number,
-      arabic: row.arabic,
-      translation: row[dbField],
-      slug: row.slug ?? null,
-    }));
+  return data.map((row: any) => ({
+    id: row.id,
+    chapterId: row.chapter_id,
+    number: row.hadith_number,
+    arabic: row.arabic,
+    translation: row[dbField],
+    slug: row.slug ?? null,
+  }));
 }
 
-// No timeout — load all hadiths efficiently
-async function loadFromDb(dbField: string): Promise<Hadith[]> {
-  return loadFromDbUnbounded(dbField);
+// Load hadiths with limit and search support
+async function loadFromDb(dbField: string, search: string = ""): Promise<Hadith[]> {
+  let query = (supabase as any)
+    .from("hadiths")
+    .select("id, chapter_id, hadith_number, arabic, slug, " + dbField)
+    .eq("book_key", "bukhari")
+    .not(dbField, "is", null)
+    .order("chapter_id", { ascending: true })
+    .order("hadith_number", { ascending: true })
+    .limit(300);
+
+  if (search) {
+    query = query.ilike(dbField, `%${search}%`);
+  }
+
+  const { data, error } = await query;
+
+  if (error) throw error;
+  if (!data) return [];
+
+  return data.map((row: any) => ({
+    id: row.id,
+    chapterId: row.chapter_id,
+    number: row.hadith_number,
+    arabic: row.arabic,
+    translation: row[dbField],
+    slug: row.slug ?? null,
+  }));
 }
 
 // ── Pagination ───────────────────────────────────────────────
@@ -370,12 +353,6 @@ export default function BukhariLangPage() {
   useEffect(() => {
     let cancelled = false;
     
-    // For DB source (Bengali), we only load if a chapter is selected or if we're on the hadiths tab
-    if (cfg.source === "db" && !selectedChapter && activeTab === "chapters") {
-      setLoading(false);
-      return;
-    }
-
     setLoading(true);
     setError(null);
 
@@ -383,75 +360,80 @@ export default function BukhariLangPage() {
       if (cancelled) return;
       setAllHadiths(mapped);
       
-      // Derive chapters from hadiths
-      const chapMap = new Map<number, number>();
-      for (const h of mapped) chapMap.set(h.chapterId, (chapMap.get(h.chapterId) || 0) + 1);
-      const chapArr = Array.from(chapMap.entries())
-        .sort((a, b) => a[0] - b[0])
-        .map(([id, count]) => ({ id, count }));
+      // Derive chapters from kitabData if available, otherwise from hadiths
+      let chapArr: Chapter[] = [];
+      if (kitabData && kitabData.length > 0) {
+        chapArr = kitabData.map(k => ({ id: k.chapter_number, count: k.hadith_count }));
+      } else {
+        const chapMap = new Map<number, number>();
+        for (const h of mapped) chapMap.set(h.chapterId, (chapMap.get(h.chapterId) || 0) + 1);
+        chapArr = Array.from(chapMap.entries())
+          .sort((a, b) => a[0] - b[0])
+          .map(([id, count]) => ({ id, count }));
+      }
       
-      setChapters(prev => {
-        // If we already have a list (e.g. from kitabData), don't overwrite it with a partial list
-        if (selectedChapter && prev.length > 1) return prev;
-        return chapArr;
-      });
-      
+      setChapters(prev => prev.length > 0 ? prev : chapArr);
       setLoading(false);
     };
 
-    if (cfg.source === "db") {
-      // If a specific chapter is selected, load ONLY that chapter for speed
-      if (selectedChapter) {
-        loadChapterFromDb(cfg.dbField || "bengali", selectedChapter)
-          .then(processHadiths)
-          .catch((err) => {
-            if (cancelled) return;
-            console.error("Chapter load failed:", err);
-            setError(t.error);
-            setLoading(false);
-          });
+    // Debounced search logic
+    const timer = setTimeout(() => {
+      if (cfg.source === "db") {
+        if (selectedChapter) {
+          loadChapterFromDb(cfg.dbField || "bengali", selectedChapter)
+            .then(processHadiths)
+            .catch((err) => {
+              if (cancelled) return;
+              console.error("Chapter load failed:", err);
+              setError(t.error);
+              setLoading(false);
+            });
+        } else {
+          loadFromDb(cfg.dbField || "bengali", searchQuery)
+            .then(processHadiths)
+            .catch((err) => {
+              if (cancelled) return;
+              console.error("DB load failed:", err);
+              setError(t.error);
+              setLoading(false);
+            });
+        }
       } else {
-        // Load everything only if user is on "All Hadiths" tab or searching
-        loadFromDb(cfg.dbField || "bengali")
-          .then(processHadiths)
+        // JSON source (English/Urdu)
+        fetch(cfg.file!)
+          .then((res) => {
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            return res.json();
+          })
+          .then((json: Record<string, RawHadith[]>) => {
+            const raw = flattenBooks(json);
+            const field = cfg.field;
+            const mapped: Hadith[] = raw
+              .filter((h) => h.arabic && (h as any)[field])
+              .map((h) => ({
+                id: h.id,
+                chapterId: h.chapter_id,
+                number: h.hadith_number,
+                arabic: h.arabic,
+                translation: (h as any)[field] || "",
+                slug: (h as any).slug ?? null,
+              }));
+            processHadiths(mapped);
+          })
           .catch((err) => {
             if (cancelled) return;
-            console.error("DB load failed:", err);
+            console.error("JSON load failed:", err);
             setError(t.error);
             setLoading(false);
           });
       }
-    } else {
-      fetch(cfg.file!)
-        .then((res) => {
-          if (!res.ok) throw new Error(`HTTP ${res.status}`);
-          return res.json();
-        })
-        .then((json: Record<string, RawHadith[]>) => {
-          const raw = flattenBooks(json);
-          const field = cfg.field;
-          const mapped: Hadith[] = raw
-            .filter((h) => h.arabic && (h as any)[field])
-            .map((h) => ({
-              id: h.id,
-              chapterId: h.chapter_id,
-              number: h.hadith_number,
-              arabic: h.arabic,
-              translation: (h as any)[field] || "",
-              slug: (h as any).slug ?? null,
-            }));
-          processHadiths(mapped);
-        })
-        .catch((err) => {
-          if (cancelled) return;
-          console.error("JSON load failed:", err);
-          setError(t.error);
-          setLoading(false);
-        });
-    }
+    }, 400);
 
-    return () => { cancelled = true; };
-  }, [cfg.source, cfg.file, cfg.field, cfg.dbField, t.error, selectedChapter, activeTab]);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [cfg.source, cfg.file, cfg.field, cfg.dbField, t.error, selectedChapter, activeTab, searchQuery, kitabData]);
 
   // ── URL path params → state ────────────────────────────────
   useEffect(() => {
