@@ -14,7 +14,7 @@ const FALLBACK_SURAHS = [
   {"number": 5, "english_name": "Al-Ma'idah", "name": "المائدة", "number_of_ayahs": 120},
   {"number": 6, "english_name": "Al-An'am", "name": "الأنعام", "number_of_ayahs": 165},
   {"number": 7, "english_name": "Al-A'raf", "name": "الأعراف", "number_of_ayahs": 206},
-  {"number": 8, "english_name": "Al-Anfal", "name": "الأنفال", "number_of_ayahs": 75},
+  {"number": 8, "english_name": "Al-Anfal", "name": "الأنفাল", "number_of_ayahs": 75},
   {"number": 9, "english_name": "At-Tawbah", "name": "التوبة", "number_of_ayahs": 129},
   {"number": 10, "english_name": "Yunus", "name": "يونس", "number_of_ayahs": 109},
   {"number": 11, "english_name": "Hud", "name": "هود", "number_of_ayahs": 123},
@@ -25,7 +25,7 @@ const FALLBACK_SURAHS = [
   {"number": 16, "english_name": "An-Nahl", "name": "النحل", "number_of_ayahs": 128},
   {"number": 17, "english_name": "Al-Isra", "name": "الإسراء", "number_of_ayahs": 111},
   {"number": 18, "english_name": "Al-Kahf", "name": "الكهف", "number_of_ayahs": 110},
-  {"number": 19, "english_name": "Maryam", "name": "مريم", "number_of_ayahs": 98},
+  {"number": 19, "english_name": "Maryam", "name": "মরম", "number_of_ayahs": 98},
   {"number": 20, "english_name": "Ta-Ha", "name": "طه", "number_of_ayahs": 135},
   {"number": 21, "english_name": "Al-Anbiya", "name": "الأنبياء", "number_of_ayahs": 112},
   {"number": 22, "english_name": "Al-Hajj", "name": "الحج", "number_of_ayahs": 78},
@@ -106,7 +106,7 @@ const FALLBACK_SURAHS = [
   {"number": 97, "english_name": "Al-Qadr", "name": "القدر", "number_of_ayahs": 5},
   {"number": 98, "english_name": "Al-Bayyinah", "name": "البينة", "number_of_ayahs": 8},
   {"number": 99, "english_name": "Az-Zalzalah", "name": "الزلزلة", "number_of_ayahs": 8},
-  {"number": 100, "english_name": "Al-Adiyat", "name": "العاديات", "number_of_ayahs": 11},
+  {"number": 100, "english_name": "Al-Adiyat", "name": "العাদিয়াত", "number_of_ayahs": 11},
   {"number": 101, "english_name": "Al-Qari'ah", "name": "القارعة", "number_of_ayahs": 11},
   {"number": 102, "english_name": "At-Takathur", "name": "التكاثر", "number_of_ayahs": 8},
   {"number": 103, "english_name": "Al-Asr", "name": "العصر", "number_of_ayahs": 3},
@@ -141,6 +141,86 @@ const humanizeSlug = (slug) => {
     .join(" ");
 };
 
+// Base HTML template extracted from built index.html
+const BASE_HTML = `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>{{TITLE}}</title>
+    <meta name="description" content="{{DESCRIPTION}}" />
+    <link rel="canonical" href="{{CANONICAL}}" />
+    <meta name="author" content="NOOR" />
+    <meta name="theme-color" content="#0d9f6e" />
+    <meta name="msvalidate.01" content="BD28A1AD6076D784011352F0CB5D0B75" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Cinzel:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;500;600;700&family=Lora:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&family=Cormorant+Garamond:wght@400;500;600;700&family=Crimson+Pro:wght@300;400;500;600;700&family=Amiri:wght@400;700&family=Reem+Kufi:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Noor Islamic App" />
+    <meta property="og:title" content="{{TITLE}}" />
+    <meta property="og:description" content="{{DESCRIPTION}}" />
+    <meta property="og:image" content="https://noorapp.in/og-image.png" />
+    <meta property="og:url" content="{{CANONICAL}}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{TITLE}}" />
+    <meta name="twitter:description" content="{{DESCRIPTION}}" />
+    <meta name="twitter:image" content="https://noorapp.in/og-image.png" />
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){ dataLayer.push(arguments); }
+      window.gtag = gtag;
+      gtag('consent', 'default', {
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        analytics_storage: 'denied',
+        functionality_storage: 'granted',
+        security_storage: 'granted',
+        wait_for_update: 500
+      });
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2770098542057651" crossorigin="anonymous"></script>
+    <meta name="google-adsense-account" content="ca-pub-2770098542057651">
+    <script type="module" crossorigin src="/assets/index-DADGngc0.js"></script>
+    <link rel="modulepreload" crossorigin href="/assets/vendor-data--_x5elLo.js">
+    <link rel="modulepreload" crossorigin href="/assets/vendor-react-Ba1AxkWB.js">
+    <link rel="modulepreload" crossorigin href="/assets/vendor-ui-QY8IYcbR.js">
+    <link rel="stylesheet" crossorigin href="/assets/index-DewLekkf.css">
+    <style>
+      .ssr-only { padding: 40px 20px; max-width: 1200px; margin: 0 auto; color: #e5e7eb; }
+      .hero { text-align: center; margin-bottom: 40px; }
+      .hero h1 { color: #10b981; font-size: 2.5rem; margin-bottom: 1rem; }
+      .nav-card { display: block; padding: 20px; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); border-radius: 12px; text-decoration: none; color: #10b981; font-weight: bold; text-align: center; margin-bottom: 15px; }
+      .list-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); text-decoration: none; color: inherit; }
+      .list-item:hover { background: rgba(255,255,255,0.05); }
+      .arabic { font-family: 'Scheherazade New', serif; font-size: 1.8rem; text-align: right; margin: 15px 0; }
+      .translation { color: #9ca3af; font-size: 1.1rem; margin-bottom: 10px; }
+      .ayah, .hadith { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+      .breadcrumb { margin-bottom: 20px; color: #6b7280; }
+      .breadcrumb a { color: #10b981; }
+    </style>
+  </head>
+  <body style="background: #0f1419;">
+    <div id="root">
+      <div class="ssr-only">
+        {{BODY}}
+      </div>
+    </div>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js');
+        });
+      }
+    </script>
+  </body>
+</html>`;
+
 export default async function handler(req, res) {
   const { path = "/" } = req.query;
   console.log("[PRERENDER] Path:", path);
@@ -149,7 +229,6 @@ export default async function handler(req, res) {
   let description = "Read authentic Quran, Hadith, Dua, Prayer Times, Qibla, Islamic Stories and Baby Names in Bengali with a fast and beautiful Islamic app.";
   let bodyContent = "";
   let canonicalUrl = `${SITE_ORIGIN}${path}`;
-  let jsonLd = null;
 
   try {
     // --- Homepage ---
@@ -157,9 +236,9 @@ export default async function handler(req, res) {
       bodyContent = `
         <div class="hero">
           <h1>NOOR - Your Islamic Companion</h1>
-          <p>Authentic Islamic resources for your daily spiritual journey.</p>
+          <p>Authentic Islamic resources for your daily spiritual journey. Prayer times, Quran, Hadith, and more.</p>
         </div>
-        <nav class="main-nav">
+        <nav>
           <a href="/quran" class="nav-card">📖 Read Holy Quran</a>
           <a href="/hadith" class="nav-card">📚 Hadith Collections</a>
           <a href="/dua" class="nav-card">🤲 Daily Duas</a>
@@ -167,10 +246,6 @@ export default async function handler(req, res) {
           <a href="/prayer-times" class="nav-card">🕌 Prayer Times</a>
           <a href="/qibla" class="nav-card">🧭 Qibla Finder</a>
         </nav>
-        <section class="features">
-          <h2>Why Choose Noor?</h2>
-          <p>Noor provides authentic Bengali translations, clear Arabic text, and a seamless user experience for Muslims worldwide.</p>
-        </section>
       `;
     }
 
@@ -182,9 +257,9 @@ export default async function handler(req, res) {
         <h1>Contact Us</h1>
         <div class="contact-info">
           <p>We value your feedback and are here to help with any questions or issues you may have.</p>
-          <p><strong>Email:</strong> <a href="mailto:support@noorapp.in">support@noorapp.in</a></p>
-          <p><strong>Response Time:</strong> We aim to respond to all inquiries within 24-48 hours.</p>
-          <p><strong>Developer Info:</strong> Developed by a dedicated team focused on serving the Muslim Ummah with high-quality digital tools.</p>
+          <p><strong>Email:</strong> <a href="mailto:support@noorapp.in" style="color: #10b981;">support@noorapp.in</a></p>
+          <p><strong>Response Time:</strong> We typically respond within 24-48 hours.</p>
+          <p><strong>About:</strong> Noor is developed by a dedicated team focused on serving the Muslim Ummah with authentic digital resources.</p>
         </div>
       `;
     }
@@ -196,16 +271,15 @@ export default async function handler(req, res) {
       
       const surahLinks = FALLBACK_SURAHS.map(s => `
         <a href="/quran/${s.number}" class="list-item">
-          <span class="number">${s.number}</span>
-          <span class="name">${s.english_name}</span>
+          <span>${s.number}. ${s.english_name}</span>
           <span class="arabic">${s.name}</span>
         </a>
       `).join("");
 
       bodyContent = `
         <h1>Holy Quran (পবিত্র কুরআন মাজীদ)</h1>
-        <p>Browse and read the Holy Quran surah by surah.</p>
-        <div class="grid-list">
+        <p>Browse and read all 114 Surahs of the Holy Quran.</p>
+        <div class="list">
           ${surahLinks}
         </div>
       `;
@@ -218,7 +292,7 @@ export default async function handler(req, res) {
       
       if (surah) {
         title = `Surah ${surah.english_name} (${surah.name}) - Read Online | Noor`;
-        description = `Read Surah ${surah.english_name} with Arabic text and Bengali translation. Surah ${surahNum} of the Holy Quran contains ${surah.number_of_ayahs} ayahs.`;
+        description = `Read Surah ${surah.english_name} with Arabic text and Bengali translation. Surah ${surahNum} contains ${surah.number_of_ayahs} ayahs.`;
         
         const { data: ayahs } = await supabase
           .from("quran_ayahs")
@@ -231,17 +305,16 @@ export default async function handler(req, res) {
           <div class="ayah">
             <p class="arabic" dir="rtl">${esc(a.text)}</p>
             <p class="translation">${esc(a.bengali_translation)}</p>
-            <span class="ref">Ayah ${a.ayah_number}</span>
+            <span style="color: #6b7280; font-size: 0.8rem;">Ayah ${a.ayah_number}</span>
           </div>
         `).join("");
 
         bodyContent = `
           <nav class="breadcrumb"><a href="/quran">Quran</a> &gt; Surah ${surah.english_name}</nav>
           <h1>Surah ${surah.english_name} (${surah.name})</h1>
-          <div class="ayah-list">
+          <div class="content-list">
             ${ayahsHtml}
           </div>
-          <a href="/quran" class="btn">Back to All Surahs</a>
         `;
       }
     }
@@ -252,11 +325,11 @@ export default async function handler(req, res) {
       description = "Explore authentic Hadith collections including Sahih Bukhari with Bengali translations on Noor App.";
       bodyContent = `
         <h1>Hadith Collections</h1>
-        <div class="grid-list">
-          <a href="/hadith/sahih-bukhari/bangla" class="list-item">Sahih Bukhari (Bengali)</a>
-          <a href="/hadith/sahih-bukhari/english" class="list-item">Sahih Bukhari (English)</a>
-          <a href="/hadith/sahih-bukhari/urdu" class="list-item">Sahih Bukhari (Urdu)</a>
-        </div>
+        <nav>
+          <a href="/hadith/sahih-bukhari/bangla" class="nav-card">Sahih Bukhari (Bengali)</a>
+          <a href="/hadith/sahih-bukhari/english" class="nav-card">Sahih Bukhari (English)</a>
+          <a href="/hadith/sahih-bukhari/urdu" class="nav-card">Sahih Bukhari (Urdu)</a>
+        </nav>
       `;
     }
 
@@ -273,13 +346,13 @@ export default async function handler(req, res) {
 
       const chapterLinks = (chapters || []).map(c => `
         <a href="/hadith/sahih-bukhari/${lang}/chapter-${c.chapter_number}" class="list-item">
-          ${c.chapter_number}. ${lang === 'bangla' ? (c.title_bn || c.title) : c.title}
+          <span>${c.chapter_number}. ${lang === 'bangla' ? (c.title_bn || c.title) : c.title}</span>
         </a>
       `).join("");
 
       bodyContent = `
         <h1>Sahih Bukhari (${humanizeSlug(lang)})</h1>
-        <div class="grid-list">
+        <div class="list">
           ${chapterLinks}
         </div>
       `;
@@ -319,7 +392,7 @@ export default async function handler(req, res) {
         bodyContent = `
           <nav class="breadcrumb"><a href="/hadith">Hadith</a> &gt; <a href="/hadith/sahih-bukhari/${lang}">Sahih Bukhari</a> &gt; Chapter ${chapterNum}</nav>
           <h1>Chapter ${chapterNum}: ${lang === 'bangla' ? (chapter.title_bn || chapter.title) : chapter.title}</h1>
-          <div class="hadith-list">
+          <div class="content-list">
             ${hadithsHtml}
           </div>
         `;
@@ -343,7 +416,7 @@ export default async function handler(req, res) {
 
       bodyContent = `
         <h1>Daily Duas</h1>
-        <div class="grid-list">
+        <div class="list">
           ${duaLinks}
         </div>
       `;
@@ -366,7 +439,7 @@ export default async function handler(req, res) {
           <div class="content">
             <p class="arabic" dir="rtl">${esc(dua.arabic || "")}</p>
             <p class="translation">${esc(dua.content || "")}</p>
-            ${dua.reference ? `<p class="ref">Source: ${esc(dua.reference)}</p>` : ""}
+            ${dua.reference ? `<p style="color: #6b7280; font-size: 0.9rem; margin-top: 10px;">Source: ${esc(dua.reference)}</p>` : ""}
           </div>
         `;
       }
@@ -389,7 +462,7 @@ export default async function handler(req, res) {
 
       bodyContent = `
         <h1>Islamic Stories</h1>
-        <div class="grid-list">
+        <div class="list">
           ${storyLinks}
         </div>
       `;
@@ -410,13 +483,13 @@ export default async function handler(req, res) {
         bodyContent = `
           <h1>${esc(story.title)}</h1>
           <div class="story-body">
-            ${esc(story.content || "").split('\n').map(p => `<p>${p}</p>`).join('')}
+            ${esc(story.content || "").split('\n').map(p => `<p style="margin-bottom: 15px;">${p}</p>`).join('')}
           </div>
         `;
       }
     }
 
-    // --- Fallback ---
+    // --- Fallback if no specific content generated ---
     if (!bodyContent) {
       bodyContent = `
         <h1>${esc(title)}</h1>
@@ -424,42 +497,19 @@ export default async function handler(req, res) {
       `;
     }
 
-    const html = `<!DOCTYPE html>
-<html lang="bn">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${esc(title)}</title>
-    <meta name="description" content="${esc(description)}">
-    <link rel="canonical" href="${esc(canonicalUrl)}">
-    <style>
-      body { font-family: sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px; }
-      h1 { color: #0d9f6e; }
-      .arabic { font-size: 1.5em; text-align: right; margin: 20px 0; font-family: serif; }
-      .translation { font-style: italic; margin-bottom: 10px; }
-      .ref { font-size: 0.8em; color: #666; }
-      .grid-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-      .list-item { display: block; padding: 10px; border: 1px solid #eee; text-decoration: none; color: #0d9f6e; }
-      .list-item:hover { background: #f9f9f9; }
-      .breadcrumb { margin-bottom: 20px; font-size: 0.9em; }
-      .nav-card { display: block; padding: 20px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; text-decoration: none; color: #166534; font-weight: bold; margin-bottom: 10px; text-align: center; }
-    </style>
-</head>
-<body>
-    ${bodyContent}
-    <footer style="margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px; font-size: 0.8em; color: #999;">
-      <p>&copy; 2026 Noor App. Authentic Islamic Content.</p>
-      <nav>
-        <a href="/">Home</a> | <a href="/quran">Quran</a> | <a href="/hadith">Hadith</a> | <a href="/dua">Dua</a> | <a href="/stories">Stories</a> | <a href="/contact">Contact</a>
-      </nav>
-    </footer>
-</body>
-</html>`;
+    // Inject into template
+    const finalHtml = BASE_HTML
+      .replace(/{{TITLE}}/g, esc(title))
+      .replace(/{{DESCRIPTION}}/g, esc(description))
+      .replace(/{{CANONICAL}}/g, esc(canonicalUrl))
+      .replace(/{{BODY}}/g, bodyContent);
 
     res.setHeader("Content-Type", "text/html; charset=utf-8");
-    res.status(200).send(html);
-  } catch (e) {
-    console.error(e);
-    res.status(500).send("Internal Server Error");
+    res.setHeader("Cache-Control", "public, max-age=3600");
+    res.status(200).send(finalHtml);
+  } catch (error) {
+    console.error("Prerender error:", error);
+    // Even on error, serve a basic functional HTML
+    res.status(200).send(BASE_HTML.replace("{{BODY}}", "<h1>Noor</h1><p>Loading Islamic resources...</p>"));
   }
 }
