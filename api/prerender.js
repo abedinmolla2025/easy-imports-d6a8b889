@@ -108,18 +108,18 @@ const FALLBACK_SURAHS = [
   {"number": 97, "english_name": "Al-Qadr", "name": "القدر", "number_of_ayahs": 5, "english_name_translation": "The Power"},
   {"number": 98, "english_name": "Al-Bayyinah", "name": "البينة", "number_of_ayahs": 8, "english_name_translation": "The Clear Proof"},
   {"number": 99, "english_name": "Az-Zalzalah", "name": "الزلزلة", "number_of_ayahs": 8, "english_name_translation": "The Earthquake"},
-  {"number": 100, "english_name": "Al-Adiyat", "name": "العاديات", "number_of_ayahs": 11, "english_name_translation": "The Courser"},
+  {"number": 100, "english_name": "Al-Adiyat", "name": "العাদিয়াত", "number_of_ayahs": 11, "english_name_translation": "The Courser"},
   {"number": 101, "english_name": "Al-Qari'ah", "name": "القارعة", "number_of_ayahs": 11, "english_name_translation": "The Calamity"},
   {"number": 102, "english_name": "At-Takathur", "name": "التكاثر", "number_of_ayahs": 8, "english_name_translation": "The Rivalry in world increase"},
   {"number": 103, "english_name": "Al-Asr", "name": "العصر", "number_of_ayahs": 3, "english_name_translation": "The Declining Day"},
   {"number": 104, "english_name": "Al-Humazah", "name": "الهمزة", "number_of_ayahs": 9, "english_name_translation": "The Traducer"},
-  {"number": 105, "english_name": "Al-Fil", "name": "الفিল", "number_of_ayahs": 5, "english_name_translation": "The Elephant"},
-  {"number": 106, "english_name": "Quraysh", "name": "قريش", "number_of_ayahs": 4, "english_name_translation": "Quraysh"},
+  {"number": 105, "english_name": "Al-Fil", "name": "الفيل", "number_of_ayahs": 5, "english_name_translation": "The Elephant"},
+  {"number": 106, "english_name": "Quraysh", "name": "قريশ", "number_of_ayahs": 4, "english_name_translation": "Quraysh"},
   {"number": 107, "english_name": "Al-Ma'un", "name": "الماعون", "number_of_ayahs": 7, "english_name_translation": "The Small Kindnesses"},
   {"number": 108, "english_name": "Al-Kawthar", "name": "الكوثر", "number_of_ayahs": 3, "english_name_translation": "The Abundance"},
   {"number": 109, "english_name": "Al-Kafirun", "name": "الكافرون", "number_of_ayahs": 6, "english_name_translation": "The Disbelievers"},
   {"number": 110, "english_name": "An-Nasr", "name": "النصر", "number_of_ayahs": 3, "english_name_translation": "The Divine Support"},
-  {"number": 111, "english_name": "Al-Masad", "name": "المسد", "number_of_ayahs": 5, "english_name_translation": "The Palm Fiber"},
+  {"number": 111, "english_name": "Al-Masad", "name": "المسদ", "number_of_ayahs": 5, "english_name_translation": "The Palm Fiber"},
   {"number": 112, "english_name": "Al-Ikhlas", "name": "الإخلاص", "number_of_ayahs": 4, "english_name_translation": "The Sincerity"},
   {"number": 113, "english_name": "Al-Falaq", "name": "الفلق", "number_of_ayahs": 5, "english_name_translation": "The Daybreak"},
   {"number": 114, "english_name": "An-Nas", "name": "الناس", "number_of_ayahs": 6, "english_name_translation": "Mankind"}
@@ -136,18 +136,14 @@ const esc = (s) => {
 };
 
 const getAppTemplate = () => {
-  // Use Vercel's absolute path for included files
   const templatePath = path.join(process.cwd(), "dist", "app.html");
   try {
     if (fs.existsSync(templatePath)) {
-      console.log("[PRERENDER] Found template at:", templatePath);
       return fs.readFileSync(templatePath, "utf8");
     }
   } catch (e) {
     console.error("[PRERENDER] Error reading template:", e);
   }
-  
-  console.error("[PRERENDER] Template not found at:", templatePath);
   return `<!DOCTYPE html><html><head><title>{{TITLE}}</title></head><body><div id="root">{{BODY}}</div></body></html>`;
 };
 
@@ -231,7 +227,7 @@ export default async function handler(req, res) {
       `;
     }
 
-    // --- Quran Surah Pages ---
+    // --- Quran Surah Pages (using alquran.cloud API) ---
     else if (routePath.match(/^\/quran\/\d+$/)) {
       const surahNum = parseInt(routePath.split("/")[2]);
       const surah = FALLBACK_SURAHS.find(s => s.number === surahNum);
@@ -240,36 +236,41 @@ export default async function handler(req, res) {
         title = `Surah ${surah.english_name} (${surah.name}) - Read Online | Noor`;
         
         try {
-          const { data: ayahs } = await supabase
-            .from("quran_ayahs")
-            .select("ayah_number, text, bengali_translation")
-            .eq("surah_number", surahNum)
-            .order("ayah_number")
-            .limit(100);
-
-          const ayahsHtml = (ayahs || []).map(a => `
-            <div class="p-4 border-b border-white/10">
-              <p class="text-right text-2xl font-arabic mb-3" dir="rtl">${esc(a.text)}</p>
-              <p class="text-white/80">${esc(a.bengali_translation)}</p>
-            </div>
-          `).join("");
+          const [arRes, bnRes] = await Promise.all([
+            fetch(`https://api.alquran.cloud/v1/surah/${surahNum}/ar.alafasy`),
+            fetch(`https://api.alquran.cloud/v1/surah/${surahNum}/bn.bengali`)
+          ]);
           
-          bodyContent = `
-            <div class="min-h-screen bg-[hsl(158,64%,18%)] text-white">
-              <header class="sticky top-0 bg-[hsl(158,55%,22%)] border-b border-white/10 p-4 flex justify-between items-center">
-                <div>
-                  <h1 class="text-lg font-bold">${surah.english_name}</h1>
-                  <p class="text-xs text-white/60">${surah.english_name_translation}</p>
-                </div>
-                <span class="text-2xl font-arabic text-[hsl(45,93%,58%)]">${surah.name}</span>
-              </header>
-              <div class="max-w-3xl mx-auto">
-                ${ayahsHtml || '<p class="p-8 text-center text-white/50">Ayahs not found.</p>'}
+          const arData = await arRes.json();
+          const bnData = await bnRes.json();
+          
+          if (arData.code === 200 && bnData.code === 200) {
+            const ayahsHtml = arData.data.ayahs.map((a, i) => `
+              <div class="p-4 border-b border-white/10">
+                <p class="text-right text-2xl font-arabic mb-3" dir="rtl">${esc(a.text)}</p>
+                <p class="text-white/80">${esc(bnData.data.ayahs[i].text)}</p>
               </div>
-            </div>
-          `;
+            `).join("");
+            
+            bodyContent = `
+              <div class="min-h-screen bg-[hsl(158,64%,18%)] text-white">
+                <header class="sticky top-0 bg-[hsl(158,55%,22%)] border-b border-white/10 p-4 flex justify-between items-center">
+                  <div>
+                    <h1 class="text-lg font-bold">${surah.english_name}</h1>
+                    <p class="text-xs text-white/60">${surah.english_name_translation}</p>
+                  </div>
+                  <span class="text-2xl font-arabic text-[hsl(45,93%,58%)]">${surah.name}</span>
+                </header>
+                <div class="max-w-3xl mx-auto">
+                  ${ayahsHtml}
+                </div>
+              </div>
+            `;
+          } else {
+            throw new Error("API response not 200");
+          }
         } catch (e) {
-          bodyContent = `<div class="min-h-screen bg-[hsl(158,64%,18%)] flex items-center justify-center text-white">Loading...</div>`;
+          bodyContent = `<div class="min-h-screen bg-[hsl(158,64%,18%)] flex items-center justify-center text-white">Loading content...</div>`;
         }
       }
     }
@@ -461,7 +462,6 @@ export default async function handler(req, res) {
       .replace(/<meta property="og:url" content="[^"]*"/, `<meta property="og:url" content="${esc(canonicalUrl)}"`)
       .replace(/<meta name="twitter:title" content="[^"]*"/, `<meta name="twitter:title" content="${esc(title)}"`)
       .replace(/<meta name="twitter:description" content="[^"]*"/, `<meta name="twitter:description" content="${esc(description)}"`)
-      // Inject body into #root
       .replace('<div id="root"></div>', `<div id="root">${bodyContent}</div>`);
 
     res.setHeader("Content-Type", "text/html; charset=utf-8");
