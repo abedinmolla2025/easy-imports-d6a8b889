@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { Search, BookOpen, ChevronRight, ArrowLeft, Sparkles, Heart, Volume2, Loader2 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";

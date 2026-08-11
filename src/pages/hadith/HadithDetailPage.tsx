@@ -11,6 +11,7 @@ import {
   ScrollText,
   Lightbulb,
   Languages,
+  Loader2,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
