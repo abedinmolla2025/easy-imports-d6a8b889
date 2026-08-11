@@ -64,8 +64,9 @@ export default async function handler(req, res) {
     const hadithLangMatch = path.match(/^\/hadith\/sahih-bukhari\/(bangla|english|urdu)$/);
     if (hadithLangMatch) {
       const lang = hadithLangMatch[1];
+      const dbField = lang === "bangla" ? "bengali" : lang;
       const { data: chapters } = await supabase.from("hadith_chapters").select("*").eq("book_id", "bukhari").order("chapter_number");
-      const { data: sampleHadiths } = await supabase.from("hadiths").select("hadith_number, arabic, " + lang).eq("book_key", "bukhari").not(lang, "is", null).limit(25);
+      const { data: sampleHadiths } = await supabase.from("hadiths").select("hadith_number, arabic, " + dbField).eq("book_key", "bukhari").not(dbField, "is", null).limit(25);
 
       title = `Sahih Bukhari ${humanizeSlug(lang)} Hadith Collection | Noor`;
       description = `Browse all ${chapters?.length || 97} chapters of Sahih Bukhari with ${lang} translation and original Arabic text on Noor.`;
@@ -78,7 +79,7 @@ export default async function handler(req, res) {
           ${chapters?.map(c => `<li><a href="/hadith/sahih-bukhari/${lang}/chapter-${c.chapter_number}">${c.title_bn || c.title}</a> (${c.hadith_count} hadiths)</li>`).join("")}
         </ul>
         <h3>Sample Hadiths</h3>
-        ${sampleHadiths?.map(h => `<article><h4>Hadith ${h.hadith_number}</h4><p dir="rtl">${h.arabic}</p><p>${h[lang]}</p></article>`).join("")}
+        ${sampleHadiths?.map(h => `<article><h4>Hadith ${h.hadith_number}</h4><p dir="rtl">${h.arabic}</p><p>${h[dbField]}</p></article>`).join("")}
       `;
       
       jsonLd = {
@@ -103,8 +104,9 @@ export default async function handler(req, res) {
     const hadithChapterMatch = path.match(/^\/hadith\/sahih-bukhari\/(bangla|english|urdu)\/chapter-(\d+)$/);
     if (hadithChapterMatch) {
       const [, lang, chapterNum] = hadithChapterMatch;
+      const dbField = lang === "bangla" ? "bengali" : lang;
       const { data: chapter } = await supabase.from("hadith_chapters").select("*").eq("book_id", "bukhari").eq("chapter_number", chapterNum).maybeSingle();
-      const { data: hadiths } = await supabase.from("hadiths").select("hadith_number, arabic, " + lang).eq("book_key", "bukhari").eq("chapter_id", chapterNum).not(lang, "is", null).limit(60);
+      const { data: hadiths } = await supabase.from("hadiths").select("hadith_number, arabic, " + dbField).eq("book_key", "bukhari").eq("chapter_id", chapterNum).not(dbField, "is", null).limit(60);
 
       const chapTitle = chapter?.title_bn || chapter?.title || `Chapter ${chapterNum}`;
       title = `Sahih Bukhari ${humanizeSlug(lang)} - ${chapTitle} | Noor`;
@@ -118,7 +120,7 @@ export default async function handler(req, res) {
           <article>
             <h3>Hadith ${h.hadith_number}</h3>
             <p dir="rtl" style="font-size: 1.2em;">${h.arabic}</p>
-            <p>${h[lang]}</p>
+            <p>${h[dbField]}</p>
           </article>
         `).join("")}
       `;
