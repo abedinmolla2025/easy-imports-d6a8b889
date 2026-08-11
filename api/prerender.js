@@ -167,7 +167,7 @@ async function loadHadithRowsSsr(lang, chapterId) {
         const json = await response.json();
         rows = flattenHadithBooks(json)
           .filter((row) => row.arabic && row[meta.field] && (!chapterId || Number(row.chapter_id) === chapterId))
-          .slice(0, 40)
+          .slice(0, 20)
           .map((row) => ({
             id: row.id,
             chapterId: Number(row.chapter_id),
@@ -187,7 +187,7 @@ async function loadHadithRowsSsr(lang, chapterId) {
       .not(meta.field, "is", null)
       .order("chapter_id", { ascending: true })
       .order("hadith_number", { ascending: true })
-      .range(0, 39);
+      .range(0, 19);
     if (chapterId) query = query.eq("chapter_id", chapterId);
     const { data } = await query;
     rows = (data || []).map((row) => ({
@@ -754,7 +754,7 @@ export default async function handler(req, res) {
     });
 
     res.setHeader("Content-Type", "text/html; charset=utf-8");
-    res.setHeader("Cache-Control", "public, s-maxage=86400, stale-while-revalidate=3600, max-age=60");
+    res.setHeader("Cache-Control", "public, s-maxage=31536000, stale-while-revalidate=604800, max-age=3600");
     res.setHeader("X-Noor-Prerender", "true");
     res.status(200).send(finalHtml);
   } catch (error) {

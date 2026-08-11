@@ -263,35 +263,29 @@ async function loadChapterFromDb(dbField: string, chapterId: number): Promise<Ha
   }));
 }
 
-async function loadFromDb(dbField: string, search: string = ""): Promise<Hadith[]> {
-  let allRows: any[] = [];
-  let from = 0;
-  const step = 1000;
-  
-  while (true) {
-    let query = (supabase as any)
-      .from("hadiths")
-      .select("id, chapter_id, hadith_number, arabic, slug, " + dbField)
-      .eq("book_key", "bukhari")
-      .not(dbField, "is", null)
-      .order("chapter_id", { ascending: true })
-      .order("hadith_number", { ascending: true })
-      .range(from, from + step - 1);
+async function loadFromDb(dbField: string, search: string = "", chapterId: number | null = null, limit: number = 100): Promise<Hadith[]> {
+  let query = (supabase as any)
+    .from("hadiths")
+    .select("id, chapter_id, hadith_number, arabic, slug, " + dbField)
+    .eq("book_key", "bukhari")
+    .not(dbField, "is", null)
+    .order("chapter_id", { ascending: true })
+    .order("hadith_number", { ascending: true })
+    .limit(limit);
 
-    if (search) {
-      query = query.ilike(dbField, `%${search}%`);
-    }
-
-    const { data, error } = await query;
-    if (error) throw error;
-    if (!data || data.length === 0) break;
-
-    allRows = [...allRows, ...data];
-    if (data.length < step) break;
-    from += step;
+  if (chapterId) {
+    query = query.eq("chapter_id", chapterId);
   }
 
-  return allRows.map((row: any) => ({
+  if (search) {
+    query = query.ilike(dbField, `%${search}%`);
+  }
+
+  const { data, error } = await query;
+  if (error) throw error;
+  if (!data) return [];
+
+  return data.map((row: any) => ({
     id: row.id,
     chapterId: row.chapter_id,
     number: row.hadith_number,
@@ -419,7 +413,7 @@ export default function BukhariLangPage() {
               setLoading(false);
             });
         } else {
-          loadFromDb(dbField, searchQuery)
+          loadFromDb(dbField, searchQuery, selectedChapter, 100)
             .then(processHadiths)
             .catch((err) => {
               if (cancelled) return;
