@@ -177,8 +177,11 @@ const HadithDetailPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background grid place-items-center">
-        <p className="text-white/60 text-sm">হাদিস লোড হচ্ছে...</p>
+      <div className="min-h-screen bg-[hsl(158,64%,12%)] grid place-items-center" style={{ backgroundImage: ISLAMIC_PATTERN }}>
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="w-10 h-10 text-[hsl(45,93%,58%)] animate-spin" />
+          <p className="text-white/60 animate-pulse font-medium tracking-wide">Loading Hadith Details...</p>
+        </div>
       </div>
     );
   }

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { Link } from "react-router-dom";
-import { ChevronLeft, ChevronRight, BookOpen } from "lucide-react";
+import { ChevronLeft, ChevronRight, BookOpen, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useStories } from "@/lib/stories";
 
@@ -66,8 +66,9 @@ export default function StoriesHeroSlider() {
 
   if (loading || slides.length === 0) {
     return (
-      <div className="w-full aspect-[3/4] sm:aspect-[16/10] md:aspect-[21/9] max-h-[620px] rounded-2xl bg-muted animate-pulse flex items-center justify-center">
-        <p className="text-muted-foreground">স্লাইডার লোড হচ্ছে…</p>
+      <div className="w-full aspect-[3/4] sm:aspect-[16/10] md:aspect-[21/9] max-h-[620px] rounded-2xl bg-muted flex flex-col items-center justify-center gap-4">
+        <Loader2 className="w-10 h-10 text-emerald-600 animate-spin" />
+        <p className="text-muted-foreground animate-pulse font-medium tracking-wide">Loading Slider...</p>
       </div>
     );
   }

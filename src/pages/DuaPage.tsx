@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { Search, BookOpen, ChevronRight, ArrowLeft, Sparkles, Heart, Volume2 } from "lucide-react";
+import { Search, BookOpen, ChevronRight, ArrowLeft, Sparkles, Heart, Volume2, Loader2 } from "lucide-react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { motion, AnimatePresence } from "framer-motion";
@@ -649,7 +649,10 @@ const DuaPage = () => {
       )}
 
       {loading && (
-        <div className="p-4 text-center text-white/70 text-sm">{UI_LABELS.loading[language]}</div>
+        <div className="flex flex-col items-center justify-center py-20 gap-4">
+          <Loader2 className="w-10 h-10 text-[hsl(45,93%,58%)] animate-spin" />
+          <p className="text-white/60 animate-pulse font-medium tracking-wide">Loading Duas...</p>
+        </div>
       )}
       {error && (
         <div className="p-4 text-center text-red-300 text-sm">{UI_LABELS.errorMessage[language]}</div>

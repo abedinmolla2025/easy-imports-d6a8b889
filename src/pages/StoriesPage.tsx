@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { BookOpen, Search, Sparkles, ChevronRight, Flame, Clock, LayoutGrid, Play } from "lucide-react";
+import { BookOpen, Search, Sparkles, ChevronRight, Flame, Clock, LayoutGrid, Play, Loader2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -228,7 +228,10 @@ export default function StoriesPage() {
           </div>
 
           {loading ? (
-            <p className="text-muted-foreground">Loading stories…</p>
+            <div className="flex flex-col items-center justify-center py-20 gap-4">
+              <Loader2 className="w-10 h-10 text-emerald-600 animate-spin" />
+              <p className="text-muted-foreground animate-pulse font-medium tracking-wide">Loading Stories...</p>
+            </div>
           ) : pageItems.length === 0 ? (
             <Card><CardContent className="py-10 text-center text-muted-foreground">No stories found.</CardContent></Card>
           ) : (

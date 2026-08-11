@@ -634,8 +634,8 @@ export default function BukhariLangPage() {
 
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20 gap-4">
-            <Loader2 className="w-10 h-10 text-[#10b981] animate-spin" />
-            <p className="text-white/60 animate-pulse">{t.loading}</p>
+            <Loader2 className="w-10 h-10 text-[hsl(45,93%,58%)] animate-spin" />
+            <p className="text-white/60 animate-pulse font-medium tracking-wide">Loading Hadiths...</p>
           </div>
         ) : (
           <AnimatePresence mode="wait">

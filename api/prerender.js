@@ -727,7 +727,13 @@ export default async function handler(req, res) {
         <div class="min-h-screen flex items-center justify-center p-4 bg-background">
           <div class="text-center">
             <h1 class="text-2xl font-bold mb-2">${esc(title)}</h1>
-            <p class="text-muted-foreground">Loading the full experience...</p>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+              <div style="width: 2.5rem; height: 2.5rem; border: 4px solid rgba(255,255,255,0.1); border-top-color: #fbbf24; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+              <p style="color: rgba(255,255,255,0.6); font-family: sans-serif; font-weight: 500; letter-spacing: 0.025em;">Loading Experience...</p>
+            </div>
+            <style>
+              @keyframes spin { to { transform: rotate(360deg); } }
+            </style>
           </div>
         </div>
       `;
