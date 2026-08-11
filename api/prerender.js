@@ -7,120 +7,120 @@ const SUPABASE_ANON_KEY = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPA
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const FALLBACK_SURAHS = [
-  {"number": 1, "english_name": "Al-Fatiha", "name": "الفاتحة", "number_of_ayahs": 7},
-  {"number": 2, "english_name": "Al-Baqarah", "name": "البقرة", "number_of_ayahs": 286},
-  {"number": 3, "english_name": "Al-Imran", "name": "آل عمران", "number_of_ayahs": 200},
-  {"number": 4, "english_name": "An-Nisa", "name": "النساء", "number_of_ayahs": 176},
-  {"number": 5, "english_name": "Al-Ma'idah", "name": "المائدة", "number_of_ayahs": 120},
-  {"number": 6, "english_name": "Al-An'am", "name": "الأنعام", "number_of_ayahs": 165},
-  {"number": 7, "english_name": "Al-A'raf", "name": "الأعراف", "number_of_ayahs": 206},
-  {"number": 8, "english_name": "Al-Anfal", "name": "الأنفال", "number_of_ayahs": 75},
-  {"number": 9, "english_name": "At-Tawbah", "name": "التوبة", "number_of_ayahs": 129},
-  {"number": 10, "english_name": "Yunus", "name": "يونس", "number_of_ayahs": 109},
-  {"number": 11, "english_name": "Hud", "name": "هود", "number_of_ayahs": 123},
-  {"number": 12, "english_name": "Yusuf", "name": "يوسف", "number_of_ayahs": 111},
-  {"number": 13, "english_name": "Ar-Ra'd", "name": "الرعد", "number_of_ayahs": 43},
-  {"number": 14, "english_name": "Ibrahim", "name": "إبراهيم", "number_of_ayahs": 52},
-  {"number": 15, "english_name": "Al-Hijr", "name": "الحجر", "number_of_ayahs": 99},
-  {"number": 16, "english_name": "An-Nahl", "name": "النحل", "number_of_ayahs": 128},
-  {"number": 17, "english_name": "Al-Isra", "name": "الإسراء", "number_of_ayahs": 111},
-  {"number": 18, "english_name": "Al-Kahf", "name": "الكهف", "number_of_ayahs": 110},
-  {"number": 19, "english_name": "Maryam", "name": "مريم", "number_of_ayahs": 98},
-  {"number": 20, "english_name": "Ta-Ha", "name": "طه", "number_of_ayahs": 135},
-  {"number": 21, "english_name": "Al-Anbiya", "name": "الأنبياء", "number_of_ayahs": 112},
-  {"number": 22, "english_name": "Al-Hajj", "name": "الحج", "number_of_ayahs": 78},
-  {"number": 23, "english_name": "Al-Mu'minun", "name": "المؤمنون", "number_of_ayahs": 118},
-  {"number": 24, "english_name": "An-Nur", "name": "النور", "number_of_ayahs": 64},
-  {"number": 25, "english_name": "Al-Furqan", "name": "الفرقان", "number_of_ayahs": 77},
-  {"number": 26, "english_name": "Ash-Shu'ara", "name": "الشعراء", "number_of_ayahs": 227},
-  {"number": 27, "english_name": "An-Naml", "name": "النمل", "number_of_ayahs": 93},
-  {"number": 28, "english_name": "Al-Qasas", "name": "القصص", "number_of_ayahs": 88},
-  {"number": 29, "english_name": "Al-Ankabut", "name": "العنكبوت", "number_of_ayahs": 69},
-  {"number": 30, "english_name": "Ar-Rum", "name": "الروم", "number_of_ayahs": 60},
-  {"number": 31, "english_name": "Luqman", "name": "لقمان", "number_of_ayahs": 34},
-  {"number": 32, "english_name": "As-Sajdah", "name": "السجدة", "number_of_ayahs": 30},
-  {"number": 33, "english_name": "Al-Ahzab", "name": "الأحزاب", "number_of_ayahs": 73},
-  {"number": 34, "english_name": "Saba", "name": "سبإ", "number_of_ayahs": 54},
-  {"number": 35, "english_name": "Fatir", "name": "فاطر", "number_of_ayahs": 45},
-  {"number": 36, "english_name": "Ya-Sin", "name": "يس", "number_of_ayahs": 83},
-  {"number": 37, "english_name": "As-Saffat", "name": "الصافات", "number_of_ayahs": 182},
-  {"number": 38, "english_name": "Sad", "name": "ص", "number_of_ayahs": 88},
-  {"number": 39, "english_name": "Az-Zumar", "name": "الزمر", "number_of_ayahs": 75},
-  {"number": 40, "english_name": "Ghafir", "name": "غافر", "number_of_ayahs": 85},
-  {"number": 41, "english_name": "Fussilat", "name": "فصلت", "number_of_ayahs": 54},
-  {"number": 42, "english_name": "Ash-Shura", "name": "الشورى", "number_of_ayahs": 53},
-  {"number": 43, "english_name": "Az-Zukhruf", "name": "الزخرف", "number_of_ayahs": 89},
-  {"number": 44, "english_name": "Ad-Dukhan", "name": "الدخان", "number_of_ayahs": 59},
-  {"number": 45, "english_name": "Al-Jathiyah", "name": "الجاثية", "number_of_ayahs": 37},
-  {"number": 46, "english_name": "Al-Ahqaf", "name": "الأحقاف", "number_of_ayahs": 35},
-  {"number": 47, "english_name": "Muhammad", "name": "محمد", "number_of_ayahs": 38},
-  {"number": 48, "english_name": "Al-Fath", "name": "الفتح", "number_of_ayahs": 29},
-  {"number": 49, "english_name": "Al-Hujurat", "name": "الحجرات", "number_of_ayahs": 18},
-  {"number": 50, "english_name": "Qaf", "name": "ق", "number_of_ayahs": 45},
-  {"number": 51, "english_name": "Adh-Dhariyat", "name": "الذاريات", "number_of_ayahs": 60},
-  {"number": 52, "english_name": "At-Tur", "name": "الطور", "number_of_ayahs": 49},
-  {"number": 53, "english_name": "An-Najm", "name": "النجم", "number_of_ayahs": 62},
-  {"number": 54, "english_name": "Al-Qamar", "name": "القمر", "number_of_ayahs": 55},
-  {"number": 55, "english_name": "Ar-Rahman", "name": "الرحمن", "number_of_ayahs": 78},
-  {"number": 56, "english_name": "Al-Waqi'ah", "name": "الواقعة", "number_of_ayahs": 96},
-  {"number": 57, "english_name": "Al-Hadid", "name": "الحديد", "number_of_ayahs": 29},
-  {"number": 58, "english_name": "Al-Mujadila", "name": "المجادلة", "number_of_ayahs": 22},
-  {"number": 59, "english_name": "Al-Hashr", "name": "الحشر", "number_of_ayahs": 24},
-  {"number": 60, "english_name": "Al-Mumtahanah", "name": "الممتحنة", "number_of_ayahs": 13},
-  {"number": 61, "english_name": "As-Saff", "name": "الصف", "number_of_ayahs": 14},
-  {"number": 62, "english_name": "Al-Jumu'ah", "name": "الجمعة", "number_of_ayahs": 11},
-  {"number": 63, "english_name": "Al-Munafiqun", "name": "المنافقون", "number_of_ayahs": 11},
-  {"number": 64, "english_name": "At-Taghabun", "name": "التغابن", "number_of_ayahs": 18},
-  {"number": 65, "english_name": "At-Talaq", "name": "الطلاق", "number_of_ayahs": 12},
-  {"number": 66, "english_name": "At-Tahrim", "name": "التحريم", "number_of_ayahs": 12},
-  {"number": 67, "english_name": "Al-Mulk", "name": "الملك", "number_of_ayahs": 30},
-  {"number": 68, "english_name": "Al-Qalam", "name": "القلم", "number_of_ayahs": 52},
-  {"number": 69, "english_name": "Al-Haqqah", "name": "الحاقة", "number_of_ayahs": 52},
-  {"number": 70, "english_name": "Al-Ma'arij", "name": "المعارج", "number_of_ayahs": 44},
-  {"number": 71, "english_name": "Nuh", "name": "نوح", "number_of_ayahs": 28},
-  {"number": 72, "english_name": "Al-Jinn", "name": "الجن", "number_of_ayahs": 28},
-  {"number": 73, "english_name": "Al-Muzzammil", "name": "المزمل", "number_of_ayahs": 20},
-  {"number": 74, "english_name": "Al-Muddaththir", "name": "المدثر", "number_of_ayahs": 56},
-  {"number": 75, "english_name": "Al-Qiyamah", "name": "القيامة", "number_of_ayahs": 40},
-  {"number": 76, "english_name": "Al-Insan", "name": "الإنسان", "number_of_ayahs": 31},
-  {"number": 77, "english_name": "Al-Mursalat", "name": "المرسلات", "number_of_ayahs": 50},
-  {"number": 78, "english_name": "An-Naba", "name": "النبإ", "number_of_ayahs": 40},
-  {"number": 79, "english_name": "An-Nazi'at", "name": "النازعات", "number_of_ayahs": 46},
-  {"number": 80, "english_name": "Abasa", "name": "عبس", "number_of_ayahs": 42},
-  {"number": 81, "english_name": "At-Takwir", "name": "التكوير", "number_of_ayahs": 29},
-  {"number": 82, "english_name": "Al-Infitar", "name": "الانفطار", "number_of_ayahs": 19},
-  {"number": 83, "english_name": "Al-Mutaffifin", "name": "المطففين", "number_of_ayahs": 36},
-  {"number": 84, "english_name": "Al-Inshiqaq", "name": "الانشقاق", "number_of_ayahs": 25},
-  {"number": 85, "english_name": "Al-Buruj", "name": "البروج", "number_of_ayahs": 22},
-  {"number": 86, "english_name": "At-Tariq", "name": "الطارق", "number_of_ayahs": 17},
-  {"number": 87, "english_name": "Al-A'la", "name": "الأعلى", "number_of_ayahs": 19},
-  {"number": 88, "english_name": "Al-Ghashiyah", "name": "الغاشية", "number_of_ayahs": 26},
-  {"number": 89, "english_name": "Al-Fajr", "name": "الفجر", "number_of_ayahs": 30},
-  {"number": 90, "english_name": "Al-Balad", "name": "البلদ", "number_of_ayahs": 20},
-  {"number": 91, "english_name": "Ash-Shams", "name": "الشمس", "number_of_ayahs": 15},
-  {"number": 92, "english_name": "Al-Layl", "name": "الليل", "number_of_ayahs": 21},
-  {"number": 93, "english_name": "Ad-Duha", "name": "الضحى", "number_of_ayahs": 11},
-  {"number": 94, "english_name": "Ash-Sharh", "name": "الشرح", "number_of_ayahs": 8},
-  {"number": 95, "english_name": "At-Tin", "name": "التين", "number_of_ayahs": 8},
-  {"number": 96, "english_name": "Al-Alaq", "name": "العلق", "number_of_ayahs": 19},
-  {"number": 97, "english_name": "Al-Qadr", "name": "القدر", "number_of_ayahs": 5},
-  {"number": 98, "english_name": "Al-Bayyinah", "name": "البينة", "number_of_ayahs": 8},
-  {"number": 99, "english_name": "Az-Zalzalah", "name": "الزلزلة", "number_of_ayahs": 8},
-  {"number": 100, "english_name": "Al-Adiyat", "name": "العاديات", "number_of_ayahs": 11},
-  {"number": 101, "english_name": "Al-Qari'ah", "name": "القارعة", "number_of_ayahs": 11},
-  {"number": 102, "english_name": "At-Takathur", "name": "التكاثر", "number_of_ayahs": 8},
-  {"number": 103, "english_name": "Al-Asr", "name": "العصر", "number_of_ayahs": 3},
-  {"number": 104, "english_name": "Al-Humazah", "name": "الهمزة", "number_of_ayahs": 9},
-  {"number": 105, "english_name": "Al-Fil", "name": "الفيل", "number_of_ayahs": 5},
-  {"number": 106, "english_name": "Quraysh", "name": "قريش", "number_of_ayahs": 4},
-  {"number": 107, "english_name": "Al-Ma'un", "name": "الماعون", "number_of_ayahs": 7},
-  {"number": 108, "english_name": "Al-Kawthar", "name": "الكوثر", "number_of_ayahs": 3},
-  {"number": 109, "english_name": "Al-Kafirun", "name": "الكافرون", "number_of_ayahs": 6},
-  {"number": 110, "english_name": "An-Nasr", "name": "النصر", "number_of_ayahs": 3},
-  {"number": 111, "english_name": "Al-Masad", "name": "المسد", "number_of_ayahs": 5},
-  {"number": 112, "english_name": "Al-Ikhlas", "name": "الإخلاص", "number_of_ayahs": 4},
-  {"number": 113, "english_name": "Al-Falaq", "name": "الفلق", "number_of_ayahs": 5},
-  {"number": 114, "english_name": "An-Nas", "name": "الناس", "number_of_ayahs": 6}
+  {"number": 1, "english_name": "Al-Fatiha", "name": "الفاتحة", "number_of_ayahs": 7, "english_name_translation": "The Opening"},
+  {"number": 2, "english_name": "Al-Baqarah", "name": "البقرة", "number_of_ayahs": 286, "english_name_translation": "The Cow"},
+  {"number": 3, "english_name": "Al-Imran", "name": "آل عمران", "number_of_ayahs": 200, "english_name_translation": "The Family of Imraan"},
+  {"number": 4, "english_name": "An-Nisa", "name": "النساء", "number_of_ayahs": 176, "english_name_translation": "The Women"},
+  {"number": 5, "english_name": "Al-Ma'idah", "name": "المائدة", "number_of_ayahs": 120, "english_name_translation": "The Table"},
+  {"number": 6, "english_name": "Al-An'am", "name": "الأنعام", "number_of_ayahs": 165, "english_name_translation": "The Cattle"},
+  {"number": 7, "english_name": "Al-A'raf", "name": "الأعراف", "number_of_ayahs": 206, "english_name_translation": "The Heights"},
+  {"number": 8, "english_name": "Al-Anfal", "name": "الأنفাল", "number_of_ayahs": 75, "english_name_translation": "The Spoils of War"},
+  {"number": 9, "english_name": "At-Tawbah", "name": "التوبة", "number_of_ayahs": 129, "english_name_translation": "The Repentance"},
+  {"number": 10, "english_name": "Yunus", "name": "يونس", "number_of_ayahs": 109, "english_name_translation": "Yunus"},
+  {"number": 11, "english_name": "Hud", "name": "هود", "number_of_ayahs": 123, "english_name_translation": "Hud"},
+  {"number": 12, "english_name": "Yusuf", "name": "يوسف", "number_of_ayahs": 111, "english_name_translation": "Yusuf"},
+  {"number": 13, "english_name": "Ar-Ra'd", "name": "الرعد", "number_of_ayahs": 43, "english_name_translation": "The Thunder"},
+  {"number": 14, "english_name": "Ibrahim", "name": "إবراهيم", "number_of_ayahs": 52, "english_name_translation": "Ibrahim"},
+  {"number": 15, "english_name": "Al-Hijr", "name": "الحجر", "number_of_ayahs": 99, "english_name_translation": "The Rocky Tract"},
+  {"number": 16, "english_name": "An-Nahl", "name": "النحل", "number_of_ayahs": 128, "english_name_translation": "The Bee"},
+  {"number": 17, "english_name": "Al-Isra", "name": "الإسراء", "number_of_ayahs": 111, "english_name_translation": "The Night Journey"},
+  {"number": 18, "english_name": "Al-Kahf", "name": "الكهف", "number_of_ayahs": 110, "english_name_translation": "The Cave"},
+  {"number": 19, "english_name": "Maryam", "name": "মরম", "number_of_ayahs": 98, "english_name_translation": "Maryam"},
+  {"number": 20, "english_name": "Ta-Ha", "name": "طه", "number_of_ayahs": 135, "english_name_translation": "Ta-Ha"},
+  {"number": 21, "english_name": "Al-Anbiya", "name": "الأنبياء", "number_of_ayahs": 112, "english_name_translation": "The Prophets"},
+  {"number": 22, "english_name": "Al-Hajj", "name": "الحج", "number_of_ayahs": 78, "english_name_translation": "The Pilgrimage"},
+  {"number": 23, "english_name": "Al-Mu'minun", "name": "المؤمنون", "number_of_ayahs": 118, "english_name_translation": "The Believers"},
+  {"number": 24, "english_name": "An-Nur", "name": "النور", "number_of_ayahs": 64, "english_name_translation": "The Light"},
+  {"number": 25, "english_name": "Al-Furqan", "name": "الفرقان", "number_of_ayahs": 77, "english_name_translation": "The Criterion"},
+  {"number": 26, "english_name": "Ash-Shu'ara", "name": "الشعراء", "number_of_ayahs": 227, "english_name_translation": "The Poets"},
+  {"number": 27, "english_name": "An-Naml", "name": "النمل", "number_of_ayahs": 93, "english_name_translation": "The Ant"},
+  {"number": 28, "english_name": "Al-Qasas", "name": "القصص", "number_of_ayahs": 88, "english_name_translation": "The Stories"},
+  {"number": 29, "english_name": "Al-Ankabut", "name": "العنكبوت", "number_of_ayahs": 69, "english_name_translation": "The Spider"},
+  {"number": 30, "english_name": "Ar-Rum", "name": "الروم", "number_of_ayahs": 60, "english_name_translation": "The Romans"},
+  {"number": 31, "english_name": "Luqman", "name": "لقمان", "number_of_ayahs": 34, "english_name_translation": "Luqman"},
+  {"number": 32, "english_name": "As-Sajdah", "name": "السجدة", "number_of_ayahs": 30, "english_name_translation": "The Prostration"},
+  {"number": 33, "english_name": "Al-Ahzab", "name": "الأحزاب", "number_of_ayahs": 73, "english_name_translation": "The Combined Forces"},
+  {"number": 34, "english_name": "Saba", "name": "سبإ", "number_of_ayahs": 54, "english_name_translation": "Saba"},
+  {"number": 35, "english_name": "Fatir", "name": "فاطر", "number_of_ayahs": 45, "english_name_translation": "The Originator"},
+  {"number": 36, "english_name": "Ya-Sin", "name": "يس", "number_of_ayahs": 83, "english_name_translation": "Ya-Sin"},
+  {"number": 37, "english_name": "As-Saffat", "name": "الصافات", "number_of_ayahs": 182, "english_name_translation": "Those Ranges in Ranks"},
+  {"number": 38, "english_name": "Sad", "name": "ص", "number_of_ayahs": 88, "english_name_translation": "Sad"},
+  {"number": 39, "english_name": "Az-Zumar", "name": "الزمر", "number_of_ayahs": 75, "english_name_translation": "The Groups"},
+  {"number": 40, "english_name": "Ghafir", "name": "غافر", "number_of_ayahs": 85, "english_name_translation": "The Forgiver"},
+  {"number": 41, "english_name": "Fussilat", "name": "فصلت", "number_of_ayahs": 54, "english_name_translation": "Explained in Detail"},
+  {"number": 42, "english_name": "Ash-Shura", "name": "الشورى", "number_of_ayahs": 53, "english_name_translation": "Consultation"},
+  {"number": 43, "english_name": "Az-Zukhruf", "name": "الزخرف", "number_of_ayahs": 89, "english_name_translation": "The Ornaments of Gold"},
+  {"number": 44, "english_name": "Ad-Dukhan", "name": "الدخان", "number_of_ayahs": 59, "english_name_translation": "The Smoke"},
+  {"number": 45, "english_name": "Al-Jathiyah", "name": "الجاثية", "number_of_ayahs": 37, "english_name_translation": "Crouching"},
+  {"number": 46, "english_name": "Al-Ahqaf", "name": "الأحقاف", "number_of_ayahs": 35, "english_name_translation": "The Wind-curved Sandhills"},
+  {"number": 47, "english_name": "Muhammad", "name": "محمد", "number_of_ayahs": 38, "english_name_translation": "Muhammad"},
+  {"number": 48, "english_name": "Al-Fath", "name": "الفتح", "number_of_ayahs": 29, "english_name_translation": "The Victory"},
+  {"number": 49, "english_name": "Al-Hujurat", "name": "الحجرات", "number_of_ayahs": 18, "english_name_translation": "The Dwellings"},
+  {"number": 50, "english_name": "Qaf", "name": "ق", "number_of_ayahs": 45, "english_name_translation": "Qaf"},
+  {"number": 51, "english_name": "Adh-Dhariyat", "name": "الذاريات", "number_of_ayahs": 60, "english_name_translation": "The Winnowing Winds"},
+  {"number": 52, "english_name": "At-Tur", "name": "الطور", "number_of_ayahs": 49, "english_name_translation": "The Mount"},
+  {"number": 53, "english_name": "An-Najm", "name": "النجم", "number_of_ayahs": 62, "english_name_translation": "The Star"},
+  {"number": 54, "english_name": "Al-Qamar", "name": "القمر", "number_of_ayahs": 55, "english_name_translation": "The Moon"},
+  {"number": 55, "english_name": "Ar-Rahman", "name": "الرحمن", "number_of_ayahs": 78, "english_name_translation": "The Beneficent"},
+  {"number": 56, "english_name": "Al-Waqi'ah", "name": "الواقعة", "number_of_ayahs": 96, "english_name_translation": "The Inevitable"},
+  {"number": 57, "english_name": "Al-Hadid", "name": "الحديد", "number_of_ayahs": 29, "english_name_translation": "The Iron"},
+  {"number": 58, "english_name": "Al-Mujadila", "name": "المجادلة", "number_of_ayahs": 22, "english_name_translation": "The Pleading Woman"},
+  {"number": 59, "english_name": "Al-Hashr", "name": "الحشر", "number_of_ayahs": 24, "english_name_translation": "The Exile"},
+  {"number": 60, "english_name": "Al-Mumtahanah", "name": "المমتحنة", "number_of_ayahs": 13, "english_name_translation": "She that is to be examined"},
+  {"number": 61, "english_name": "As-Saff", "name": "الصف", "number_of_ayahs": 14, "english_name_translation": "The Ranks"},
+  {"number": 62, "english_name": "Al-Jumu'ah", "name": "الجمعة", "number_of_ayahs": 11, "english_name_translation": "The Congregation, Friday"},
+  {"number": 63, "english_name": "Al-Munafiqun", "name": "المنافقون", "number_of_ayahs": 11, "english_name_translation": "The Hypocrites"},
+  {"number": 64, "english_name": "At-Taghabun", "name": "التغابن", "number_of_ayahs": 18, "english_name_translation": "The Mutual Disillusion"},
+  {"number": 65, "english_name": "At-Talaq", "name": "الطلاق", "number_of_ayahs": 12, "english_name_translation": "The Divorce"},
+  {"number": 66, "english_name": "At-Tahrim", "name": "التحريم", "number_of_ayahs": 12, "english_name_translation": "The Prohibition"},
+  {"number": 67, "english_name": "Al-Mulk", "name": "الملك", "number_of_ayahs": 30, "english_name_translation": "The Sovereignty"},
+  {"number": 68, "english_name": "Al-Qalam", "name": "القلم", "number_of_ayahs": 52, "english_name_translation": "The Pen"},
+  {"number": 69, "english_name": "Al-Haqqah", "name": "الحاقة", "number_of_ayahs": 52, "english_name_translation": "The Reality"},
+  {"number": 70, "english_name": "Al-Ma'arij", "name": "المعارج", "number_of_ayahs": 44, "english_name_translation": "The Ascending Stairways"},
+  {"number": 71, "english_name": "Nuh", "name": "نوح", "number_of_ayahs": 28, "english_name_translation": "Nuh"},
+  {"number": 72, "english_name": "Al-Jinn", "name": "الجن", "number_of_ayahs": 28, "english_name_translation": "The Jinn"},
+  {"number": 73, "english_name": "Al-Muzzammil", "name": "المزمل", "number_of_ayahs": 20, "english_name_translation": "The Enshrouded One"},
+  {"number": 74, "english_name": "Al-Muddaththir", "name": "المدثر", "number_of_ayahs": 56, "english_name_translation": "The Cloaked One"},
+  {"number": 75, "english_name": "Al-Qiyamah", "name": "القيامة", "number_of_ayahs": 40, "english_name_translation": "The Resurrection"},
+  {"number": 76, "english_name": "Al-Insan", "name": "الإنسان", "number_of_ayahs": 31, "english_name_translation": "The Man"},
+  {"number": 77, "english_name": "Al-Mursalat", "name": "المرسلات", "number_of_ayahs": 50, "english_name_translation": "The Emissaries"},
+  {"number": 78, "english_name": "An-Naba", "name": "النبإ", "number_of_ayahs": 40, "english_name_translation": "The Tidings"},
+  {"number": 79, "english_name": "An-Nazi'at", "name": "النازعات", "number_of_ayahs": 46, "english_name_translation": "Those who drag forth"},
+  {"number": 80, "english_name": "Abasa", "name": "عبস", "number_of_ayahs": 42, "english_name_translation": "He Frowned"},
+  {"number": 81, "english_name": "At-Takwir", "name": "التكوير", "number_of_ayahs": 29, "english_name_translation": "The Overthrowing"},
+  {"number": 82, "english_name": "Al-Infitar", "name": "الانفطار", "number_of_ayahs": 19, "english_name_translation": "The Cleaving"},
+  {"number": 83, "english_name": "Al-Mutaffifin", "name": "المطففين", "number_of_ayahs": 36, "english_name_translation": "The Defrauding"},
+  {"number": 84, "english_name": "Al-Inshiqaq", "name": "الانشقاق", "number_of_ayahs": 25, "english_name_translation": "The Sundering"},
+  {"number": 85, "english_name": "Al-Buruj", "name": "البروج", "number_of_ayahs": 22, "english_name_translation": "The Mansions of the Stars"},
+  {"number": 86, "english_name": "At-Tariq", "name": "الطارق", "number_of_ayahs": 17, "english_name_translation": "The Nightcomer"},
+  {"number": 87, "english_name": "Al-A'la", "name": "الأعلى", "number_of_ayahs": 19, "english_name_translation": "The Most High"},
+  {"number": 88, "english_name": "Al-Ghashiyah", "name": "الغاشية", "number_of_ayahs": 26, "english_name_translation": "The Overwhelming"},
+  {"number": 89, "english_name": "Al-Fajr", "name": "الفجر", "number_of_ayahs": 30, "english_name_translation": "The Dawn"},
+  {"number": 90, "english_name": "Al-Balad", "name": "البلদ", "number_of_ayahs": 20, "english_name_translation": "The City"},
+  {"number": 91, "english_name": "Ash-Shams", "name": "الشمس", "number_of_ayahs": 15, "english_name_translation": "The Sun"},
+  {"number": 92, "english_name": "Al-Layl", "name": "الليل", "number_of_ayahs": 21, "english_name_translation": "The Night"},
+  {"number": 93, "english_name": "Ad-Duha", "name": "الضحى", "number_of_ayahs": 11, "english_name_translation": "The Morning Hours"},
+  {"number": 94, "english_name": "Ash-Sharh", "name": "الشرح", "number_of_ayahs": 8, "english_name_translation": "The Relief"},
+  {"number": 95, "english_name": "At-Tin", "name": "التين", "number_of_ayahs": 8, "english_name_translation": "The Fig"},
+  {"number": 96, "english_name": "Al-Alaq", "name": "العلق", "number_of_ayahs": 19, "english_name_translation": "The Clot"},
+  {"number": 97, "english_name": "Al-Qadr", "name": "القدر", "number_of_ayahs": 5, "english_name_translation": "The Power"},
+  {"number": 98, "english_name": "Al-Bayyinah", "name": "البينة", "number_of_ayahs": 8, "english_name_translation": "The Clear Proof"},
+  {"number": 99, "english_name": "Az-Zalzalah", "name": "الزلزلة", "number_of_ayahs": 8, "english_name_translation": "The Earthquake"},
+  {"number": 100, "english_name": "Al-Adiyat", "name": "العاديات", "number_of_ayahs": 11, "english_name_translation": "The Courser"},
+  {"number": 101, "english_name": "Al-Qari'ah", "name": "القارعة", "number_of_ayahs": 11, "english_name_translation": "The Calamity"},
+  {"number": 102, "english_name": "At-Takathur", "name": "التكاثر", "number_of_ayahs": 8, "english_name_translation": "The Rivalry in world increase"},
+  {"number": 103, "english_name": "Al-Asr", "name": "العصر", "number_of_ayahs": 3, "english_name_translation": "The Declining Day"},
+  {"number": 104, "english_name": "Al-Humazah", "name": "الهمزة", "number_of_ayahs": 9, "english_name_translation": "The Traducer"},
+  {"number": 105, "english_name": "Al-Fil", "name": "الفيل", "number_of_ayahs": 5, "english_name_translation": "The Elephant"},
+  {"number": 106, "english_name": "Quraysh", "name": "قريش", "number_of_ayahs": 4, "english_name_translation": "Quraysh"},
+  {"number": 107, "english_name": "Al-Ma'un", "name": "الماعون", "number_of_ayahs": 7, "english_name_translation": "The Small Kindnesses"},
+  {"number": 108, "english_name": "Al-Kawthar", "name": "الكوثر", "number_of_ayahs": 3, "english_name_translation": "The Abundance"},
+  {"number": 109, "english_name": "Al-Kafirun", "name": "الكافرون", "number_of_ayahs": 6, "english_name_translation": "The Disbelievers"},
+  {"number": 110, "english_name": "An-Nasr", "name": "النصر", "number_of_ayahs": 3, "english_name_translation": "The Divine Support"},
+  {"number": 111, "english_name": "Al-Masad", "name": "المسد", "number_of_ayahs": 5, "english_name_translation": "The Palm Fiber"},
+  {"number": 112, "english_name": "Al-Ikhlas", "name": "الإخلاص", "number_of_ayahs": 4, "english_name_translation": "The Sincerity"},
+  {"number": 113, "english_name": "Al-Falaq", "name": "الفلق", "number_of_ayahs": 5, "english_name_translation": "The Daybreak"},
+  {"number": 114, "english_name": "An-Nas", "name": "الناس", "number_of_ayahs": 6, "english_name_translation": "The Mankind"}
 ];
 
 const esc = (s) => {
@@ -191,26 +191,9 @@ const BASE_HTML = `<!doctype html>
     <link rel="modulepreload" crossorigin href="/assets/vendor-react-Ba1AxkWB.js">
     <link rel="modulepreload" crossorigin href="/assets/vendor-ui-QY8IYcbR.js">
     <link rel="stylesheet" crossorigin href="/assets/index-DewLekkf.css">
-    <style>
-      .ssr-only { padding: 40px 20px; max-width: 1200px; margin: 0 auto; color: #e5e7eb; }
-      .hero { text-align: center; margin-bottom: 40px; }
-      .hero h1 { color: #10b981; font-size: 2.5rem; margin-bottom: 1rem; }
-      .nav-card { display: block; padding: 20px; background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); border-radius: 12px; text-decoration: none; color: #10b981; font-weight: bold; text-align: center; margin-bottom: 15px; }
-      .list-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); text-decoration: none; color: inherit; }
-      .list-item:hover { background: rgba(255,255,255,0.05); }
-      .arabic { font-family: 'Scheherazade New', serif; font-size: 1.8rem; text-align: right; margin: 15px 0; }
-      .translation { color: #9ca3af; font-size: 1.1rem; margin-bottom: 10px; }
-      .ayah, .hadith { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-      .breadcrumb { margin-bottom: 20px; color: #6b7280; }
-      .breadcrumb a { color: #10b981; }
-    </style>
   </head>
-  <body style="background: #0f1419;">
-    <div id="root">
-      <div class="ssr-only">
-        {{BODY}}
-      </div>
-    </div>
+  <body class="bg-background">
+    <div id="root">{{BODY}}</div>
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
@@ -223,7 +206,7 @@ const BASE_HTML = `<!doctype html>
 
 export default async function handler(req, res) {
   const { path = "/" } = req.query;
-  console.log("[PRERENDER] Processing Path:", path);
+  console.log("[PRERENDER] Restoring Original UI for Path:", path);
   
   let title = "Noor – Prayer Times, Quran & More";
   let description = "Read authentic Quran, Hadith, Dua, Prayer Times, Qibla, Islamic Stories and Baby Names in Bengali with a fast and beautiful Islamic app.";
@@ -234,53 +217,75 @@ export default async function handler(req, res) {
     // --- Homepage ---
     if (path === "/") {
       bodyContent = `
-        <div class="hero">
-          <h1>NOOR - Your Islamic Companion</h1>
-          <p>Authentic Islamic resources for your daily spiritual journey. Prayer times, Quran, Hadith, and more.</p>
-        </div>
-        <nav>
-          <a href="/quran" class="nav-card">📖 Read Holy Quran</a>
-          <a href="/hadith" class="nav-card">📚 Hadith Collections</a>
-          <a href="/dua" class="nav-card">🤲 Daily Duas</a>
-          <a href="/stories" class="nav-card">✨ Islamic Stories</a>
-          <a href="/prayer-times" class="nav-card">🕌 Prayer Times</a>
-          <a href="/qibla" class="nav-card">🧭 Qibla Finder</a>
-        </nav>
-      `;
-    }
-
-    // --- Contact Page ---
-    else if (path === "/contact") {
-      title = "Contact Us | Noor - Islamic App";
-      description = "Get in touch with the Noor development team for feedback, support, or inquiries.";
-      bodyContent = `
-        <h1>Contact Us</h1>
-        <div class="contact-info">
-          <p>We value your feedback and are here to help with any questions or issues you may have.</p>
-          <p><strong>Email:</strong> <a href="mailto:support@noorapp.in" style="color: #10b981;">support@noorapp.in</a></p>
-          <p><strong>Response Time:</strong> We typically respond within 24-48 hours.</p>
-          <p><strong>About:</strong> Noor is developed by a dedicated team focused on serving the Muslim Ummah with authentic digital resources.</p>
+        <div class="min-h-screen bg-background pb-20 w-full overflow-x-hidden">
+          <main class="w-full px-3 py-4">
+            <div class="space-y-4">
+              <section class="text-center py-8">
+                <h1 class="text-4xl font-bold text-primary mb-2">NOOR</h1>
+                <p class="text-muted-foreground">Your Islamic Companion</p>
+              </section>
+              <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <a href="/quran" class="p-6 rounded-2xl bg-card border border-border flex flex-col items-center gap-3">
+                  <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary text-2xl">📖</div>
+                  <span class="font-bold">Quran</span>
+                </a>
+                <a href="/hadith" class="p-6 rounded-2xl bg-card border border-border flex flex-col items-center gap-3">
+                  <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary text-2xl">📚</div>
+                  <span class="font-bold">Hadith</span>
+                </a>
+                <a href="/dua" class="p-6 rounded-2xl bg-card border border-border flex flex-col items-center gap-3">
+                  <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary text-2xl">🤲</div>
+                  <span class="font-bold">Dua</span>
+                </a>
+                <a href="/stories" class="p-6 rounded-2xl bg-card border border-border flex flex-col items-center gap-3">
+                  <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary text-2xl">✨</div>
+                  <span class="font-bold">Stories</span>
+                </a>
+                <a href="/prayer-times" class="p-6 rounded-2xl bg-card border border-border flex flex-col items-center gap-3">
+                  <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary text-2xl">🕌</div>
+                  <span class="font-bold">Prayer</span>
+                </a>
+                <a href="/qibla" class="p-6 rounded-2xl bg-card border border-border flex flex-col items-center gap-3">
+                  <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary text-2xl">🧭</div>
+                  <span class="font-bold">Qibla</span>
+                </a>
+              </div>
+            </div>
+          </main>
         </div>
       `;
     }
 
     // --- Quran Root Page ---
     else if (path === "/quran") {
-      title = "Read Holy Quran Online - Bengali Translation & Arabic Text | Noor";
-      description = "Access all 114 Surahs of the Holy Quran with authentic Bengali translation and clear Arabic text on Noor App.";
+      title = "Quran Reader — পবিত্র কুরআন | NOOR";
+      description = "Read the Holy Quran with Arabic text, Bengali translation & audio recitation.";
       
-      const surahLinks = FALLBACK_SURAHS.map(s => `
-        <a href="/quran/${s.number}" class="list-item">
-          <span>${s.number}. ${s.english_name}</span>
-          <span class="arabic">${s.name}</span>
+      const surahList = FALLBACK_SURAHS.map(s => `
+        <a href="/quran/${s.number}" class="w-full text-left p-3 rounded-xl bg-white/5 border border-white/10 flex items-center gap-3">
+          <div class="relative w-12 h-12 shrink-0 flex items-center justify-center">
+            <span class="font-bold text-[hsl(45,93%,58%)] text-lg">${s.number}</span>
+          </div>
+          <div class="flex-1">
+            <p class="font-semibold text-white">${s.english_name}</p>
+            <p class="text-xs text-white/60">${s.english_name_translation}</p>
+          </div>
+          <div class="text-right">
+            <span class="text-xl font-arabic text-[hsl(45,93%,58%)]">${s.name}</span>
+            <p class="text-xs text-white/60">${s.number_of_ayahs} আয়াত</p>
+          </div>
         </a>
       `).join("");
 
       bodyContent = `
-        <h1>Holy Quran (পবিত্র কুরআন মাজীদ)</h1>
-        <p>Browse and read all 114 Surahs of the Holy Quran.</p>
-        <div class="list">
-          ${surahLinks}
+        <div class="min-h-screen bg-[hsl(158,64%,18%)] text-white">
+          <header class="bg-[hsl(158,55%,22%)] border-b border-white/10 p-4 text-center">
+            <h1 class="text-4xl font-arabic text-[hsl(45,93%,58%)] mb-2">الْقُرْآن الْكَرِيم</h1>
+            <p class="text-white/70 text-sm">পবিত্র কুরআন মাজীদ</p>
+          </header>
+          <div class="px-3 py-4 space-y-2">
+            ${surahList}
+          </div>
         </div>
       `;
     }
@@ -292,54 +297,45 @@ export default async function handler(req, res) {
       
       if (surah) {
         title = `Surah ${surah.english_name} (${surah.name}) - Read Online | Noor`;
-        description = `Read Surah ${surah.english_name} with Arabic text and Bengali translation. Surah ${surahNum} contains ${surah.number_of_ayahs} ayahs.`;
         
         try {
-          const apiRes = await fetch(`https://api.alquran.cloud/v1/surah/${surahNum}/bn.bengali`);
+          const apiRes = await fetch(\`https://api.alquran.cloud/v1/surah/\${surahNum}/bn.bengali\`);
           const apiData = await apiRes.json();
           
           if (apiData.code === 200) {
             const ayahsHtml = apiData.data.ayahs.slice(0, 30).map(a => `
-              <div class="ayah">
-                <p class="arabic" dir="rtl">${esc(a.text)}</p>
-                <p class="translation">${esc(a.text)}</p>
-                <span style="color: #6b7280; font-size: 0.8rem;">Ayah ${a.numberInSurah}</span>
+              <div class="p-4 border-b border-white/10">
+                <p class="text-right text-2xl font-arabic mb-3" dir="rtl">${esc(a.text)}</p>
+                <p class="text-white/80">${esc(a.text)}</p>
               </div>
             `).join("");
             
             bodyContent = `
-              <nav class="breadcrumb"><a href="/quran">Quran</a> &gt; Surah ${surah.english_name}</nav>
-              <h1>Surah ${surah.english_name} (${surah.name})</h1>
-              <div class="content-list">
-                ${ayahsHtml}
+              <div class="min-h-screen bg-[hsl(158,64%,18%)] text-white">
+                <header class="sticky top-0 bg-[hsl(158,55%,22%)] border-b border-white/10 p-4 flex justify-between items-center">
+                  <div>
+                    <h1 class="text-lg font-bold">${surah.english_name}</h1>
+                    <p class="text-xs text-white/60">${surah.english_name_translation}</p>
+                  </div>
+                  <span class="text-2xl font-arabic text-[hsl(45,93%,58%)]">${surah.name}</span>
+                </header>
+                <div class="max-w-3xl mx-auto">
+                  ${ayahsHtml}
+                </div>
               </div>
             `;
           }
         } catch (e) {
-          console.error("Quran API Error:", e);
-          bodyContent = `<h1>Surah ${surah.english_name}</h1><p>Loading ayahs...</p>`;
+          bodyContent = \`<div class="min-h-screen bg-[hsl(158,64%,18%)] flex items-center justify-center text-white">Loading...</div>\`;
         }
       }
-    }
-
-    // --- Hadith Root Page ---
-    else if (path === "/hadith") {
-      title = "Authentic Hadith Collections - Sahih Bukhari & More | Noor";
-      description = "Explore authentic Hadith collections including Sahih Bukhari with Bengali translations on Noor App.";
-      bodyContent = `
-        <h1>Hadith Collections</h1>
-        <nav>
-          <a href="/hadith/sahih-bukhari/bangla" class="nav-card">Sahih Bukhari (Bengali)</a>
-          <a href="/hadith/sahih-bukhari/english" class="nav-card">Sahih Bukhari (English)</a>
-          <a href="/hadith/sahih-bukhari/urdu" class="nav-card">Sahih Bukhari (Urdu)</a>
-        </nav>
-      `;
     }
 
     // --- Hadith Language Pages ---
     else if (path.match(/^\/hadith\/sahih-bukhari\/(bangla|english|urdu)$/)) {
       const lang = path.split("/")[3];
-      title = `Sahih Bukhari Hadith - ${humanizeSlug(lang)} Translation | Noor`;
+      const langLabels = { bangla: "সহিহ বুখারী শরীফ", english: "Sahih Al-Bukhari", urdu: "صحیح البخاری" };
+      title = langLabels[lang] || "Sahih Bukhari";
       
       const { data: chapters } = await supabase
         .from("hadith_chapters")
@@ -347,65 +343,29 @@ export default async function handler(req, res) {
         .eq("book_id", "bukhari")
         .order("chapter_number");
 
-      const chapterLinks = (chapters || []).map(c => `
-        <a href="/hadith/sahih-bukhari/${lang}/chapter-${c.chapter_number}" class="list-item">
-          <span>${c.chapter_number}. ${lang === 'bangla' ? (c.title_bn || c.title) : c.title}</span>
+      const chapterList = (chapters || []).map(c => `
+        <a href="/hadith/sahih-bukhari/${lang}/chapter-${c.chapter_number}" class="flex items-center justify-between p-4 bg-card border border-border rounded-xl mb-2">
+          <span class="font-medium">${c.chapter_number}. ${lang === 'bangla' ? (c.title_bn || c.title) : c.title}</span>
+          <span class="text-muted-foreground">→</span>
         </a>
       `).join("");
 
       bodyContent = `
-        <h1>Sahih Bukhari (${humanizeSlug(lang)})</h1>
-        <div class="list">
-          ${chapterLinks}
+        <div class="min-h-screen bg-background p-4">
+          <header class="mb-6 text-center">
+            <h1 class="text-2xl font-bold text-primary">${title}</h1>
+            <p class="text-muted-foreground">Sahih Bukhari Hadith Collection</p>
+          </header>
+          <div class="max-w-2xl mx-auto">
+            ${chapterList}
+          </div>
         </div>
       `;
     }
 
-    // --- Hadith Chapter Pages ---
-    else if (path.match(/^\/hadith\/sahih-bukhari\/(bangla|english|urdu)\/chapter-\d+$/)) {
-      const parts = path.split("/");
-      const lang = parts[3];
-      const chapterNum = parseInt(parts[4].split("-")[1]);
-      const dbField = lang === "bangla" ? "bengali" : lang;
-
-      const { data: chapter } = await supabase
-        .from("hadith_chapters")
-        .select("*")
-        .eq("book_id", "bukhari")
-        .eq("chapter_number", chapterNum)
-        .maybeSingle();
-
-      const { data: hadiths } = await supabase
-        .from("hadiths")
-        .select("hadith_number, arabic, " + dbField)
-        .eq("book_key", "bukhari")
-        .eq("chapter_id", chapterNum)
-        .limit(20);
-
-      if (chapter) {
-        title = `Sahih Bukhari Chapter ${chapterNum} - ${humanizeSlug(lang)} | Noor`;
-        const hadithsHtml = (hadiths || []).map(h => `
-          <div class="hadith">
-            <h3>Hadith ${h.hadith_number}</h3>
-            <p class="arabic" dir="rtl">${esc(h.arabic)}</p>
-            <p class="translation">${esc(h[dbField])}</p>
-          </div>
-        `).join("");
-
-        bodyContent = `
-          <nav class="breadcrumb"><a href="/hadith">Hadith</a> &gt; <a href="/hadith/sahih-bukhari/${lang}">Sahih Bukhari</a> &gt; Chapter ${chapterNum}</nav>
-          <h1>Chapter ${chapterNum}: ${lang === 'bangla' ? (chapter.title_bn || chapter.title) : chapter.title}</h1>
-          <div class="content-list">
-            ${hadithsHtml}
-          </div>
-        `;
-      }
-    }
-
     // --- Dua Root Page ---
     else if (path === "/dua") {
-      title = "Daily Duas & Supplications - Arabic & Bengali | Noor";
-      description = "Read essential daily duas for every occasion with Arabic text, transliteration, and Bengali meaning on Noor App.";
+      title = "Daily Duas & Supplications | Noor";
       
       const { data: duas } = await supabase
         .from("admin_content")
@@ -413,91 +373,84 @@ export default async function handler(req, res) {
         .eq("content_type", "dua")
         .eq("status", "published");
 
-      const duaLinks = (duas || []).map(d => `
-        <a href="/dua/${d.slug}" class="list-item">${esc(d.title)}</a>
+      const duaList = (duas || []).map(d => `
+        <a href="/dua/${d.slug}" class="block p-4 bg-card border border-border rounded-xl mb-2 hover:border-primary transition-colors">
+          <h3 class="font-bold">${esc(d.title)}</h3>
+        </a>
       `).join("");
 
       bodyContent = `
-        <h1>Daily Duas</h1>
-        <div class="list">
-          ${duaLinks}
+        <div class="min-h-screen bg-background p-4">
+          <h1 class="text-2xl font-bold mb-6">Daily Duas</h1>
+          <div class="grid gap-3 max-w-2xl mx-auto">
+            ${duaList}
+          </div>
         </div>
       `;
-    }
-
-    // --- Dua Detail Page ---
-    else if (path.match(/^\/dua\/[a-z0-9-]+$/)) {
-      const slug = path.split("/")[2];
-      const { data: dua } = await supabase
-        .from("admin_content")
-        .select("*")
-        .eq("slug", slug)
-        .eq("content_type", "dua")
-        .maybeSingle();
-
-      if (dua) {
-        title = `${dua.title} - Dua | Noor`;
-        bodyContent = `
-          <h1>${esc(dua.title)}</h1>
-          <div class="content">
-            <p class="arabic" dir="rtl">${esc(dua.arabic || "")}</p>
-            <p class="translation">${esc(dua.content || "")}</p>
-            ${dua.reference ? `<p style="color: #6b7280; font-size: 0.9rem; margin-top: 10px;">Source: ${esc(dua.reference)}</p>` : ""}
-          </div>
-        `;
-      }
     }
 
     // --- Stories Root Page ---
     else if (path === "/stories") {
-      title = "Islamic Stories for Kids & Adults - Bengali & English | Noor";
-      description = "Read inspirational Islamic stories of the Prophets and Sahaba in Bengali and English on Noor App.";
+      title = "Islamic Stories | NoorApp";
       
       const { data: stories } = await supabase
         .from("admin_content")
-        .select("slug, title")
+        .select("slug, title, content")
         .eq("content_type", "story")
         .eq("status", "published");
 
-      const storyLinks = (stories || []).map(s => `
-        <a href="/stories/${s.slug}" class="list-item">${esc(s.title)}</a>
+      const storyList = (stories || []).map(s => `
+        <div class="bg-card border border-border rounded-2xl overflow-hidden shadow-sm mb-4">
+          <div class="p-5">
+            <h3 class="text-xl font-bold mb-2">${esc(s.title)}</h3>
+            <a href="/stories/${s.slug}" class="text-primary font-bold">পড়ুন →</a>
+          </div>
+        </div>
       `).join("");
 
       bodyContent = `
-        <h1>Islamic Stories</h1>
-        <div class="list">
-          ${storyLinks}
+        <div class="min-h-screen bg-background pb-24">
+          <section class="bg-emerald-800 text-white p-10">
+            <h1 class="text-3xl font-bold">Islamic Stories</h1>
+            <p class="mt-2">Authentic stories of the Prophets and Sahaba.</p>
+          </section>
+          <div class="p-4 max-w-4xl mx-auto">
+            ${storyList}
+          </div>
         </div>
       `;
     }
 
-    // --- Story Detail Page ---
-    else if (path.match(/^\/stories\/[a-z0-9-]+$/)) {
-      const slug = path.split("/")[2];
-      const { data: story } = await supabase
-        .from("admin_content")
-        .select("*")
-        .eq("slug", slug)
-        .eq("content_type", "story")
-        .maybeSingle();
-
-      if (story) {
-        title = `${story.title} - Islamic Story | Noor`;
-        bodyContent = `
-          <h1>${esc(story.title)}</h1>
-          <div class="story-body">
-            ${esc(story.content || "").split('\n').map(p => `<p style="margin-bottom: 15px;">${p}</p>`).join('')}
+    // --- Contact Page ---
+    else if (path === "/contact") {
+      title = "Contact Us | Noor";
+      bodyContent = `
+        <div class="min-h-screen bg-background p-4">
+          <header class="mb-8">
+            <h1 class="text-2xl font-bold">Contact Us</h1>
+            <p class="text-muted-foreground">যোগাযোগ করুন</p>
+          </header>
+          <div class="max-w-2xl mx-auto space-y-6">
+            <section class="bg-card p-6 rounded-2xl border border-border">
+              <h2 class="text-lg font-bold mb-4">Get in Touch</h2>
+              <p class="mb-4">Email: <a href="mailto:support@noorapp.in" class="text-primary">support@noorapp.in</a></p>
+              <p class="text-sm text-muted-foreground">We typically respond within 24-48 hours.</p>
+            </section>
           </div>
-        `;
-      }
+        </div>
+      `;
     }
 
-    // --- Fallback if no specific content generated ---
+    // --- Fallback ---
     if (!bodyContent) {
-      bodyContent = `
-        <h1>${esc(title)}</h1>
-        <p>${esc(description)}</p>
-      `;
+      bodyContent = \`
+        <div class="min-h-screen flex items-center justify-center p-4">
+          <div class="text-center">
+            <h1 class="text-2xl font-bold mb-2">\${esc(title)}</h1>
+            <p class="text-muted-foreground">\${esc(description)}</p>
+          </div>
+        </div>
+      \`;
     }
 
     // Inject into template
@@ -508,14 +461,10 @@ export default async function handler(req, res) {
       .replace(/{{BODY}}/g, bodyContent);
 
     res.setHeader("Content-Type", "text/html; charset=utf-8");
-    // Set explicit Cache-Control for Vercel Edge Cache
-    // s-maxage: cache at edge for 24h
-    // stale-while-revalidate: serve stale for up to 1h while revalidating in background
     res.setHeader("Cache-Control", "public, s-maxage=86400, stale-while-revalidate=3600, max-age=60");
     res.status(200).send(finalHtml);
   } catch (error) {
     console.error("Prerender error:", error);
-    // Even on error, serve a basic functional HTML
-    res.status(200).send(BASE_HTML.replace("{{BODY}}", "<h1>Noor</h1><p>Loading Islamic resources...</p>"));
+    res.status(200).send(BASE_HTML.replace("{{BODY}}", ""));
   }
 }
