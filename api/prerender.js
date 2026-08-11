@@ -60,6 +60,58 @@ const getCategoryLabel = (cat) => {
   return CATEGORY_MAP[cat] || cat;
 };
 
+const CATEGORY_ICONS = {
+  "Balanced Life": "⚖️",
+  "Character": "👤",
+  "Daily": "☀️",
+  "Death": "⚰️",
+  "Evening": "🌙",
+  "Faith": "🕋",
+  "Family": "👨‍👩‍👧‍👦",
+  "Fasting": "🍽️",
+  "Food": "🍲",
+  "Forgiveness": "🤲",
+  "Gratitude": "🤲",
+  "Guidance": "🧭",
+  "Hajj": "🕋",
+  "Healing": "💊",
+  "Health": "🏥",
+  "Hereafter": "🌌",
+  "Hope": "✨",
+  "Journey": "🚗",
+  "Justice": "⚖️",
+  "Knowledge": "📚",
+  "Legacy": "📜",
+  "Masjid": "🕌",
+  "Morning": "🌅",
+  "Names of Allah": "✨",
+  "Parents": "👴👵",
+  "Praise": "🙌",
+  "Promise": "🤝",
+  "Protection": "🛡️",
+  "Quran": "📖",
+  "Ramadan": "🌙",
+  "Remembrance": "📿",
+  "Repentance": "🛐",
+  "Responsibility": "📋",
+  "Ruqyah": "🛡️",
+  "Salah": "🛐",
+  "Sleep": "💤",
+  "Steadfastness": "⚓",
+  "Submission": "🛐",
+  "Tawhid": "☝️",
+  "Travel": "ভ্রমণ",
+  "Weather": "আবহাওয়া",
+  "Wisdom": "প্রজ্ঞা",
+  "Worship": "ইবাদত",
+  "Wudu": "ওযু",
+  "Dua": "🤲",
+};
+
+const getCategoryIcon = (cat) => {
+  return CATEGORY_ICONS[cat] || "🤲";
+};
+
 const FALLBACK_SURAHS = [
   {"number": 1, "english_name": "Al-Fatiha", "name": "الفاتحة", "number_of_ayahs": 7, "english_name_translation": "The Opening"},
   {"number": 2, "english_name": "Al-Baqarah", "name": "البقرة", "number_of_ayahs": 286, "english_name_translation": "The Cow"},
@@ -404,30 +456,31 @@ export default async function handler(req, res) {
       
       const { data: duas } = await supabase
         .from("admin_content")
-        .select("slug, title, category")
+        .select("category")
         .eq("content_type", "dua")
-        .eq("status", "published")
-        .limit(50);
+        .eq("status", "published");
 
-      const duaList = (duas || []).map(d => `
-        <a href="/dua/${d.slug}" class="flex items-center justify-between p-4 bg-card border border-border rounded-2xl mb-3 hover:shadow-md transition-all group">
-          <div class="flex-1">
-            <h3 class="font-bold text-lg group-hover:text-primary transition-colors">${esc(d.title)}</h3>
-            <p class="text-xs text-muted-foreground uppercase tracking-wider mt-1">${esc(getCategoryLabel(d.category))}</p>
+      const categories = [...new Set((duas || []).map(d => d.category))].filter(Boolean);
+
+      const categoryList = categories.map(cat => `
+        <a href="/dua/category/${cat.toLowerCase().replace(/ /g, '-')}" class="p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-amber-400/30 transition-all flex flex-col items-center text-center">
+          <div class="w-10 h-10 rounded-xl bg-amber-400/10 flex items-center justify-center text-xl mb-2">
+            ${getCategoryIcon(cat)}
           </div>
-          <span class="text-primary opacity-50 group-hover:opacity-100 transition-opacity">→</span>
+          <p class="text-sm font-bold text-white">${esc(getCategoryLabel(cat))}</p>
+          <p class="text-[10px] text-white/40 mt-1 uppercase tracking-wider">সব দোয়া দেখুন →</p>
         </a>
       `).join("");
 
       bodyContent = `
-        <div class="min-h-screen bg-background">
-          <header class="bg-gradient-to-br from-emerald-600 to-teal-700 p-8 text-white text-center">
-            <h1 class="text-3xl font-bold mb-2">দোয়া সংকলন</h1>
-            <p class="text-white/80 max-w-md mx-auto">দৈনন্দিন জীবনের প্রয়োজনীয় দোয়া ও জিকিরসমূহ</p>
+        <div class="min-h-screen bg-[hsl(158,64%,18%)]">
+          <header class="bg-gradient-to-br from-[hsl(158,55%,22%)] to-[hsl(158,64%,15%)] p-10 text-white text-center border-b border-white/10">
+            <h1 class="text-4xl font-bold mb-3">দোয়া সংকলন</h1>
+            <p class="text-white/70 max-w-md mx-auto">দৈনন্দিন জীবনের প্রয়োজনীয় দোয়া ও জিকিরসমূহ</p>
           </header>
-          <div class="p-4 max-w-2xl mx-auto -mt-6">
-            <div class="bg-card rounded-2xl shadow-xl p-2">
-              ${duaList || '<p class="text-center p-8 text-muted-foreground">দোয়া লোড হচ্ছে...</p>'}
+          <div class="p-4 max-w-4xl mx-auto">
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              ${categoryList || '<p class="text-center p-8 text-white/50 col-span-full">দোয়া লোড হচ্ছে...</p>'}
             </div>
           </div>
         </div>

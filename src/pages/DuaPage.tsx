@@ -89,6 +89,58 @@ const getCategoryLabel = (category: string, lang: Language): string => {
   return CATEGORY_TRANSLATIONS[category]?.[lang] || category;
 };
 
+const CATEGORY_ICONS: Record<string, string> = {
+  "Balanced Life": "⚖️",
+  "Character": "👤",
+  "Daily": "☀️",
+  "Death": "⚰️",
+  "Evening": "🌙",
+  "Faith": "🕋",
+  "Family": "👨‍👩‍👧‍👦",
+  "Fasting": "🍽️",
+  "Food": "🍲",
+  "Forgiveness": "🤲",
+  "Gratitude": "🤲",
+  "Guidance": "🧭",
+  "Hajj": "🕋",
+  "Healing": "💊",
+  "Health": "🏥",
+  "Hereafter": "🌌",
+  "Hope": "✨",
+  "Journey": "🚗",
+  "Justice": "⚖️",
+  "Knowledge": "📚",
+  "Legacy": "📜",
+  "Masjid": "🕌",
+  "Morning": "🌅",
+  "Names of Allah": "✨",
+  "Parents": "👴👵",
+  "Praise": "🙌",
+  "Promise": "🤝",
+  "Protection": "🛡️",
+  "Quran": "📖",
+  "Ramadan": "🌙",
+  "Remembrance": "📿",
+  "Repentance": "🛐",
+  "Responsibility": "📋",
+  "Ruqyah": "🛡️",
+  "Salah": "🛐",
+  "Sleep": "💤",
+  "Steadfastness": "⚓",
+  "Submission": "🛐",
+  "Tawhid": "☝️",
+  "Travel": "✈️",
+  "Weather": "⛈️",
+  "Wisdom": "💡",
+  "Worship": "🛐",
+  "Wudu": "🚿",
+  "Dua": "🤲",
+};
+
+const getCategoryIcon = (category: string): string => {
+  return CATEGORY_ICONS[category] || "🤲";
+};
+
 const slugifyCategory = (s: string) =>
   s
     .toLowerCase()
@@ -766,19 +818,22 @@ const DuaPage = () => {
                   );
                 })()}
 
-                {/* SEO category cards (link to dedicated /dua/category/:slug pages) */}
+                {/* All category cards in grid style with icons */}
                 {!searchQuery && categories.length > 0 && (
                   <div className="grid grid-cols-2 gap-2">
-                    {categories.slice(0, 6).map((cat) => (
+                    {categories.map((cat) => (
                       <Link
                         key={`seo-cat-${cat}`}
                         to={`/dua/category/${slugifyCategory(cat)}`}
-                        className="p-3 rounded-2xl bg-white/5 border border-white/10 hover:border-[hsl(45,93%,58%)]/30 transition text-center"
+                        className="p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-[hsl(45,93%,58%)]/30 transition-all group flex flex-col items-center text-center"
                       >
-                        <p className="text-sm font-semibold text-white">
+                        <div className="w-10 h-10 rounded-xl bg-[hsl(45,93%,58%)]/10 flex items-center justify-center text-xl mb-2 group-hover:scale-110 transition-transform">
+                          {getCategoryIcon(cat)}
+                        </div>
+                        <p className="text-sm font-bold text-white group-hover:text-[hsl(45,93%,58%)] transition-colors">
                           {getCategoryLabel(cat, language)}
                         </p>
-                        <p className="text-[11px] text-white/60 mt-0.5">
+                        <p className="text-[10px] text-white/40 mt-1 uppercase tracking-wider">
                           {UI_LABELS.viewAllDuas[language]}
                         </p>
                       </Link>
@@ -818,21 +873,7 @@ const DuaPage = () => {
                   })()
                 )}
 
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="flex gap-2 flex-wrap"
-              >
-                {categories.map((cat) => (
-                  <button
-                    key={cat}
-                    onClick={() => pushCategory(cat)}
-                    className="px-4 py-2 rounded-full text-sm font-medium bg-white/10 text-white/80 hover:bg-[hsl(45,93%,58%)]/20 hover:text-[hsl(45,93%,58%)] transition-all border border-transparent hover:border-[hsl(45,93%,58%)]/30"
-                  >
-                    {getCategoryLabel(cat, language)}
-                  </button>
-                ))}
-              </motion.div>
+
               </>
             )}
 
