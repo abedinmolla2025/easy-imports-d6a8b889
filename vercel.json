@@ -77,7 +77,7 @@
     {
      "type": "header",
      "key": "user-agent",
-     "value": ".*(Googlebot|facebookexternalhit|WhatsApp|Twitterbot|TelegramBot|Discordbot|LinkedInBot|Pinterest|slackbot|Applebot).*"
+     "value": ".*(Googlebot|googlebot|AdsBot-Google|facebookexternalhit|WhatsApp|Twitterbot|TelegramBot|Discordbot|LinkedInBot|Pinterest|slackbot|Applebot).*"
     }
    ],
    "destination": "/api/prerender?path=/$1"
@@ -88,7 +88,7 @@
     {
      "type": "header",
      "key": "user-agent",
-     "value": ".*(Googlebot|facebookexternalhit|WhatsApp|Twitterbot|TelegramBot|Discordbot|LinkedInBot|Pinterest|slackbot|Applebot).*"
+     "value": ".*(Googlebot|googlebot|AdsBot-Google|facebookexternalhit|WhatsApp|Twitterbot|TelegramBot|Discordbot|LinkedInBot|Pinterest|slackbot|Applebot).*"
     }
    ],
    "destination": "/api/prerender?path=/"
