@@ -60,7 +60,6 @@ export default async function handler(req, res) {
     let canonicalUrl = `${SITE_ORIGIN}${path}`;
 
     // --- SSR Branch: Hadith Root/Language ---
-    // /hadith/sahih-bukhari/:lang
     const hadithLangMatch = path.match(/^\/hadith\/sahih-bukhari\/(bangla|english|urdu)$/);
     if (hadithLangMatch) {
       const lang = hadithLangMatch[1];
@@ -71,38 +70,38 @@ export default async function handler(req, res) {
       title = `Sahih Bukhari ${humanizeSlug(lang)} Hadith Collection | Noor`;
       description = `Browse all ${chapters?.length || 97} chapters of Sahih Bukhari with ${lang} translation and original Arabic text on Noor.`;
       
+      let chaptersHtml = (chapters || []).map(c => `<li><a href="/hadith/sahih-bukhari/${lang}/chapter-${c.chapter_number}">${esc(c.title_bn || c.title)}</a> (${c.hadith_count} hadiths)</li>`).join("");
+      let hadithsHtml = (sampleHadiths || []).map(h => `<article><h4>Hadith ${h.hadith_number}</h4><p dir="rtl">${esc(h.arabic)}</p><p>${esc(h[dbField])}</p></article>`).join("");
+
       bodyContent = `
         <h1>Sahih Bukhari - ${humanizeSlug(lang)} Translation</h1>
         <p>Sahih al-Bukhari is a collection of hadith compiled by Imam Muhammad al-Bukhari. His collection is recognized by the overwhelming majority of the Muslim world to be the most authentic collection of reports of the Sunnah of the Prophet Muhammad (ﷺ).</p>
         <h3>Books / Chapters</h3>
-        <ul>
-          ${chapters?.map(c => `<li><a href="/hadith/sahih-bukhari/${lang}/chapter-${c.chapter_number}">${c.title_bn || c.title}</a> (${c.hadith_count} hadiths)</li>`).join("")}
-        </ul>
+        <ul>${chaptersHtml || "<li>Loading chapters...</li>"}</ul>
         <h3>Sample Hadiths</h3>
-        ${sampleHadiths && sampleHadiths.length > 0 
-          ? sampleHadiths.map(h => `<article><h4>Hadith ${h.hadith_number}</h4><p dir="rtl">${h.arabic}</p><p>${h[dbField]}</p></article>`).join("") 
-          : "<p>No sample hadiths available at the moment.</p>"}
+        ${hadithsHtml || "<p>No sample hadiths available at the moment.</p>"}
       `;
       
-      jsonLd = {
-        "@context": "https://schema.org",
-        "@type": "CollectionPage",
-        "headline": title,
-        "description": description,
-        "mainEntity": {
-          "@type": "ItemList",
-          "itemListElement": chapters?.map((c, i) => ({
-            "@type": "ListItem",
-            "position": i + 1,
-            "url": `${SITE_ORIGIN}/hadith/sahih-bukhari/${lang}/chapter-${c.chapter_number}`,
-            "name": c.title_bn || c.title
-          }))
-        }
-      };
+      if (chapters) {
+        jsonLd = {
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          "headline": title,
+          "description": description,
+          "mainEntity": {
+            "@type": "ItemList",
+            "itemListElement": chapters.map((c, i) => ({
+              "@type": "ListItem",
+              "position": i + 1,
+              "url": `${SITE_ORIGIN}/hadith/sahih-bukhari/${lang}/chapter-${c.chapter_number}`,
+              "name": c.title_bn || c.title
+            }))
+          }
+        };
+      }
     }
 
     // --- SSR Branch: Hadith Chapter ---
-    // /hadith/sahih-bukhari/:lang/chapter-N
     const hadithChapterMatch = path.match(/^\/hadith\/sahih-bukhari\/(bangla|english|urdu)\/chapter-(\d+)$/);
     if (hadithChapterMatch) {
       const [, lang, chapterNum] = hadithChapterMatch;
@@ -114,17 +113,19 @@ export default async function handler(req, res) {
       title = `Sahih Bukhari ${humanizeSlug(lang)} - ${chapTitle} | Noor`;
       description = `Read hadiths from Sahih Bukhari ${chapTitle} in ${lang} with Arabic text and authentic references on Noor App.`;
 
+      let hadithsHtml = (hadiths || []).map(h => `
+        <article>
+          <h3>Hadith ${h.hadith_number}</h3>
+          <p dir="rtl" style="font-size: 1.2em;">${esc(h.arabic)}</p>
+          <p>${esc(h[dbField])}</p>
+        </article>
+      `).join("");
+
       bodyContent = `
-        <nav><a href="/hadith">Hadith</a> &gt; <a href="/hadith/sahih-bukhari/${lang}">Sahih Bukhari</a> &gt; ${chapTitle}</nav>
-        <h1>Sahih Bukhari - ${chapTitle}</h1>
+        <nav><a href="/hadith">Hadith</a> &gt; <a href="/hadith/sahih-bukhari/${lang}">Sahih Bukhari</a> &gt; ${esc(chapTitle)}</nav>
+        <h1>Sahih Bukhari - ${esc(chapTitle)}</h1>
         <p>Explore ${hadiths?.length || 0} authentic hadiths from Sahih Bukhari Chapter ${chapterNum} with ${lang} translation.</p>
-        ${hadiths?.map(h => `
-          <article>
-            <h3>Hadith ${h.hadith_number}</h3>
-            <p dir="rtl" style="font-size: 1.2em;">${h.arabic}</p>
-            <p>${h[dbField]}</p>
-          </article>
-        `).join("")}
+        ${hadithsHtml || "<p>Loading hadiths...</p>"}
       `;
 
       jsonLd = {
@@ -145,28 +146,26 @@ export default async function handler(req, res) {
 
     // --- SSR Branch: Quran Root ---
     if (path === "/quran") {
-      // Use a local list or fetch if needed. Since I created the table quran_surahs, I can fetch from it.
       const { data: surahs } = await supabase.from("quran_surahs").select("*").order("number");
       
       title = "Read Holy Quran Online - Bengali Translation & Audio | Noor";
       description = "Access the complete Holy Quran with Arabic text, Bengali translation, and beautiful audio recitations. Explore all 114 surahs on Noor App.";
       
+      let surahsHtml = (surahs || []).map(s => `
+        <a href="/quran/${s.number}" style="display: block; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 8px; text-decoration: none; color: inherit;">
+          <strong>${s.number}. ${esc(s.english_name)}</strong><br/>
+          <span style="font-size: 0.8em; color: #888;">${esc(s.name)} - ${s.number_of_ayahs} Ayahs</span>
+        </a>
+      `).join("");
+
       bodyContent = `
         <h1>Holy Quran - পবিত্র কুরআন মাজীদ</h1>
         <p>Read, listen, and study the Holy Quran. Below are all 114 Surahs with links to read their full text and translations.</p>
         <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;">
-          ${surahs?.map(s => `
-            <a href="/quran/${s.number}" style="display: block; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 8px; text-decoration: none; color: inherit;">
-              <strong>${s.number}. ${s.english_name}</strong><br/>
-              <span style="font-size: 0.8em; color: #888;">${s.name} - ${s.number_of_ayahs} Ayahs</span>
-            </a>
-          `).join("")}
+          ${surahsHtml || "<p>Loading surahs...</p>"}
         </div>
       `;
     }
-
-    // --- Generic Story/Dua Logic (Keep but improve) ---
-    // (Already in original file, I'll keep the Supabase queries for them)
 
     const html = `<!DOCTYPE html>
 <html lang="bn">
