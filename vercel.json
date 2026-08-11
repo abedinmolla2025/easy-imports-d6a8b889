@@ -95,7 +95,7 @@
   },
   {
    "source": "/((?!\\.well-known/).*)",
-   "destination": "/"
+   "destination": "/app.html"
   }
  ]
 }
