@@ -11,7 +11,7 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const CATEGORY_MAP = {
   "Balanced Life": "ভারসাম্যপূর্ণ জীবন",
   "Character": "চরিত্র",
-  "Daily": "দৈনন্দিন",
+  "Daily": "দৈনিক",
   "Death": "মৃত্যু",
   "Evening": "সন্ধ্যা",
   "Faith": "ঈমান",

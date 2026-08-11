@@ -74,7 +74,7 @@ const LANGUAGE_LABELS: Record<DuaLang, string> = {
 const CATEGORY_MAP: Record<string, string> = {
   "Balanced Life": "ভারসাম্যপূর্ণ জীবন",
   "Character": "চরিত্র",
-  "Daily": "দৈনন্দিন",
+  "Daily": "দৈনিক",
   "Death": "মৃত্যু",
   "Evening": "সন্ধ্যা",
   "Faith": "ঈমান",
@@ -97,7 +97,7 @@ const CATEGORY_MAP: Record<string, string> = {
   "Morning": "সকাল",
   "Names of Allah": "আল্লাহর নাম",
   "Parents": "পিতা-মাতা",
-  "Praise": " প্রশংসা",
+  "Praise": "প্রশংসা",
   "Promise": "প্রতিশ্রুতি",
   "Protection": "সুরক্ষা",
   "Quran": "কুরআন",
