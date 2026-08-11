@@ -2,6 +2,7 @@
   "trailingSlash": false,
   "redirects": [
     { "source": "/(.*)", "has": [{ "type": "host", "value": "www.noorapp.in" }], "destination": "https://noorapp.in/$1", "statusCode": 301 },
+    { "source": "/privacy", "destination": "/privacy-policy", "statusCode": 301 },
     { "source": "/bukhari", "destination": "/hadith/sahih-bukhari", "statusCode": 301 },
     { "source": "/hadith/bukhari", "destination": "/hadith/sahih-bukhari", "statusCode": 301 },
     { "source": "/sahih-al-bukhari", "destination": "/hadith/sahih-bukhari", "statusCode": 301 },
@@ -20,10 +21,8 @@
     { "source": "/robots.txt", "destination": "/robots.txt" },
     { "source": "/favicon.ico", "destination": "/favicon.ico" },
     { "source": "/assets/(.*)", "destination": "/assets/$1" },
-    { "source": "/privacy", "destination": "/api/prerender-v2?path=/privacy&v=4" },
-    { "source": "/privacy-policy", "destination": "/api/prerender-v2?path=/privacy-policy&v=4" },
-    { "source": "/", "destination": "/api/prerender-v2?path=/&v=4" },
-    { "source": "/((?!api|assets|favicon|robots|sitemap|ads\\.txt|sw\\.js|manifest\\.json|\\.well-known/).*)", "destination": "/api/prerender-v2?path=/$1&v=4" },
+    { "source": "/", "destination": "/api/prerender-v2?path=/&v=5" },
+    { "source": "/((?!api|assets|favicon|robots|sitemap|ads\\.txt|sw\\.js|manifest\\.json|\\.well-known/).*)", "destination": "/api/prerender-v2?path=/$1&v=5" },
     { "source": "/(.*)", "destination": "/app.html" }
   ]
 }
