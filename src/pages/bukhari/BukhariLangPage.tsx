@@ -155,7 +155,7 @@ const langSeoMeta: Record<LangSlug, { rootTitle: string; rootDesc: string; title
   },
   urdu: {
     rootTitle: "Sahih Bukhari Urdu Hadith – صحیح بخاری اردو | Noor App",
-    rootDesc: "صحیح بخاری احادیث اردو ترجمہ کے ساتھ پڑھیں۔",
+    rootDesc: "صحیح بخاری احادیث اردو ترجمہ کے সাথে پڑھیں۔",
     titleLang: "Urdu",
     descLang: "Urdu",
   },
@@ -256,27 +256,36 @@ async function loadChapterFromDb(dbField: string, chapterId: number): Promise<Ha
   }));
 }
 
-// Load hadiths with limit and search support
+// Load all hadiths from DB using pagination to avoid the 1000 row limit
 async function loadFromDb(dbField: string, search: string = ""): Promise<Hadith[]> {
-  let query = (supabase as any)
-    .from("hadiths")
-    .select("id, chapter_id, hadith_number, arabic, slug, " + dbField)
-    .eq("book_key", "bukhari")
-    .not(dbField, "is", null)
-    .order("chapter_id", { ascending: true })
-    .order("hadith_number", { ascending: true })
-    .limit(300);
+  let allRows: any[] = [];
+  let from = 0;
+  const step = 1000;
+  
+  while (true) {
+    let query = (supabase as any)
+      .from("hadiths")
+      .select("id, chapter_id, hadith_number, arabic, slug, " + dbField)
+      .eq("book_key", "bukhari")
+      .not(dbField, "is", null)
+      .order("chapter_id", { ascending: true })
+      .order("hadith_number", { ascending: true })
+      .range(from, from + step - 1);
 
-  if (search) {
-    query = query.ilike(dbField, `%${search}%`);
+    if (search) {
+      query = query.ilike(dbField, `%${search}%`);
+    }
+
+    const { data, error } = await query;
+    if (error) throw error;
+    if (!data || data.length === 0) break;
+
+    allRows = [...allRows, ...data];
+    if (data.length < step) break;
+    from += step;
   }
 
-  const { data, error } = await query;
-
-  if (error) throw error;
-  if (!data) return [];
-
-  return data.map((row: any) => ({
+  return allRows.map((row: any) => ({
     id: row.id,
     chapterId: row.chapter_id,
     number: row.hadith_number,
@@ -415,14 +424,14 @@ export default function BukhariLangPage() {
                 chapterId: h.chapter_id,
                 number: h.hadith_number,
                 arabic: h.arabic,
-                translation: (h as any)[field] || "",
-                slug: (h as any).slug ?? null,
+                translation: (h as any)[field],
+                slug: h.slug ?? null,
               }));
             processHadiths(mapped);
           })
           .catch((err) => {
             if (cancelled) return;
-            console.error("JSON load failed:", err);
+            console.error("Fetch failed:", err);
             setError(t.error);
             setLoading(false);
           });
@@ -433,312 +442,315 @@ export default function BukhariLangPage() {
       cancelled = true;
       clearTimeout(timer);
     };
-  }, [cfg.source, cfg.file, cfg.field, cfg.dbField, t.error, selectedChapter, activeTab, searchQuery, kitabData]);
+  }, [cfg, selectedChapter, searchQuery, kitabData]);
 
-  // ── URL path params → state ────────────────────────────────
+  // ── Sync from URL ──────────────────────────────────────────
   useEffect(() => {
-    // Parse chapter from path: "chapter-5" → 5, or just "5" for hadith route
     if (effectiveChapterParam) {
-      const cid = Number(effectiveChapterParam.replace("chapter-", ""));
-      setSelectedChapter(cid && Number.isFinite(cid) ? cid : null);
-      setActiveTab("hadiths");
+      const match = effectiveChapterParam.match(/chapter-(\d+)/);
+      if (match) {
+        setSelectedChapter(parseInt(match[1], 10));
+        setActiveTab("hadiths");
+      } else if (!isNaN(parseInt(effectiveChapterParam, 10))) {
+        setSelectedChapter(parseInt(effectiveChapterParam, 10));
+        setActiveTab("hadiths");
+      }
     } else {
       setSelectedChapter(null);
+      setActiveTab("chapters");
     }
-    setPage(1);
-  }, [effectiveChapterParam]);
 
-  useEffect(() => {
-    if (!hadithParam || allHadiths.length === 0) {
-      if (!hadithParam) setSelectedHadith(null);
-      return;
+    if (hadithParam) {
+      const num = parseInt(hadithParam, 10);
+      const h = allHadiths.find((x) => x.number === num);
+      if (h) setSelectedHadith(h);
+    } else {
+      setSelectedHadith(null);
     }
-    const num = Number(hadithParam);
-    const found = allHadiths.find((h) => h.number === num);
-    setSelectedHadith(found ?? null);
-  }, [hadithParam, allHadiths]);
+  }, [effectiveChapterParam, hadithParam, allHadiths]);
 
-  const openChapter = (id: number) => {
-    navigate(`/hadith/sahih-bukhari/${slug}/chapter-${id}`);
-    setActiveTab("hadiths");
-  };
-
-  const openHadith = (hadith: Hadith) => {
-    navigate(`/hadith/sahih-bukhari/${slug}/${hadith.chapterId}/${hadith.number}`);
-  };
-
-  // ── Filtering ──────────────────────────────────────────────
+  // ── Derived state ──────────────────────────────────────────
   const filteredHadiths = useMemo(() => {
-    const q = searchQuery.toLowerCase();
-    return allHadiths.filter((h) => {
-      if (selectedChapter !== null && h.chapterId !== selectedChapter) return false;
-      if (!q) return true;
-      const translation = h.translation || "";
-      const arabic = h.arabic || "";
-      return translation.toLowerCase().includes(q) || arabic.includes(searchQuery) || String(h.number).includes(searchQuery);
-    });
-  }, [allHadiths, searchQuery, selectedChapter]);
+    let list = allHadiths;
+    if (selectedChapter) {
+      list = list.filter((h) => h.chapterId === selectedChapter);
+    }
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      list = list.filter(
+        (h) =>
+          h.number.toString().includes(q) ||
+          h.translation.toLowerCase().includes(q) ||
+          h.arabic.includes(q)
+      );
+    }
+    return list;
+  }, [allHadiths, selectedChapter, searchQuery]);
 
-  const paginatedHadiths = useMemo(() => filteredHadiths.slice(0, page * PAGE_SIZE), [filteredHadiths, page]);
-  const hasMore = paginatedHadiths.length < filteredHadiths.length;
-  const totalInChapter = selectedChapter !== null ? allHadiths.filter((h) => h.chapterId === selectedChapter).length : allHadiths.length;
+  const pagedHadiths = useMemo(() => {
+    return filteredHadiths.slice(0, page * PAGE_SIZE);
+  }, [filteredHadiths, page]);
 
-  // ── SEO values ────────────────────────────────────────────
-  const seoChapterId = selectedChapter ?? (effectiveChapterParam ? Number(effectiveChapterParam.replace("chapter-", "")) : undefined);
-  const seoHadithNumber = selectedHadith?.number ?? (hadithParam ? Number(hadithParam) : undefined);
-  const seoTitle = buildSeoTitle(slug, seoChapterId, seoHadithNumber);
-  const seoDesc = buildSeoDesc(slug, seoChapterId, seoHadithNumber);
-  const canonical = buildCanonical(slug, seoChapterId, seoHadithNumber);
-  const articleLd = buildArticleJsonLd(slug, seoHadithNumber);
+  const totalCount = filteredHadiths.length;
 
-  // ── Render ─────────────────────────────────────────────────
+  // ── Handlers ───────────────────────────────────────────────
+  const handleChapterClick = (id: number) => {
+    setSelectedChapter(id);
+    setActiveTab("hadiths");
+    setPage(1);
+    navigate(`/hadith/sahih-bukhari/${slug}/chapter-${id}`);
+  };
+
+  const handleBack = () => {
+    if (selectedHadith) {
+      setSelectedHadith(null);
+      navigate(`/hadith/sahih-bukhari/${slug}/chapter-${selectedChapter}`);
+    } else if (selectedChapter) {
+      setSelectedChapter(null);
+      setActiveTab("chapters");
+      navigate(`/hadith/sahih-bukhari/${slug}`);
+    } else {
+      navigate("/hadith");
+    }
+  };
+
+  const handleReadDetails = (h: Hadith) => {
+    if (h.slug) {
+      navigate(`/hadith/h/${h.slug}`);
+    } else {
+      navigate(`/hadith/sahih-bukhari/${slug}/${h.chapterId}/${h.number}`);
+    }
+  };
+
+  // ── Render Helpers ──────────────────────────────────────────
+  if (error) {
+    return (
+      <div className="min-h-screen bg-[#0a1a1a] text-white flex items-center justify-center p-4">
+        <div className="text-center">
+          <p className="text-red-400 mb-4">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-6 py-2 bg-[#10b981] rounded-full text-sm font-medium"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-emerald-900 via-emerald-800 to-teal-900 pb-20" style={{ direction: isRtl ? "rtl" : "ltr" }}>
+    <div className="min-h-screen bg-[#0a1a1a] text-white pb-24">
       <Helmet>
-        <title>{seoTitle}</title>
-        <meta name="description" content={seoDesc} />
-        <link rel="canonical" href={canonical} />
-        <meta name="robots" content="index,follow" />
-        {/* hreflang alternate tags for language variants */}
-        <link rel="alternate" hrefLang="bn" href={buildCanonical("bangla", seoChapterId, seoHadithNumber)} />
-        <link rel="alternate" hrefLang="en" href={buildCanonical("english", seoChapterId, seoHadithNumber)} />
-        <link rel="alternate" hrefLang="ur" href={buildCanonical("urdu", seoChapterId, seoHadithNumber)} />
-        <link rel="alternate" hrefLang="x-default" href={buildCanonical("english", seoChapterId, seoHadithNumber)} />
-        <meta property="og:title" content={seoTitle} />
-        <meta property="og:description" content={seoDesc} />
-        <meta property="og:url" content={canonical} />
-        <meta property="og:type" content="article" />
-        <meta property="og:image" content="https://noorapp.in/og-bukhari.png" />
-        <meta property="og:locale" content={slug === "bangla" ? "bn_BD" : slug === "urdu" ? "ur_PK" : "en_US"} />
-        <script type="application/ld+json">{JSON.stringify(articleLd)}</script>
+        <title>{buildSeoTitle(slug, selectedChapter || undefined, selectedHadith?.number)}</title>
+        <meta name="description" content={buildSeoDesc(slug, selectedChapter || undefined, selectedHadith?.number)} />
+        <link rel="canonical" href={buildCanonical(slug, selectedChapter || undefined, selectedHadith?.number)} />
+        {/* JSON-LD for Hadith Article */}
+        <script type="application/ld+json">
+          {JSON.stringify(buildArticleJsonLd(slug, selectedHadith?.number))}
+        </script>
       </Helmet>
 
       {/* Header */}
-      <motion.header initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="sticky top-0 z-50 bg-emerald-900/95 backdrop-blur-lg border-b border-white/10">
-        <div className="flex items-center justify-between px-4 py-4">
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => {
-                if (selectedHadith) {
-                  // Go back to chapter or lang page
-                  if (selectedChapter !== null) {
-                    navigate(`/hadith/sahih-bukhari/${slug}/chapter-${selectedChapter}`);
-                  } else {
-                    navigate(`/hadith/sahih-bukhari/${slug}`);
-                  }
-                } else if (selectedChapter !== null) {
-                  navigate(`/hadith/sahih-bukhari/${slug}`);
-                } else {
-                  navigate("/hadith/sahih-bukhari");
-                }
-              }}
-              className="p-2 -ml-2 text-white/80 hover:text-white hover:bg-white/10 rounded-full transition-colors"
-            >
-              <ArrowLeft className="w-5 h-5" style={{ transform: isRtl ? "scaleX(-1)" : "none" }} />
-            </button>
-            <div>
-              <h1 className="text-xl font-bold text-white tracking-wide">{selectedChapter !== null ? `${t.chapter}: ${getChapterName(selectedChapter, slug, kitabMap)}` : t.title}</h1>
-              <p className="text-xs text-white/70">{selectedChapter !== null ? `${totalInChapter} ${t.hadiths}` : t.subtitle}</p>
-            </div>
+      <header className="sticky top-0 z-50 bg-[#0a1a1a]/80 backdrop-blur-md border-b border-white/10 px-4 py-4">
+        <div className="max-w-4xl mx-auto flex items-center gap-4">
+          <button
+            onClick={handleBack}
+            className="p-2 hover:bg-white/5 rounded-full transition-colors"
+          >
+            <ArrowLeft className="w-6 h-6" />
+          </button>
+          <div className="flex-1 min-w-0">
+            <h1 className="text-lg font-bold truncate">
+              {selectedChapter ? getChapterName(selectedChapter, slug, kitabMap) : t.title}
+            </h1>
+            <p className="text-xs text-[#10b981] font-medium">{t.subtitle}</p>
           </div>
-          <div className="px-3 py-1.5 bg-white/10 rounded-full text-sm text-white/90 font-medium">{cfg.label}</div>
         </div>
+      </header>
 
+      <main className="max-w-4xl mx-auto px-4 py-6">
+        {/* Search & Tabs */}
         {!selectedHadith && (
-          <div className="px-4 pb-4">
+          <div className="space-y-6 mb-8">
             <div className="relative">
-              <Search className="absolute top-1/2 -translate-y-1/2 w-5 h-5 text-white/50" style={{ left: isRtl ? "auto" : "1rem", right: isRtl ? "1rem" : "auto" }} />
-              <Input placeholder={t.searchPlaceholder} value={searchQuery} onChange={(e) => { setSearchQuery(e.target.value); setPage(1); }} className="h-12 rounded-xl bg-white/15 border-0 text-white placeholder:text-white/50" style={{ paddingLeft: isRtl ? "1rem" : "3rem", paddingRight: isRtl ? "3rem" : "1rem" }} />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
+              <Input
+                type="text"
+                placeholder={t.searchPlaceholder}
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setPage(1);
+                }}
+                className="bg-white/5 border-white/10 pl-10 h-12 rounded-xl focus:ring-[#10b981] transition-all"
+              />
+            </div>
+
+            <div className="flex p-1 bg-white/5 rounded-xl">
+              <button
+                onClick={() => {
+                  setActiveTab("chapters");
+                  setSelectedChapter(null);
+                  navigate(`/hadith/sahih-bukhari/${slug}`);
+                }}
+                className={`flex-1 py-2.5 text-sm font-medium rounded-lg transition-all ${
+                  activeTab === "chapters" ? "bg-[#10b981] text-white shadow-lg" : "text-white/60 hover:text-white"
+                }`}
+              >
+                {t.chapters}
+              </button>
+              <button
+                onClick={() => setActiveTab("hadiths")}
+                className={`flex-1 py-2.5 text-sm font-medium rounded-lg transition-all ${
+                  activeTab === "hadiths" ? "bg-[#10b981] text-white shadow-lg" : "text-white/60 hover:text-white"
+                }`}
+              >
+                {t.allHadiths} ({totalCount})
+              </button>
             </div>
           </div>
         )}
-      </motion.header>
 
-      {/* Loading */}
-      {loading && (
-        <div className="flex flex-col items-center justify-center py-20 gap-3">
-          <Loader2 className="w-8 h-8 text-emerald-300 animate-spin" />
-          <p className="text-white/70 text-sm">{t.loading}</p>
-        </div>
-      )}
-
-      {/* Error */}
-      {error && !loading && (
-        <div className="flex flex-col items-center justify-center py-20 gap-3">
-          <p className="text-red-300 text-sm">{error}</p>
-          <button onClick={() => window.location.reload()} className="text-emerald-300 underline text-sm">Retry</button>
-        </div>
-      )}
-
-      {!loading && !error && (
-        <AnimatePresence mode="wait">
-          {selectedHadith ? (
-            <motion.div key="detail" initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -50 }} className="p-4 space-y-4">
-              <div className="flex justify-center">
-                <div className="bg-white/20 backdrop-blur-sm border border-white/30 px-8 py-3 rounded-full shadow-lg">
-                  <span className="text-white font-bold text-lg">{t.hadithNo} {selectedHadith.number}</span>
-                </div>
-              </div>
-
-              {/* Arabic */}
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-white/10 backdrop-blur-md rounded-3xl p-6 md:p-8 border border-white/20 shadow-2xl">
-                <p className="text-xs text-emerald-300/70 uppercase tracking-widest mb-3 font-semibold">العربية</p>
-                <p className="text-2xl md:text-3xl text-white leading-[2.2] text-right" dir="rtl" style={{ fontFamily: "'Amiri', 'Noto Naskh Arabic', serif" }}>{selectedHadith.arabic}</p>
-              </motion.div>
-
-              {/* Translation */}
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="bg-white/10 backdrop-blur-md rounded-3xl p-6 md:p-8 border border-white/20 shadow-2xl">
-                <p className="text-xs text-emerald-300/70 uppercase tracking-widest mb-3 font-semibold">{cfg.label}</p>
-                <p className={`text-[16px] md:text-lg text-white leading-relaxed font-medium ${isRtl ? "text-right" : ""}`} dir={isRtl ? "rtl" : "ltr"}>{selectedHadith.translation}</p>
-              </motion.div>
-
-              {/* Read full SEO details */}
-              <motion.a
+        {loading ? (
+          <div className="flex flex-col items-center justify-center py-20 gap-4">
+            <Loader2 className="w-10 h-10 text-[#10b981] animate-spin" />
+            <p className="text-white/60 animate-pulse">{t.loading}</p>
+          </div>
+        ) : (
+          <AnimatePresence mode="wait">
+            {selectedHadith ? (
+              <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.25 }}
-                href={`/hadith/h/${selectedHadith.slug || `bukhari-${selectedHadith.number}`}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigate(`/hadith/h/${selectedHadith.slug || `bukhari-${selectedHadith.number}`}`);
-                }}
-                className="flex items-center justify-center gap-2 w-full py-4 rounded-2xl bg-emerald-500/20 hover:bg-emerald-500/30 text-white font-semibold border border-emerald-300/30 transition-colors"
+                exit={{ opacity: 0, y: -20 }}
+                className="space-y-8"
               >
-                <BookOpen className="w-4 h-4" />
-                {t.readDetails}
-              </motion.a>
+                <div className="bg-white/5 rounded-3xl p-6 md:p-8 border border-white/10">
+                  <div className="flex items-center justify-between mb-8">
+                    <span className="px-4 py-1.5 bg-[#10b981]/20 text-[#10b981] rounded-full text-sm font-bold border border-[#10b981]/30">
+                      {t.hadithNo} {selectedHadith.number}
+                    </span>
+                    <span className="text-white/40 text-sm font-medium">
+                      {t.chapter} {selectedHadith.chapterId}
+                    </span>
+                  </div>
 
-              {/* Breadcrumb links */}
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="flex flex-wrap gap-2 text-sm items-center">
-                <a href={`/hadith/sahih-bukhari/${slug}`} onClick={(e) => { e.preventDefault(); navigate(`/hadith/sahih-bukhari/${slug}`); }} className="text-emerald-300 hover:text-emerald-200 underline underline-offset-2">
-                  {t.title}
-                </a>
-                <span className="text-white/30">›</span>
-                <a href={`/hadith/sahih-bukhari/${slug}/chapter-${selectedHadith.chapterId}`} onClick={(e) => { e.preventDefault(); navigate(`/hadith/sahih-bukhari/${slug}/chapter-${selectedHadith.chapterId}`); }} className="text-emerald-300 hover:text-emerald-200 underline underline-offset-2">
-                  {t.chapter}: {getChapterName(selectedHadith.chapterId, slug, kitabMap)}
-                </a>
+                  <div className="space-y-10">
+                    <div className="space-y-4">
+                      <p
+                        className="text-3xl md:text-4xl leading-[1.8] text-right font-arabic"
+                        dir="rtl"
+                      >
+                        {selectedHadith.arabic}
+                      </p>
+                    </div>
+
+                    <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+                    <div className="space-y-4">
+                      <p
+                        className={`text-lg md:text-xl leading-relaxed text-white/90 ${
+                          isRtl ? "text-right font-arabic" : ""
+                        }`}
+                        dir={isRtl ? "rtl" : "ltr"}
+                      >
+                        {selectedHadith.translation}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </motion.div>
-
-              {/* Prev / Next hadith navigation */}
-              {(() => {
-                const idx = allHadiths.findIndex((h) => h.number === selectedHadith.number);
-                const prev = idx > 0 ? allHadiths[idx - 1] : null;
-                const next = idx < allHadiths.length - 1 ? allHadiths[idx + 1] : null;
-                return (
-                  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="flex gap-3 pt-2">
-                    {prev ? (
-                      <a
-                        href={`/hadith/sahih-bukhari/${slug}/${prev.chapterId}/${prev.number}`}
-                        onClick={(e) => { e.preventDefault(); openHadith(prev); }}
-                        className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl bg-white/10 text-white font-medium border border-white/20 hover:bg-white/15 transition-all text-sm"
+            ) : activeTab === "chapters" ? (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="grid grid-cols-1 md:grid-cols-2 gap-3"
+              >
+                {chapters.map((chap) => (
+                  <button
+                    key={chap.id}
+                    onClick={() => handleChapterClick(chap.id)}
+                    className="flex items-center gap-4 p-4 bg-white/5 hover:bg-white/10 rounded-2xl border border-white/10 transition-all group text-left"
+                  >
+                    <div className="w-12 h-12 rounded-xl bg-[#10b981]/10 flex items-center justify-center text-[#10b981] font-bold group-hover:bg-[#10b981] group-hover:text-white transition-colors">
+                      {chap.id}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-bold truncate group-hover:text-[#10b981] transition-colors">
+                        {getChapterName(chap.id, slug, kitabMap)}
+                      </h3>
+                      <p className="text-xs text-white/40">
+                        {chap.count} {t.hadiths}
+                      </p>
+                    </div>
+                    <ChevronRight className="w-5 h-5 text-white/20 group-hover:text-[#10b981] transition-colors" />
+                  </button>
+                ))}
+              </motion.div>
+            ) : (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="space-y-4"
+              >
+                {pagedHadiths.length > 0 ? (
+                  <>
+                    {pagedHadiths.map((h) => (
+                      <div
+                        key={h.id}
+                        className="bg-white/5 rounded-2xl p-5 border border-white/10 hover:border-[#10b981]/50 transition-all group"
                       >
-                        ← {t.hadithNo} {prev.number}
-                      </a>
-                    ) : <div className="flex-1" />}
-                    {next ? (
-                      <a
-                        href={`/hadith/sahih-bukhari/${slug}/${next.chapterId}/${next.number}`}
-                        onClick={(e) => { e.preventDefault(); openHadith(next); }}
-                        className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl bg-white/10 text-white font-medium border border-white/20 hover:bg-white/15 transition-all text-sm"
-                      >
-                        {t.hadithNo} {next.number} →
-                      </a>
-                    ) : <div className="flex-1" />}
-                  </motion.div>
-                );
-              })()}
-            </motion.div>
-          ) : (
-            <motion.div key="list" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="p-4">
-              {/* Tabs */}
-              <div className="flex gap-3 mb-6">
-                <button onClick={() => setActiveTab("hadiths")} className={`flex-1 py-4 rounded-2xl font-semibold tracking-wide transition-all shadow-xl ${activeTab === "hadiths" ? "bg-white/20 text-white border border-white/30 backdrop-blur-sm" : "bg-white/5 text-white/70 border border-white/10"}`}>
-                  {t.allHadiths} ({filteredHadiths.length})
-                </button>
-                <button onClick={() => setActiveTab("chapters")} className={`flex-1 py-4 rounded-2xl font-semibold tracking-wide transition-all shadow-xl ${activeTab === "chapters" ? "bg-white/20 text-white border border-white/30 backdrop-blur-sm" : "bg-white/5 text-white/70 border border-white/10"}`}>
-                  {t.chapters} ({chapters.length})
-                </button>
-              </div>
-
-              {activeTab === "hadiths" ? (
-                <div className="space-y-3">
-                  {loading && <div className="flex justify-center py-10"><Loader2 className="animate-spin text-emerald-300" /></div>}
-                  {!loading && paginatedHadiths.length === 0 && <p className="text-center text-white/50 py-10">{t.noResults}</p>}
-                  {!loading && paginatedHadiths.map((hadith, index) => (
-                    <motion.div
-                      key={hadith.id}
-                      initial={index < PAGE_SIZE ? { opacity: 0, y: 16 } : false}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index < PAGE_SIZE ? index * 0.015 : 0 }}
-                      className="bg-white/10 backdrop-blur-md rounded-2xl p-4 shadow-xl border border-white/20"
-                    >
-                      <button
-                        type="button"
-                        onClick={() => openHadith(hadith)}
-                        className="w-full text-left hover:opacity-90 transition-opacity active:scale-[0.99]"
-                      >
-                        <div className="flex items-start gap-3">
-                          <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center flex-shrink-0 border border-white/30">
-                            <span className="text-white font-bold text-sm">{hadith.number}</span>
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-white/50 text-xs line-clamp-1 mb-1 text-right" dir="rtl">{hadith.arabic}</p>
-                            <p className="text-white text-sm line-clamp-2 font-medium leading-relaxed" dir={isRtl ? "rtl" : "ltr"}>{hadith.translation}</p>
-                          </div>
-                          <ChevronRight className="text-white/50 flex-shrink-0 mt-1" size={18} />
+                        <div className="flex items-center justify-between mb-4">
+                          <span className="text-xs font-bold text-[#10b981] px-2 py-1 bg-[#10b981]/10 rounded-lg">
+                            {t.hadithNo} {h.number}
+                          </span>
+                          <span className="text-[10px] text-white/30 uppercase tracking-wider">
+                            {getChapterName(h.chapterId, slug, kitabMap)}
+                          </span>
                         </div>
-                      </button>
-                      <a
-                        href={`/hadith/h/${hadith.slug || `bukhari-${hadith.number}`}`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          navigate(`/hadith/h/${hadith.slug || `bukhari-${hadith.number}`}`);
-                        }}
-                        className="mt-3 inline-flex items-center justify-center gap-1.5 w-full py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-100 text-xs font-semibold border border-emerald-300/30 transition-colors"
-                      >
-                        <BookOpen className="w-3.5 h-3.5" />
-                        {t.readDetails}
-                      </a>
-                    </motion.div>
-                  ))}
-                  {hasMore && (
-                    <button onClick={() => setPage((p) => p + 1)} className="w-full py-4 mt-2 rounded-2xl bg-white/10 text-white font-semibold border border-white/20 hover:bg-white/15 transition-all">
-                      {t.loadMore}
-                    </button>
-                  )}
-                </div>
-              ) : (
-                <div className="space-y-3">
-                  {/* Use kitabData for the chapter list if available, otherwise fallback to derived chapters */}
-                  {(kitabData && kitabData.length > 0 
-                    ? kitabData.map(k => ({ 
-                        id: k.chapter_number, 
-                        // Use kitabMap to ensure our overrides (like for Ch 97) are respected
-                        count: kitabMap.get(k.chapter_number)?.hadith_count ?? k.hadith_count 
-                      })) 
-                    : chapters
-                  ).map((chapter, index) => (
-                    <motion.button key={chapter.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.01 }} onClick={() => openChapter(chapter.id)} className="w-full text-left bg-white/10 backdrop-blur-md rounded-2xl p-4 hover:bg-white/15 transition-all active:scale-[0.98] shadow-xl border border-white/20">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                          <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center border border-white/30">
-                            <span className="text-white font-bold text-sm">{chapter.id}</span>
-                          </div>
-                          <div>
-                            <p className="text-white font-semibold text-base">{getChapterName(chapter.id, slug, kitabMap)}</p>
-                            <p className="text-white/60 text-sm">{chapter.count} {t.hadiths}</p>
-                          </div>
-                        </div>
-                        <ChevronRight className="text-white/50" size={20} />
+                        <p
+                          className="text-xl leading-[1.8] text-right mb-4 font-arabic line-clamp-2 text-white/60"
+                          dir="rtl"
+                        >
+                          {h.arabic}
+                        </p>
+                        <p
+                          className={`text-sm leading-relaxed line-clamp-3 text-white/80 mb-4 ${
+                            isRtl ? "text-right font-arabic" : ""
+                          }`}
+                          dir={isRtl ? "rtl" : "ltr"}
+                        >
+                          {h.translation}
+                        </p>
+                        <button
+                          onClick={() => handleReadDetails(h)}
+                          className="w-full py-2.5 bg-white/5 hover:bg-[#10b981] text-white/60 hover:text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2"
+                        >
+                          {t.readDetails}
+                        </button>
                       </div>
-                    </motion.button>
-                  ))}
-                </div>
-              )}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      )}
+                    ))}
+                    {totalCount > pagedHadiths.length && (
+                      <button
+                        onClick={() => setPage((p) => p + 1)}
+                        className="w-full py-4 bg-[#10b981]/10 hover:bg-[#10b981] text-[#10b981] hover:text-white rounded-2xl font-bold transition-all border border-[#10b981]/20"
+                      >
+                        {t.loadMore}
+                      </button>
+                    )}
+                  </>
+                ) : (
+                  <div className="text-center py-20 bg-white/5 rounded-3xl border border-dashed border-white/10">
+                    <BookOpen className="w-12 h-12 text-white/10 mx-auto mb-4" />
+                    <p className="text-white/40">{t.noResults}</p>
+                  </div>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        )}
+      </main>
 
       <BottomNavigation />
     </div>
