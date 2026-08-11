@@ -16,4 +16,3 @@ Disallow: /admin/
 Disallow: /api/
 
 Sitemap: https://noorapp.in/sitemap.xml
-Sitemap: https://noorapp.in/sitemap-dynamic.xml

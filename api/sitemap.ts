@@ -59,7 +59,7 @@ export default async function handler(_req: any, res: any) {
       }
     }
 
-    // 3. Add dynamic stories, duas, and hadith slugs from Supabase
+    // 3. Add dynamic content from Supabase
     if (SUPABASE_URL && SUPABASE_ANON_KEY) {
       try {
         const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -77,12 +77,13 @@ export default async function handler(_req: any, res: any) {
           }
         }
 
-        // Hadith detail slugs
+        // Hadith detail slugs (Top 2000 for SEO)
         const { data: hadiths } = await supabase
           .from("hadiths")
           .select("slug")
           .not("slug", "is", null)
-          .limit(1000); // Limit to 1000 for sitemap size safety
+          .order("id", { ascending: true })
+          .limit(2000);
         
         if (hadiths) {
           for (const h of hadiths) {
@@ -90,7 +91,7 @@ export default async function handler(_req: any, res: any) {
           }
         }
       } catch (e) {
-        console.error("Error fetching dynamic content for sitemap:", e);
+        console.error("Supabase sitemap fetch failed:", e);
       }
     }
 
@@ -112,7 +113,7 @@ ${routes
     );
     return res.status(200).send(body);
   } catch (err) {
-    console.error("Sitemap error:", err);
+    console.error("Sitemap generation error:", err);
     return res.status(500).send("Error generating sitemap");
   }
 }

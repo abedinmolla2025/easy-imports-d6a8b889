@@ -12,7 +12,7 @@ const VALID_STATIC_PATHS = new Set([
 const FALLBACK_SURAHS = [
   {"number": 1, "english_name": "Al-Faatiha", "name": "الفاتحة", "number_of_ayahs": 7},
   {"number": 2, "english_name": "Al-Baqara", "name": "البقرة", "number_of_ayahs": 286},
-  {"number": 3, "english_name": "Aal-i-Imraan", "name": "آل عمران", "number_of_ayahs": 200},
+  {"number": 3, "english_name": "Aal-i-Imraan", "name": "آল ইমরান", "number_of_ayahs": 200},
   {"number": 4, "english_name": "An-Nisaa", "name": "النساء", "number_of_ayahs": 176},
   {"number": 5, "english_name": "Al-Maaida", "name": "المائدة", "number_of_ayahs": 120},
   {"number": 6, "english_name": "Al-An'aam", "name": "الأنعام", "number_of_ayahs": 165},
@@ -26,7 +26,7 @@ const FALLBACK_SURAHS = [
   {"number": 14, "english_name": "Ibrahim", "name": "إبراهيم", "number_of_ayahs": 52},
   {"number": 15, "english_name": "Al-Hijr", "name": "الحجر", "number_of_ayahs": 99},
   {"number": 16, "english_name": "An-Nahl", "name": "النحل", "number_of_ayahs": 128},
-  {"number": 17, "english_name": "Al-Israa", "name": "الإسراء", "number_of_ayahs": 111},
+  {"number": 17, "english_name": "Al-Israa", "name": "الإসراء", "number_of_ayahs": 111},
   {"number": 18, "english_name": "Al-Kahf", "name": "الكهফ", "number_of_ayahs": 110},
   {"number": 19, "english_name": "Maryam", "name": "مريم", "number_of_ayahs": 98},
   {"number": 20, "english_name": "Taa-Haa", "name": "طه", "number_of_ayahs": 135},
@@ -58,7 +58,7 @@ const FALLBACK_SURAHS = [
   {"number": 46, "english_name": "Al-Ahqaf", "name": "الأحقاف", "number_of_ayahs": 35},
   {"number": 47, "english_name": "Muhammad", "name": "محمد", "number_of_ayahs": 38},
   {"number": 48, "english_name": "Al-Fath", "name": "الفتح", "number_of_ayahs": 29},
-  {"number": 49, "english_name": "Al-Hujuraat", "name": "الحجرات", "number_of_ayahs": 18},
+  {"number": 49, "english_name": "Al-Hujuraat", "name": "الحজরাত", "number_of_ayahs": 18},
   {"number": 50, "english_name": "Qaf", "name": "ق", "number_of_ayahs": 45},
   {"number": 51, "english_name": "Adh-Dhaariyat", "name": "الذاريات", "number_of_ayahs": 60},
   {"number": 52, "english_name": "At-Toor", "name": "الطور", "number_of_ayahs": 49},
@@ -73,7 +73,7 @@ const FALLBACK_SURAHS = [
   {"number": 61, "english_name": "As-Saff", "name": "الصف", "number_of_ayahs": 14},
   {"number": 62, "english_name": "Al-Jumu'a", "name": "الجمعة", "number_of_ayahs": 11},
   {"number": 63, "english_name": "Al-Munaafiqoon", "name": "المنافقون", "number_of_ayahs": 11},
-  {"number": 64, "english_name": "At-Taghaabun", "name": "التغابن", "number_of_ayahs": 18},
+  {"number": 64, "english_name": "At-Taghaabun", "name": "التগাবন", "number_of_ayahs": 18},
   {"number": 65, "english_name": "At-Talaaq", "name": "الطلاق", "number_of_ayahs": 12},
   {"number": 66, "english_name": "At-Tahrim", "name": "التحريم", "number_of_ayahs": 12},
   {"number": 67, "english_name": "Al-Mulk", "name": "الملك", "number_of_ayahs": 30},
@@ -120,7 +120,7 @@ const FALLBACK_SURAHS = [
   {"number": 108, "english_name": "Al-Kawthar", "name": "الكوثر", "number_of_ayahs": 3},
   {"number": 109, "english_name": "Al-Kaafiroon", "name": "الكافرون", "number_of_ayahs": 6},
   {"number": 110, "english_name": "An-Nasr", "name": "النصر", "number_of_ayahs": 3},
-  {"number": 111, "english_name": "Al-Masad", "name": "المسد", "number_of_ayahs": 5},
+  {"number": 111, "english_name": "Al-Masad", "name": "المসদ", "number_of_ayahs": 5},
   {"number": 112, "english_name": "Al-Ikhlaas", "name": "الإخلاص", "number_of_ayahs": 4},
   {"number": 113, "english_name": "Al-Falaq", "name": "الفلق", "number_of_ayahs": 5},
   {"number": 114, "english_name": "An-Naas", "name": "الناس", "number_of_ayahs": 6}
@@ -179,12 +179,12 @@ export default async function handler(req, res) {
     let jsonLd = null;
     let canonicalUrl = `${SITE_ORIGIN}${path}`;
 
-    // Safely initialize variables
+    // Safely initialize HTML components
     let surahHtml = "";
-    let chapterList = "";
-    let sampleList = "";
+    let chapterListHtml = "";
+    let sampleHadithHtml = "";
 
-    // --- SSR Branch: Hadith Root/Language ---
+    // --- Hadith Root/Language Landing Pages ---
     const hadithLangMatch = path.match(/^\/hadith\/sahih-bukhari\/(bangla|english|urdu)$/);
     if (hadithLangMatch) {
       const lang = hadithLangMatch[1];
@@ -196,22 +196,26 @@ export default async function handler(req, res) {
       title = `Sahih Bukhari ${humanizeSlug(lang)} Hadith Collection | Noor`;
       description = `Browse all ${chapters?.length || 97} chapters of Sahih Bukhari with ${lang} translation and original Arabic text on Noor.`;
       
-      chapterList = (chapters || []).map(c => `<li><a href="/hadith/sahih-bukhari/${lang}/chapter-${c.chapter_number}">${esc(c.title_bn || c.title)}</a> (${c.hadith_count || 0} hadiths)</li>`).join("");
-      sampleList = (sampleHadiths || []).map(h => `<article><h4>Hadith ${h.hadith_number}</h4><p dir="rtl" style="font-size: 1.2em;">${esc(h.arabic)}</p><p>${esc(h[dbField])}</p></article>`).join("");
+      chapterListHtml = (chapters || []).map(c => `<li><a href="/hadith/sahih-bukhari/${lang}/chapter-${c.chapter_number}">${esc(c.title_bn || c.title)}</a> (${c.hadith_count || 0} hadiths)</li>`).join("");
+      sampleHadithHtml = (sampleHadiths || []).map(h => `<article style="margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px;"><h4>Hadith ${h.hadith_number}</h4><p dir="rtl" style="font-size: 1.3em; margin-bottom: 10px;">${esc(h.arabic)}</p><p>${esc(h[dbField])}</p></article>`).join("");
 
       bodyContent = `
         <h1>Sahih Bukhari - ${humanizeSlug(lang)} Translation</h1>
         <p>Sahih al-Bukhari is a collection of hadith compiled by Imam Muhammad al-Bukhari. His collection is recognized by the overwhelming majority of the Muslim world to be the most authentic collection of reports of the Sunnah of the Prophet Muhammad (ﷺ).</p>
-        <h3>Books / Chapters</h3>
-        <ul>${chapterList || "<li>Loading chapters...</li>"}</ul>
-        <h3>Sample Hadiths</h3>
-        ${sampleList || "<p>No sample hadiths available at the moment.</p>"}
+        <section style="margin-top: 30px;">
+          <h3>Books / Chapters</h3>
+          <ul style="column-count: 2; column-gap: 20px;">${chapterListHtml || "<li>Loading chapters...</li>"}</ul>
+        </section>
+        <section style="margin-top: 40px;">
+          <h3>Sample Hadiths</h3>
+          ${sampleHadithHtml || "<p>No sample hadiths available at the moment.</p>"}
+        </section>
       `;
     }
 
-    // --- SSR Branch: Hadith Chapter ---
+    // --- Hadith Chapter Pages ---
     const hadithChapterMatch = path.match(/^\/hadith\/sahih-bukhari\/(bangla|english|urdu)\/chapter-(\d+)$/);
-    if (hadithChapterMatch) {
+    if (!bodyContent && hadithChapterMatch) {
       const [, lang, chapterNum] = hadithChapterMatch;
       const dbField = lang === "bangla" ? "bengali" : lang;
       
@@ -222,24 +226,26 @@ export default async function handler(req, res) {
       title = `Sahih Bukhari ${humanizeSlug(lang)} - ${chapTitle} | Noor`;
       description = `Read hadiths from Sahih Bukhari ${chapTitle} in ${lang} with Arabic text and authentic references on Noor App.`;
 
-      sampleList = (hadiths || []).map(h => `
-        <article>
+      sampleHadithHtml = (hadiths || []).map(h => `
+        <article style="margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px;">
           <h3>Hadith ${h.hadith_number}</h3>
-          <p dir="rtl" style="font-size: 1.2em;">${esc(h.arabic)}</p>
-          <p>${esc(h[dbField])}</p>
+          <p dir="rtl" style="font-size: 1.4em; margin-bottom: 15px;">${esc(h.arabic)}</p>
+          <p style="font-size: 1.1em;">${esc(h[dbField])}</p>
         </article>
       `).join("");
 
       bodyContent = `
-        <nav><a href="/hadith">Hadith</a> &gt; <a href="/hadith/sahih-bukhari/${lang}">Sahih Bukhari</a> &gt; ${esc(chapTitle)}</nav>
+        <nav style="margin-bottom: 20px; color: #10b981;"><a href="/hadith" style="color: #10b981;">Hadith</a> &gt; <a href="/hadith/sahih-bukhari/${lang}" style="color: #10b981;">Sahih Bukhari</a> &gt; ${esc(chapTitle)}</nav>
         <h1>Sahih Bukhari - ${esc(chapTitle)}</h1>
-        <p>Explore authentic hadiths from Sahih Bukhari Chapter ${chapterNum} with ${lang} translation.</p>
-        ${sampleList || "<p>Loading hadiths...</p>"}
+        <p style="color: #888; margin-bottom: 30px;">Explore authentic hadiths from Sahih Bukhari Chapter ${chapterNum} with ${lang} translation.</p>
+        <section>
+          ${sampleHadithHtml || "<p>Loading hadiths...</p>"}
+        </section>
       `;
     }
 
-    // --- SSR Branch: Quran Root ---
-    if (path === "/quran") {
+    // --- Quran Root Page ---
+    if (!bodyContent && path === "/quran") {
       let surahs = [];
       try {
         const { data } = await supabase.from("quran_surahs").select("*").order("number");
@@ -254,7 +260,7 @@ export default async function handler(req, res) {
       description = "Access the complete Holy Quran with Arabic text, Bengali translation, and beautiful audio recitations. Explore all 114 surahs on Noor App.";
       
       surahHtml = surahs.map(s => `
-        <a href="/quran/${s.number}" style="display: block; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 12px; text-decoration: none; color: inherit; border: 1px solid rgba(255,255,255,0.1);">
+        <a href="/quran/${s.number}" style="display: block; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 12px; text-decoration: none; color: inherit; border: 1px solid rgba(255,255,255,0.1); transition: background 0.2s;">
           <strong style="font-size: 1.1em; color: #10b981;">${s.number}. ${esc(s.english_name || s.englishName)}</strong><br/>
           <span style="font-size: 0.9em; color: #888;">${esc(s.name)} - ${s.number_of_ayahs || s.numberOfAyahs} Ayahs</span>
         </a>
@@ -262,16 +268,20 @@ export default async function handler(req, res) {
 
       bodyContent = `
         <h1>Holy Quran - পবিত্র কুরআন মাজীদ</h1>
-        <p>Read, listen, and study the Holy Quran. Below are all 114 Surahs with links to read their full text and translations on Noor App.</p>
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; margin-top: 20px;">
+        <p style="margin-bottom: 30px;">Read, listen, and study the Holy Quran. Below are all 114 Surahs with links to read their full text and translations on Noor App.</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px;">
           ${surahHtml}
         </div>
       `;
     }
 
-    // Final safety check
+    // --- Final Page Construction ---
     if (!bodyContent || bodyContent.includes("undefined")) {
-      bodyContent = `<h1>${esc(title)}</h1><p>${esc(description)}</p><p>Explore authentic Islamic resources, Quran, Hadith, and Dua on Noor App.</p>`;
+      bodyContent = `
+        <h1>${esc(title)}</h1>
+        <p>${esc(description)}</p>
+        <p>Explore authentic Islamic resources, Quran, Hadith, and Dua on Noor App. We provide authentic Bengali translations and Arabic texts for your spiritual growth.</p>
+      `;
     }
 
     const html = `<!DOCTYPE html>
@@ -290,7 +300,7 @@ export default async function handler(req, res) {
     ${jsonLd ? `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>` : ""}
 </head>
 <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #0a1a1a; color: white; padding: 20px; line-height: 1.6;">
-    <div style="max-width: 800px; margin: 0 auto;">
+    <div style="max-width: 900px; margin: 0 auto;">
         <header style="margin-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px;">
             <a href="/" style="color: #10b981; font-size: 2.5em; font-weight: bold; text-decoration: none; letter-spacing: -1px;">NOOR</a>
         </header>
@@ -299,10 +309,10 @@ export default async function handler(req, res) {
         </main>
         <footer style="margin-top: 60px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 30px; font-size: 0.9em; color: #666; text-align: center;">
             <p>&copy; 2026 Noor Islamic App. All rights reserved.</p>
-            <div style="margin-top: 10px;">
-                <a href="/about" style="color: #888; text-decoration: none; margin: 0 10px;">About</a>
-                <a href="/privacy-policy" style="color: #888; text-decoration: none; margin: 0 10px;">Privacy</a>
-                <a href="/terms" style="color: #888; text-decoration: none; margin: 0 10px;">Terms</a>
+            <div style="margin-top: 15px;">
+                <a href="/about" style="color: #888; text-decoration: none; margin: 0 15px;">About</a>
+                <a href="/privacy-policy" style="color: #888; text-decoration: none; margin: 0 15px;">Privacy</a>
+                <a href="/terms" style="color: #888; text-decoration: none; margin: 0 15px;">Terms</a>
             </div>
         </footer>
     </div>

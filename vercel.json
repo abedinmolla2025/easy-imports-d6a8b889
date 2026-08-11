@@ -31,16 +31,6 @@
    "source": "/sahih-al-bukhari/:lang",
    "destination": "/hadith/sahih-bukhari/:lang",
    "statusCode": 301
-  },
-  {
-   "source": "/app/noorapp.apk",
-   "destination": "/download",
-   "statusCode": 301
-  },
-  {
-   "source": "/names",
-   "destination": "/baby-names",
-   "statusCode": 301
   }
  ],
  "headers": [
@@ -82,17 +72,6 @@
    "destination": "/api/sitemap"
   },
   {
-   "source": "/data-sources",
-   "has": [
-    {
-     "type": "header",
-     "key": "user-agent",
-     "value": ".*(Googlebot|facebookexternalhit|WhatsApp|Twitterbot|TelegramBot|Discordbot|LinkedInBot|Pinterest|slackbot|Applebot).*"
-    }
-   ],
-   "destination": "/api/prerender?path=/data-sources"
-  },
-  {
    "source": "/((?!assets|favicon|og-|pwa-|manifest|robots|sitemap\\.xml|sw\\.js|data|api|\\.well-known/).*)",
    "has": [
     {
@@ -117,12 +96,6 @@
   {
    "source": "/((?!\\.well-known/).*)",
    "destination": "/"
-  }
- ],
- "crons": [
-  {
-   "path": "/api/scheduler-tick",
-   "schedule": "0 0 * * *"
   }
  ]
 }
