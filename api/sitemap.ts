@@ -43,41 +43,43 @@ const BASE_ROUTES = [
 ];
 
 export default async function handler(_req: any, res: any) {
-  const routes = [...BASE_ROUTES];
-  
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-  // 1. Add Quran Surahs (1-114)
-  for (let i = 1; i <= 114; i++) {
-    routes.push(`/quran/${i}`);
-  }
-
-  // 2. Add Sahih Bukhari chapters (1-97) for all 3 languages
-  const langs = ["bangla", "english", "urdu"];
-  for (const lang of langs) {
-    for (let i = 1; i <= 97; i++) {
-      routes.push(`/hadith/sahih-bukhari/${lang}/chapter-${i}`);
-    }
-  }
-
-  // 3. Add dynamic stories and duas from Supabase
   try {
-    const { data: content } = await supabase
-      .from("admin_content")
-      .select("slug, content_type")
-      .in("content_type", ["story", "dua"]);
+    const routes = [...BASE_ROUTES];
     
-    if (content) {
-      for (const item of content) {
-        const prefix = item.content_type === "story" ? "/stories" : "/dua";
-        routes.push(`${prefix}/${item.slug}`);
+    // 1. Add Quran Surahs (1-114)
+    for (let i = 1; i <= 114; i++) {
+      routes.push(`/quran/${i}`);
+    }
+
+    // 2. Add Sahih Bukhari chapters (1-97) for all 3 languages
+    const langs = ["bangla", "english", "urdu"];
+    for (const lang of langs) {
+      for (let i = 1; i <= 97; i++) {
+        routes.push(`/hadith/sahih-bukhari/${lang}/chapter-${i}`);
       }
     }
-  } catch (e) {
-    console.error("Error fetching dynamic content for sitemap:", e);
-  }
 
-  const body = `<?xml version="1.0" encoding="UTF-8"?>
+    // 3. Add dynamic stories and duas from Supabase
+    if (SUPABASE_URL && SUPABASE_ANON_KEY) {
+      try {
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const { data: content } = await supabase
+          .from("admin_content")
+          .select("slug, content_type")
+          .in("content_type", ["story", "dua"]);
+        
+        if (content) {
+          for (const item of content) {
+            const prefix = item.content_type === "story" ? "/stories" : "/dua";
+            routes.push(`${prefix}/${item.slug}`);
+          }
+        }
+      } catch (e) {
+        console.error("Error fetching dynamic content for sitemap:", e);
+      }
+    }
+
+    const body = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${routes
   .map((path) => `  <url>
@@ -88,10 +90,14 @@ ${routes
   .join("\n")}
 </urlset>`;
 
-  res.setHeader("Content-Type", "application/xml; charset=utf-8");
-  res.setHeader(
-    "Cache-Control",
-    "public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400",
-  );
-  return res.status(200).send(body);
+    res.setHeader("Content-Type", "application/xml; charset=utf-8");
+    res.setHeader(
+      "Cache-Control",
+      "public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400",
+    );
+    return res.status(200).send(body);
+  } catch (err) {
+    console.error("Sitemap error:", err);
+    return res.status(500).send("Error generating sitemap");
+  }
 }

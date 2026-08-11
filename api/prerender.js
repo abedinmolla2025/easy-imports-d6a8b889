@@ -2,13 +2,21 @@ import { createClient } from '@supabase/supabase-js';
 
 const SITE_ORIGIN = "https://noorapp.in";
 
-// Use environment variables only
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
 const SUPABASE_ANON_KEY = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
 
 const VALID_STATIC_PATHS = new Set([
   "/", "/quran", "/hadith", "/dua", "/prayer-times", "/prayer-guide", "/qibla", "/tasbih", "/99-names", "/baby-names", "/calendar", "/quiz", "/stories", "/about", "/contact", "/sources", "/data-sources", "/privacy-policy", "/terms", "/download", "/islamic-app",
 ]);
+
+const FALLBACK_SURAHS = [
+  { number: 1, english_name: "Al-Faatiha", name: "الفاتحة", number_of_ayahs: 7 },
+  { number: 2, english_name: "Al-Baqara", name: "البقرة", number_of_ayahs: 286 },
+  { number: 3, english_name: "Aal-i-Imraan", name: "آল ইমরান", number_of_ayahs: 200 },
+  { number: 36, english_name: "Ya-Seen", name: "يس", number_of_ayahs: 83 },
+  { number: 67, english_name: "Al-Mulk", name: "الملক", number_of_ayahs: 30 },
+  { number: 114, english_name: "An-Naas", name: "الناس", number_of_ayahs: 6 }
+];
 
 function isKnownPublicPath(path) {
   return VALID_STATIC_PATHS.has(path)
@@ -33,7 +41,6 @@ const SEO_BY_PATH = {
   "/dua": { title: "Daily Dua in Bengali | Noor", description: "Read daily duas with Bengali meaning, Arabic text and practical guidance on Noor." },
 };
 
-// Helper for escaping HTML
 const esc = (s) => String(s || "")
   .replace(/&/g, "&amp;")
   .replace(/</g, "&lt;")
@@ -59,7 +66,7 @@ export default async function handler(req, res) {
     let jsonLd = null;
     let canonicalUrl = `${SITE_ORIGIN}${path}`;
 
-    // --- SSR Branch: Hadith Root/Language ---
+    // --- Hadith Root/Language ---
     const hadithLangMatch = path.match(/^\/hadith\/sahih-bukhari\/(bangla|english|urdu)$/);
     if (hadithLangMatch) {
       const lang = hadithLangMatch[1];
@@ -70,7 +77,7 @@ export default async function handler(req, res) {
       title = `Sahih Bukhari ${humanizeSlug(lang)} Hadith Collection | Noor`;
       description = `Browse all ${chapters?.length || 97} chapters of Sahih Bukhari with ${lang} translation and original Arabic text on Noor.`;
       
-      let chaptersHtml = (chapters || []).map(c => `<li><a href="/hadith/sahih-bukhari/${lang}/chapter-${c.chapter_number}">${esc(c.title_bn || c.title)}</a> (${c.hadith_count} hadiths)</li>`).join("");
+      let chaptersHtml = (chapters || []).map(c => `<li><a href="/hadith/sahih-bukhari/${lang}/chapter-${c.chapter_number}">${esc(c.title_bn || c.title)}</a> (${c.hadith_count || 0} hadiths)</li>`).join("");
       let hadithsHtml = (sampleHadiths || []).map(h => `<article><h4>Hadith ${h.hadith_number}</h4><p dir="rtl">${esc(h.arabic)}</p><p>${esc(h[dbField])}</p></article>`).join("");
 
       bodyContent = `
@@ -81,27 +88,9 @@ export default async function handler(req, res) {
         <h3>Sample Hadiths</h3>
         ${hadithsHtml || "<p>No sample hadiths available at the moment.</p>"}
       `;
-      
-      if (chapters) {
-        jsonLd = {
-          "@context": "https://schema.org",
-          "@type": "CollectionPage",
-          "headline": title,
-          "description": description,
-          "mainEntity": {
-            "@type": "ItemList",
-            "itemListElement": chapters.map((c, i) => ({
-              "@type": "ListItem",
-              "position": i + 1,
-              "url": `${SITE_ORIGIN}/hadith/sahih-bukhari/${lang}/chapter-${c.chapter_number}`,
-              "name": c.title_bn || c.title
-            }))
-          }
-        };
-      }
     }
 
-    // --- SSR Branch: Hadith Chapter ---
+    // --- Hadith Chapter ---
     const hadithChapterMatch = path.match(/^\/hadith\/sahih-bukhari\/(bangla|english|urdu)\/chapter-(\d+)$/);
     if (hadithChapterMatch) {
       const [, lang, chapterNum] = hadithChapterMatch;
@@ -127,42 +116,33 @@ export default async function handler(req, res) {
         <p>Explore ${hadiths?.length || 0} authentic hadiths from Sahih Bukhari Chapter ${chapterNum} with ${lang} translation.</p>
         ${hadithsHtml || "<p>Loading hadiths...</p>"}
       `;
-
-      jsonLd = {
-        "@context": "https://schema.org",
-        "@type": "ItemPage",
-        "headline": title,
-        "description": description,
-        "breadcrumb": {
-          "@type": "BreadcrumbList",
-          "itemListElement": [
-            { "@type": "ListItem", "position": 1, "name": "Hadith", "item": `${SITE_ORIGIN}/hadith` },
-            { "@type": "ListItem", "position": 2, "name": "Sahih Bukhari", "item": `${SITE_ORIGIN}/hadith/sahih-bukhari/${lang}` },
-            { "@type": "ListItem", "position": 3, "name": chapTitle, "item": canonicalUrl }
-          ]
-        }
-      };
     }
 
-    // --- SSR Branch: Quran Root ---
+    // --- Quran Root ---
     if (path === "/quran") {
-      const { data: surahs } = await supabase.from("quran_surahs").select("*").order("number");
+      let surahs = [];
+      try {
+        const { data } = await supabase.from("quran_surahs").select("*").order("number");
+        surahs = data || [];
+      } catch (e) {}
+      
+      if (surahs.length === 0) surahs = FALLBACK_SURAHS;
       
       title = "Read Holy Quran Online - Bengali Translation & Audio | Noor";
       description = "Access the complete Holy Quran with Arabic text, Bengali translation, and beautiful audio recitations. Explore all 114 surahs on Noor App.";
       
-      let surahsHtml = (surahs || []).map(s => `
+      let surahsHtml = surahs.map(s => `
         <a href="/quran/${s.number}" style="display: block; padding: 10px; background: rgba(255,255,255,0.05); border-radius: 8px; text-decoration: none; color: inherit;">
-          <strong>${s.number}. ${esc(s.english_name)}</strong><br/>
-          <span style="font-size: 0.8em; color: #888;">${esc(s.name)} - ${s.number_of_ayahs} Ayahs</span>
+          <strong>${s.number}. ${esc(s.english_name || s.englishName)}</strong><br/>
+          <span style="font-size: 0.8em; color: #888;">${esc(s.name)} - ${s.number_of_ayahs || s.numberOfAyahs} Ayahs</span>
         </a>
       `).join("");
 
       bodyContent = `
         <h1>Holy Quran - পবিত্র কুরআন মাজীদ</h1>
-        <p>Read, listen, and study the Holy Quran. Below are all 114 Surahs with links to read their full text and translations.</p>
+        <p>Read, listen, and study the Holy Quran. Below are Surahs with links to read their full text and translations.</p>
         <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px;">
-          ${surahsHtml || "<p>Loading surahs...</p>"}
+          ${surahsHtml}
         </div>
       `;
     }
@@ -201,6 +181,6 @@ export default async function handler(req, res) {
     return res.status(200).send(html);
   } catch (err) {
     console.error("Prerender Error:", err);
-    return res.status(500).send("Internal Server Error");
+    return res.status(200).send(`<!DOCTYPE html><html><body><h1>NOOR</h1><p>Loading...</p></body></html>`);
   }
 }
