@@ -32,6 +32,7 @@ const humanizeSlug = (slug) => {
 
 export default async function handler(req, res) {
   const { path = "/" } = req.query;
+  console.log("[PRERENDER] Path:", path);
   let title = "Noor – Quran, Hadith, Dua & Prayer Times";
   let description = "Read authentic Quran, Hadith, Dua, Prayer Times, Qibla, Islamic Stories and Baby Names in Bengali with a fast and beautiful Islamic app.";
   let bodyContent = "";
@@ -41,6 +42,7 @@ export default async function handler(req, res) {
   try {
     // --- Quran Surah Pages ---
     const quranMatch = path.match(/^\/quran\/(\d+)$/);
+    console.log("[PRERENDER] Quran match:", quranMatch);
     if (quranMatch) {
       const surahNum = parseInt(quranMatch[1]);
       if (surahNum < 1 || surahNum > 114) {
@@ -48,12 +50,14 @@ export default async function handler(req, res) {
       }
 
       try {
-        const { data: surah } = await supabase
+        console.log("[PRERENDER] Fetching surah:", surahNum);
+        const { data: surah, error: surahError } = await supabase
           .from("quran_surahs")
           .select("*")
           .eq("number", surahNum)
           .maybeSingle();
 
+        console.log("[PRERENDER] Surah result:", surah, "Error:", surahError);
         if (surah) {
           const surahName = surah.name || `Surah ${surahNum}`;
           const englishName = surah.english_name || surah.englishName || "";
