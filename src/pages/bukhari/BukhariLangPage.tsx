@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { ArrowLeft, Search, ChevronRight, Loader2, BookOpen } from "lucide-react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Navigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
@@ -233,7 +233,6 @@ function flattenBooks(json: Record<string, RawHadith[]>): RawHadith[] {
 }
 
 // ── Load from database (Bangla) ──────────────────────────────
-// Load hadiths by chapter for faster initial rendering
 async function loadChapterFromDb(dbField: string, chapterId: number): Promise<Hadith[]> {
   const { data, error } = await (supabase as any)
     .from("hadiths")
@@ -256,7 +255,6 @@ async function loadChapterFromDb(dbField: string, chapterId: number): Promise<Ha
   }));
 }
 
-// Load all hadiths from DB using pagination to avoid the 1000 row limit
 async function loadFromDb(dbField: string, search: string = ""): Promise<Hadith[]> {
   let allRows: any[] = [];
   let from = 0;
@@ -306,8 +304,21 @@ export default function BukhariLangPage() {
     chapterId: string;
     hadithNumber: string;
   }>();
-  // chapterSlug is used for /hadith/sahih-bukhari/:lang/:chapterSlug (e.g. "chapter-5")
-  // chapterId is used for /hadith/sahih-bukhari/:lang/:chapterId/:hadithNumber
+
+  // 1. Language Normalization and Validation
+  const normalizedLang = useMemo(() => {
+    const raw = (lang || "").toLowerCase().trim();
+    if (raw === "bn" || raw === "bengali" || raw === "bangla") return "bangla";
+    if (raw === "en" || raw === "english") return "english";
+    if (raw === "ur" || raw === "urdu") return "urdu";
+    return null;
+  }, [lang]);
+
+  // Redirect if invalid language
+  if (!normalizedLang) {
+    return <Navigate to="/hadith/sahih-bukhari" replace />;
+  }
+
   const effectiveChapterParam = chapterSlug || chapterParam;
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
@@ -323,9 +334,8 @@ export default function BukhariLangPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const slug = (lang as LangSlug) || "bangla";
-  const cfg = langMeta[slug] ?? langMeta.bangla;
-  const t = uiStrings[slug] ?? uiStrings.bangla;
+  const cfg = langMeta[normalizedLang];
+  const t = uiStrings[normalizedLang];
   const isRtl = cfg.rtl;
 
   // ── Fetch Kitab names from DB ──────────────────────────────
@@ -347,7 +357,6 @@ export default function BukhariLangPage() {
     const m = new Map<number, KitabInfo>();
     if (kitabData) {
       for (const k of kitabData) {
-        // Manual fix for Chapter 97 title if it's wrong in DB
         if (k.chapter_number === 97 && (!k.title_bn || k.title_bn.includes("হারানো"))) {
           m.set(97, { ...k, title: "Tawheed", title_bn: "তাওহীদ (আল্লাহর একত্ববাদ)", hadith_count: 188 });
         } else {
@@ -365,11 +374,15 @@ export default function BukhariLangPage() {
     setLoading(true);
     setError(null);
 
+    // Development assertion for Urdu
+    if (normalizedLang === "urdu" && cfg.file !== "/data/sahih_bukhari_ur.json") {
+      console.error("CRITICAL: Urdu route has incorrect source file mapping!");
+    }
+
     const processHadiths = (mapped: Hadith[]) => {
       if (cancelled) return;
       setAllHadiths(mapped);
       
-      // Derive chapters from kitabData if available, otherwise from hadiths
       let chapArr: Chapter[] = [];
       if (kitabData && kitabData.length > 0) {
         chapArr = kitabData.map(k => ({ id: k.chapter_number, count: k.hadith_count }));
@@ -385,11 +398,11 @@ export default function BukhariLangPage() {
       setLoading(false);
     };
 
-    // Debounced search logic
     const timer = setTimeout(() => {
       if (cfg.source === "db") {
+        const dbField = cfg.dbField!;
         if (selectedChapter) {
-          loadChapterFromDb(cfg.dbField || "bengali", selectedChapter)
+          loadChapterFromDb(dbField, selectedChapter)
             .then(processHadiths)
             .catch((err) => {
               if (cancelled) return;
@@ -398,7 +411,7 @@ export default function BukhariLangPage() {
               setLoading(false);
             });
         } else {
-          loadFromDb(cfg.dbField || "bengali", searchQuery)
+          loadFromDb(dbField, searchQuery)
             .then(processHadiths)
             .catch((err) => {
               if (cancelled) return;
@@ -442,7 +455,7 @@ export default function BukhariLangPage() {
       cancelled = true;
       clearTimeout(timer);
     };
-  }, [cfg, selectedChapter, searchQuery, kitabData]);
+  }, [normalizedLang, cfg, selectedChapter, searchQuery, kitabData, t.error]);
 
   // ── Sync from URL ──────────────────────────────────────────
   useEffect(() => {
@@ -498,17 +511,17 @@ export default function BukhariLangPage() {
     setSelectedChapter(id);
     setActiveTab("hadiths");
     setPage(1);
-    navigate(`/hadith/sahih-bukhari/${slug}/chapter-${id}`);
+    navigate(`/hadith/sahih-bukhari/${normalizedLang}/chapter-${id}`);
   };
 
   const handleBack = () => {
     if (selectedHadith) {
       setSelectedHadith(null);
-      navigate(`/hadith/sahih-bukhari/${slug}/chapter-${selectedChapter}`);
+      navigate(`/hadith/sahih-bukhari/${normalizedLang}/chapter-${selectedChapter}`);
     } else if (selectedChapter) {
       setSelectedChapter(null);
       setActiveTab("chapters");
-      navigate(`/hadith/sahih-bukhari/${slug}`);
+      navigate(`/hadith/sahih-bukhari/${normalizedLang}`);
     } else {
       navigate("/hadith");
     }
@@ -518,7 +531,7 @@ export default function BukhariLangPage() {
     if (h.slug) {
       navigate(`/hadith/h/${h.slug}`);
     } else {
-      navigate(`/hadith/sahih-bukhari/${slug}/${h.chapterId}/${h.number}`);
+      navigate(`/hadith/sahih-bukhari/${normalizedLang}/${h.chapterId}/${h.number}`);
     }
   };
 
@@ -542,12 +555,11 @@ export default function BukhariLangPage() {
   return (
     <div className="min-h-screen bg-[#0a1a1a] text-white pb-24">
       <Helmet>
-        <title>{buildSeoTitle(slug, selectedChapter || undefined, selectedHadith?.number)}</title>
-        <meta name="description" content={buildSeoDesc(slug, selectedChapter || undefined, selectedHadith?.number)} />
-        <link rel="canonical" href={buildCanonical(slug, selectedChapter || undefined, selectedHadith?.number)} />
-        {/* JSON-LD for Hadith Article */}
+        <title>{buildSeoTitle(normalizedLang, selectedChapter || undefined, selectedHadith?.number)}</title>
+        <meta name="description" content={buildSeoDesc(normalizedLang, selectedChapter || undefined, selectedHadith?.number)} />
+        <link rel="canonical" href={buildCanonical(normalizedLang, selectedChapter || undefined, selectedHadith?.number)} />
         <script type="application/ld+json">
-          {JSON.stringify(buildArticleJsonLd(slug, selectedHadith?.number))}
+          {JSON.stringify(buildArticleJsonLd(normalizedLang, selectedHadith?.number))}
         </script>
       </Helmet>
 
@@ -562,7 +574,7 @@ export default function BukhariLangPage() {
           </button>
           <div className="flex-1 min-w-0">
             <h1 className="text-lg font-bold truncate">
-              {selectedChapter ? getChapterName(selectedChapter, slug, kitabMap) : t.title}
+              {selectedChapter ? getChapterName(selectedChapter, normalizedLang, kitabMap) : t.title}
             </h1>
             <p className="text-xs text-[#10b981] font-medium">{t.subtitle}</p>
           </div>
@@ -592,7 +604,7 @@ export default function BukhariLangPage() {
                 onClick={() => {
                   setActiveTab("chapters");
                   setSelectedChapter(null);
-                  navigate(`/hadith/sahih-bukhari/${slug}`);
+                  navigate(`/hadith/sahih-bukhari/${normalizedLang}`);
                 }}
                 className={`flex-1 py-2.5 text-sm font-medium rounded-lg transition-all ${
                   activeTab === "chapters" ? "bg-[#10b981] text-white shadow-lg" : "text-white/60 hover:text-white"
@@ -678,7 +690,7 @@ export default function BukhariLangPage() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <h3 className="font-bold truncate group-hover:text-[#10b981] transition-colors">
-                        {getChapterName(chap.id, slug, kitabMap)}
+                        {getChapterName(chap.id, normalizedLang, kitabMap)}
                       </h3>
                       <p className="text-xs text-white/40">
                         {chap.count} {t.hadiths}
@@ -706,7 +718,7 @@ export default function BukhariLangPage() {
                             {t.hadithNo} {h.number}
                           </span>
                           <span className="text-[10px] text-white/30 uppercase tracking-wider">
-                            {getChapterName(h.chapterId, slug, kitabMap)}
+                            {getChapterName(h.chapterId, normalizedLang, kitabMap)}
                           </span>
                         </div>
                         <p
