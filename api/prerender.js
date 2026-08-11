@@ -508,7 +508,10 @@ export default async function handler(req, res) {
       .replace(/{{BODY}}/g, bodyContent);
 
     res.setHeader("Content-Type", "text/html; charset=utf-8");
-    res.setHeader("Cache-Control", "public, max-age=3600");
+    // Set explicit Cache-Control for Vercel Edge Cache
+    // s-maxage: cache at edge for 24h
+    // stale-while-revalidate: serve stale for up to 1h while revalidating in background
+    res.setHeader("Cache-Control", "public, s-maxage=86400, stale-while-revalidate=3600, max-age=60");
     res.status(200).send(finalHtml);
   } catch (error) {
     console.error("Prerender error:", error);
