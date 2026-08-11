@@ -83,7 +83,7 @@ export default async function handler(_req: any, res: any) {
           .select("slug")
           .not("slug", "is", null)
           .order("id", { ascending: true })
-          .limit(2000);
+          .limit(500);
         
         if (hadiths) {
           for (const h of hadiths) {
