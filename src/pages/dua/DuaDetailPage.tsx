@@ -615,7 +615,7 @@ const DuaDetailPage = () => {
             <h2 className="flex items-center gap-2 text-xs font-medium text-[hsl(45,93%,58%)] uppercase tracking-wide mb-3">
               <Sparkles className="w-4 h-4" /> {SECTION_LABELS.pronunciation[language]}
             </h2>
-            <p className="text-white font-bangla font-medium text-xl md:text-2xl leading-[1.8] tracking-wide drop-shadow-md antialiased">
+            <p className="text-[#FFFFFF] font-bangla font-medium text-xl md:text-2xl leading-[1.8] tracking-wide drop-shadow-md antialiased">
               {text.pronunciation}
             </p>
           </section>
@@ -632,7 +632,7 @@ const DuaDetailPage = () => {
               <Heart className="w-4 h-4" /> {SECTION_LABELS.meaning[language]}
             </h2>
             <p 
-              className="text-white font-medium text-xl md:text-2xl leading-[1.8] tracking-wide drop-shadow-md antialiased"
+              className="text-[#FFFFFF] font-medium text-xl md:text-2xl leading-[1.8] tracking-wide drop-shadow-md antialiased"
               style={{ fontFamily: "'Noto Serif Bengali', serif" }}
             >
               {text.meaning}
