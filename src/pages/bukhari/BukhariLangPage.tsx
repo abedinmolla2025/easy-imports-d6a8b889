@@ -677,7 +677,7 @@ export default function BukhariLangPage() {
 
                     <div className="space-y-4">
                       <p
-                        className={`text-lg md:text-xl leading-[1.9] text-white font-bangla ${
+                        className={`text-xl md:text-2xl leading-[1.8] text-white font-bangla-serif drop-shadow-sm antialiased ${
                           isRtl ? "text-right font-arabic" : ""
                         }`}
                         dir={isRtl ? "rtl" : "ltr"}

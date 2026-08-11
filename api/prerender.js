@@ -216,7 +216,7 @@ const hadithCardMarkup = (row, lang, meta, chapterMap) => `
       <span class="text-[10px] text-[hsl(45,93%,58%)]/75 uppercase tracking-wider">${esc(getHadithChapterName(chapterMap.get(row.chapterId), lang))}</span>
     </div>
     <p dir="rtl" class="relative z-10 text-xl leading-[1.8] text-right mb-4 font-arabic line-clamp-3 text-white">${esc(row.arabic)}</p>
-    <p dir="${meta.rtl ? "rtl" : "ltr"}" class="relative z-10 text-base md:text-lg leading-[1.85] line-clamp-4 text-white font-bangla mb-4">${esc(row.translation)}</p>
+    <p dir="${meta.rtl ? "rtl" : "ltr"}" class="relative z-10 text-xl md:text-2xl leading-[1.8] line-clamp-4 text-white font-bangla-serif mb-4">${esc(row.translation)}</p>
     <a href="/hadith/sahih-bukhari/${lang}/${row.chapterId}/${row.number}" class="relative z-10 w-full py-2.5 bg-[hsl(45,93%,58%)]/15 hover:bg-[hsl(45,93%,58%)] text-[hsl(45,93%,58%)] hover:text-[hsl(158,64%,15%)] rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 border border-[hsl(45,93%,58%)]/20">📖 ${meta.read}</a>
   </article>
 `;
