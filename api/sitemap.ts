@@ -59,10 +59,12 @@ export default async function handler(_req: any, res: any) {
       }
     }
 
-    // 3. Add dynamic stories and duas from Supabase
+    // 3. Add dynamic stories, duas, and hadith slugs from Supabase
     if (SUPABASE_URL && SUPABASE_ANON_KEY) {
       try {
         const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        // Stories and Duas
         const { data: content } = await supabase
           .from("admin_content")
           .select("slug, content_type")
@@ -72,6 +74,19 @@ export default async function handler(_req: any, res: any) {
           for (const item of content) {
             const prefix = item.content_type === "story" ? "/stories" : "/dua";
             routes.push(`${prefix}/${item.slug}`);
+          }
+        }
+
+        // Hadith detail slugs
+        const { data: hadiths } = await supabase
+          .from("hadiths")
+          .select("slug")
+          .not("slug", "is", null)
+          .limit(1000); // Limit to 1000 for sitemap size safety
+        
+        if (hadiths) {
+          for (const h of hadiths) {
+            routes.push(`/hadith/h/${h.slug}`);
           }
         }
       } catch (e) {
