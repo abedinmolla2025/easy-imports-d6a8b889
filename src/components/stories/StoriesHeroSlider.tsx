@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight, BookOpen, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Sparkles } from "lucide-react";
 import { useStories } from "@/lib/stories";
 
 export type HeroSlide = {
@@ -66,9 +67,25 @@ export default function StoriesHeroSlider() {
 
   if (loading || slides.length === 0) {
     return (
-      <div className="w-full aspect-[3/4] sm:aspect-[16/10] md:aspect-[21/9] max-h-[620px] rounded-2xl bg-muted flex flex-col items-center justify-center gap-4">
-        <Loader2 className="w-10 h-10 text-emerald-600 animate-spin" />
-        <p className="text-muted-foreground animate-pulse font-medium tracking-wide">Loading Slider...</p>
+      <div className="relative w-full aspect-[3/4] sm:aspect-[16/10] md:aspect-[21/9] max-h-[620px] rounded-2xl bg-emerald-950/5 overflow-hidden border border-emerald-900/10">
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 z-20">
+          <div className="relative">
+            <Loader2 className="w-12 h-12 text-emerald-600 animate-spin" />
+            <Sparkles className="absolute -top-1 -right-1 w-5 h-5 text-emerald-500 animate-pulse" />
+          </div>
+          <p className="text-emerald-800/60 animate-pulse font-medium tracking-widest text-xs uppercase">Preparing Feature Slider...</p>
+        </div>
+        
+        {/* Skeleton content layout */}
+        <div className="absolute inset-x-0 bottom-0 p-8 md:p-12 space-y-4 animate-pulse">
+          <Skeleton className="h-4 w-24 bg-emerald-900/10 rounded" />
+          <Skeleton className="h-12 w-2/3 bg-emerald-900/10 rounded-xl" />
+          <Skeleton className="h-20 w-1/2 bg-emerald-900/5 rounded-lg" />
+          <Skeleton className="h-12 w-32 bg-emerald-900/20 rounded-full" />
+        </div>
+        
+        {/* Shimmer overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-emerald-600/5 to-transparent -translate-x-full animate-[shimmer_3s_infinite] pointer-events-none" />
       </div>
     );
   }

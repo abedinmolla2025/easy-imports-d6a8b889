@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
-import { ArrowLeft, Search, ChevronRight, Loader2, BookOpen } from "lucide-react";
+import { ArrowLeft, Search, ChevronRight, Loader2, BookOpen, Sparkles } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useNavigate, useParams, Navigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
@@ -297,6 +298,30 @@ async function loadFromDb(dbField: string, search: string = "", chapterId: numbe
 
 // ── Pagination ───────────────────────────────────────────────
 const PAGE_SIZE = 40;
+
+// ── Skeleton Loader ──────────────────────────────────────────
+const HadithSkeleton = () => (
+  <div className="space-y-4 animate-pulse">
+    {[1, 2, 3].map((i) => (
+      <div key={i} className="relative bg-gradient-to-br from-[hsl(158,55%,25%)] to-[hsl(158,64%,20%)] rounded-2xl p-6 border border-white/10 shadow-lg overflow-hidden opacity-60">
+        <div className="flex justify-between mb-4">
+          <Skeleton className="h-6 w-24 bg-white/10 rounded-lg" />
+          <Skeleton className="h-4 w-32 bg-white/5 rounded-md" />
+        </div>
+        <div className="space-y-3 mb-6">
+          <Skeleton className="h-8 w-full bg-white/10 rounded-md" />
+          <Skeleton className="h-8 w-3/4 ml-auto bg-white/10 rounded-md" />
+        </div>
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-full bg-white/5 rounded-md" />
+          <Skeleton className="h-4 w-full bg-white/5 rounded-md" />
+          <Skeleton className="h-4 w-2/3 bg-white/5 rounded-md" />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full animate-[shimmer_2s_infinite]" />
+      </div>
+    ))}
+  </div>
+);
 
 // ── Component ───────────────────────────────────────────────
 export default function BukhariLangPage() {
@@ -633,9 +658,15 @@ export default function BukhariLangPage() {
         )}
 
         {loading ? (
-          <div className="flex flex-col items-center justify-center py-20 gap-4">
-            <Loader2 className="w-10 h-10 text-[hsl(45,93%,58%)] animate-spin" />
-            <p className="text-white/60 animate-pulse font-medium tracking-wide">Loading Hadiths...</p>
+          <div className="space-y-6">
+            <div className="flex flex-col items-center justify-center py-10 gap-3">
+              <div className="relative">
+                <Loader2 className="w-10 h-10 text-[hsl(45,93%,58%)] animate-spin" />
+                <Sparkles className="absolute -top-1 -right-1 w-4 h-4 text-[hsl(45,93%,58%)] animate-pulse" />
+              </div>
+              <p className="text-white/60 animate-pulse font-medium tracking-wide">Preparing Hadiths...</p>
+            </div>
+            <HadithSkeleton />
           </div>
         ) : (
           <AnimatePresence mode="wait">

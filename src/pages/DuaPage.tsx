@@ -284,6 +284,27 @@ async function loadPublicDuaFallback(): Promise<Dua[]> {
   }
 }
 
+const DuaSkeleton = () => (
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-pulse">
+    {[1, 2, 3, 4].map((i) => (
+      <div key={i} className="relative bg-gradient-to-br from-[hsl(158,55%,25%)] to-[hsl(158,64%,20%)] rounded-2xl p-6 border border-white/10 shadow-lg overflow-hidden opacity-60">
+        <div className="flex items-center gap-3 mb-4">
+          <Skeleton className="h-10 w-10 bg-white/10 rounded-xl" />
+          <div className="flex-1 space-y-2">
+            <Skeleton className="h-4 w-1/2 bg-white/10 rounded" />
+            <Skeleton className="h-3 w-1/4 bg-white/5 rounded" />
+          </div>
+        </div>
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-full bg-white/5 rounded" />
+          <Skeleton className="h-4 w-5/6 bg-white/5 rounded" />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full animate-[shimmer_2s_infinite]" />
+      </div>
+    ))}
+  </div>
+);
+
 const DuaPage = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();

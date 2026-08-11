@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { BookOpen, Search, Sparkles, ChevronRight, Flame, Clock, LayoutGrid, Play, Loader2 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -28,6 +29,28 @@ import {
 
 const PAGE_SIZE = 9;
 const SITE = "https://noorapp.in";
+
+const StorySkeleton = () => (
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-pulse">
+    {[1, 2, 3].map((i) => (
+      <div key={i} className="relative bg-card rounded-2xl border border-border shadow-sm overflow-hidden flex flex-col h-full">
+        <Skeleton className="aspect-[16/9] w-full bg-muted" />
+        <div className="p-5 flex-1 space-y-4">
+          <Skeleton className="h-6 w-3/4 bg-muted rounded" />
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-full bg-muted/60 rounded" />
+            <Skeleton className="h-4 w-5/6 bg-muted/60 rounded" />
+          </div>
+          <div className="pt-4 flex justify-between items-center border-t border-border/50">
+            <Skeleton className="h-3 w-20 bg-muted/40 rounded" />
+            <Skeleton className="h-4 w-16 bg-muted/40 rounded" />
+          </div>
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full animate-[shimmer_2s_infinite]" />
+      </div>
+    ))}
+  </div>
+);
 
 export default function StoriesPage() {
   const { stories, loading } = useStories();
@@ -228,9 +251,15 @@ export default function StoriesPage() {
           </div>
 
           {loading ? (
-            <div className="flex flex-col items-center justify-center py-20 gap-4">
-              <Loader2 className="w-10 h-10 text-emerald-600 animate-spin" />
-              <p className="text-muted-foreground animate-pulse font-medium tracking-wide">Loading Stories...</p>
+            <div className="space-y-8">
+              <div className="flex flex-col items-center justify-center py-10 gap-3">
+                <div className="relative">
+                  <Loader2 className="w-10 h-10 text-emerald-600 animate-spin" />
+                  <Sparkles className="absolute -top-1 -right-1 w-4 h-4 text-emerald-500 animate-pulse" />
+                </div>
+                <p className="text-muted-foreground animate-pulse font-medium tracking-wide">Preparing Stories...</p>
+              </div>
+              <StorySkeleton />
             </div>
           ) : pageItems.length === 0 ? (
             <Card><CardContent className="py-10 text-center text-muted-foreground">No stories found.</CardContent></Card>

@@ -727,12 +727,21 @@ export default async function handler(req, res) {
         <div class="min-h-screen flex items-center justify-center p-4 bg-background">
           <div class="text-center">
             <h1 class="text-2xl font-bold mb-2">${esc(title)}</h1>
-            <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem;">
-              <div style="width: 2.5rem; height: 2.5rem; border: 4px solid rgba(255,255,255,0.1); border-top-color: #fbbf24; border-radius: 50%; animation: spin 1s linear infinite;"></div>
-              <p style="color: rgba(255,255,255,0.6); font-family: sans-serif; font-weight: 500; letter-spacing: 0.025em;">Loading Experience...</p>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem; padding: 2rem;">
+              <div style="position: relative; width: 80px; height: 80px; display: flex; align-items: center; justify-center; background: linear-gradient(135deg, #fbbf24, #d97706); border-radius: 20px; box-shadow: 0 10px 25px -5px rgba(251, 191, 36, 0.4); animation: pulse-premium 2s ease-in-out infinite;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path><path d="M8 7h6"></path><path d="M8 11h8"></path></svg>
+              </div>
+              <div style="text-align: center;">
+                <p style="color: #ffffff; font-family: 'Noto Sans Bengali', sans-serif; font-weight: 600; font-size: 1.1rem; margin-bottom: 0.25rem; opacity: 0.9;">বিসমিল্লাহির রাহমানির রাহিম</p>
+                <p style="color: rgba(255,255,255,0.5); font-family: sans-serif; font-weight: 500; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase;">Preparing Your Experience</p>
+              </div>
             </div>
             <style>
-              @keyframes spin { to { transform: rotate(360deg); } }
+              @keyframes pulse-premium {
+                0%, 100% { transform: scale(1); box-shadow: 0 10px 25px -5px rgba(251, 191, 36, 0.4); }
+                50% { transform: scale(1.05); box-shadow: 0 15px 35px -5px rgba(251, 191, 36, 0.6); }
+              }
+              body { background-color: #064e3b !important; }
             </style>
           </div>
         </div>
