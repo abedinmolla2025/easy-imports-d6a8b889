@@ -77,15 +77,31 @@
    "destination": "/api/sitemap"
   },
   {
+   "source": "/ads.txt",
+   "destination": "/ads.txt"
+  },
+  {
+   "source": "/robots.txt",
+   "destination": "/robots.txt"
+  },
+  {
+   "source": "/favicon.ico",
+   "destination": "/favicon.ico"
+  },
+  {
+   "source": "/assets/(.*)",
+   "destination": "/assets/$1"
+  },
+  {
    "source": "/",
    "destination": "/api/prerender?path=/"
   },
   {
-   "source": "/((?!assets|favicon|og-|pwa-|manifest|robots|sitemap\\.xml|sw\\.js|data|api|\\.well-known/).*)",
+   "source": "/((?!api|assets|favicon|robots|sitemap|ads\\.txt|sw\\.js|manifest\\.json|\\.well-known/).*)",
    "destination": "/api/prerender?path=/$1"
   },
   {
-   "source": "/((?!\\.well-known/).*)",
+   "source": "/(.*)",
    "destination": "/app.html"
   }
  ]

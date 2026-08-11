@@ -25,9 +25,9 @@ const FALLBACK_SURAHS = [
   {"number": 14, "english_name": "Ibrahim", "name": "إبراهيم", "number_of_ayahs": 52, "english_name_translation": "Ibrahim"},
   {"number": 15, "english_name": "Al-Hijr", "name": "الحجر", "number_of_ayahs": 99, "english_name_translation": "The Rocky Tract"},
   {"number": 16, "english_name": "An-Nahl", "name": "النحل", "number_of_ayahs": 128, "english_name_translation": "The Bee"},
-  {"number": 17, "english_name": "Al-Isra", "name": "الإসরা", "number_of_ayahs": 111, "english_name_translation": "The Night Journey"},
+  {"number": 17, "english_name": "Al-Isra", "name": "الإسراء", "number_of_ayahs": 111, "english_name_translation": "The Night Journey"},
   {"number": 18, "english_name": "Al-Kahf", "name": "الكهف", "number_of_ayahs": 110, "english_name_translation": "The Cave"},
-  {"number": 19, "english_name": "Maryam", "name": "মরম", "number_of_ayahs": 98, "english_name_translation": "Maryam"},
+  {"number": 19, "english_name": "Maryam", "name": "مريم", "number_of_ayahs": 98, "english_name_translation": "Maryam"},
   {"number": 20, "english_name": "Ta-Ha", "name": "طه", "number_of_ayahs": 135, "english_name_translation": "Ta-Ha"},
   {"number": 21, "english_name": "Al-Anbiya", "name": "الأنبياء", "number_of_ayahs": 112, "english_name_translation": "The Prophets"},
   {"number": 22, "english_name": "Al-Hajj", "name": "الحج", "number_of_ayahs": 78, "english_name_translation": "The Pilgrimage"},
@@ -68,7 +68,7 @@ const FALLBACK_SURAHS = [
   {"number": 57, "english_name": "Al-Hadid", "name": "الحديد", "number_of_ayahs": 29, "english_name_translation": "The Iron"},
   {"number": 58, "english_name": "Al-Mujadila", "name": "المجادلة", "number_of_ayahs": 22, "english_name_translation": "The Pleading Woman"},
   {"number": 59, "english_name": "Al-Hashr", "name": "الحشر", "number_of_ayahs": 24, "english_name_translation": "The Exile"},
-  {"number": 60, "english_name": "Al-Mumtahanah", "name": "المমتحنة", "number_of_ayahs": 13, "english_name_translation": "She that is to be examined"},
+  {"number": 60, "english_name": "Al-Mumtahanah", "name": "الممتحنة", "number_of_ayahs": 13, "english_name_translation": "She that is to be examined"},
   {"number": 61, "english_name": "As-Saff", "name": "الصف", "number_of_ayahs": 14, "english_name_translation": "The Ranks"},
   {"number": 62, "english_name": "Al-Jumu'ah", "name": "الجمعة", "number_of_ayahs": 11, "english_name_translation": "The Congregation, Friday"},
   {"number": 63, "english_name": "Al-Munafiqun", "name": "المنافقون", "number_of_ayahs": 11, "english_name_translation": "The Hypocrites"},
@@ -85,10 +85,10 @@ const FALLBACK_SURAHS = [
   {"number": 74, "english_name": "Al-Muddaththir", "name": "المدثر", "number_of_ayahs": 56, "english_name_translation": "The Cloaked One"},
   {"number": 75, "english_name": "Al-Qiyamah", "name": "القيامة", "number_of_ayahs": 40, "english_name_translation": "The Resurrection"},
   {"number": 76, "english_name": "Al-Insan", "name": "الإنسان", "number_of_ayahs": 31, "english_name_translation": "The Man"},
-  {"number": 77, "english_name": "Al-Mursalat", "name": "المرসলাত", "number_of_ayahs": 50, "english_name_translation": "The Emissaries"},
+  {"number": 77, "english_name": "Al-Mursalat", "name": "المرسلات", "number_of_ayahs": 50, "english_name_translation": "The Emissaries"},
   {"number": 78, "english_name": "An-Naba", "name": "النبإ", "number_of_ayahs": 40, "english_name_translation": "The Tidings"},
   {"number": 79, "english_name": "An-Nazi'at", "name": "النازعات", "number_of_ayahs": 46, "english_name_translation": "Those who drag forth"},
-  {"number": 80, "english_name": "Abasa", "name": "عبস", "number_of_ayahs": 42, "english_name_translation": "He Frowned"},
+  {"number": 80, "english_name": "Abasa", "name": "عبس", "number_of_ayahs": 42, "english_name_translation": "He Frowned"},
   {"number": 81, "english_name": "At-Takwir", "name": "التكوير", "number_of_ayahs": 29, "english_name_translation": "The Overthrowing"},
   {"number": 82, "english_name": "Al-Infitar", "name": "الانفطار", "number_of_ayahs": 19, "english_name_translation": "The Cleaving"},
   {"number": 83, "english_name": "Al-Mutaffifin", "name": "المطففين", "number_of_ayahs": 36, "english_name_translation": "The Defrauding"},
@@ -98,7 +98,7 @@ const FALLBACK_SURAHS = [
   {"number": 87, "english_name": "Al-A'la", "name": "الأعلى", "number_of_ayahs": 19, "english_name_translation": "The Most High"},
   {"number": 88, "english_name": "Al-Ghashiyah", "name": "الغاشية", "number_of_ayahs": 26, "english_name_translation": "The Overwhelming"},
   {"number": 89, "english_name": "Al-Fajr", "name": "الفجر", "number_of_ayahs": 30, "english_name_translation": "The Dawn"},
-  {"number": 90, "english_name": "Al-Balad", "name": "البلদ", "number_of_ayahs": 20, "english_name_translation": "The City"},
+  {"number": 90, "english_name": "Al-Balad", "name": "البلد", "number_of_ayahs": 20, "english_name_translation": "The City"},
   {"number": 91, "english_name": "Ash-Shams", "name": "الشمس", "number_of_ayahs": 15, "english_name_translation": "The Sun"},
   {"number": 92, "english_name": "Al-Layl", "name": "الليل", "number_of_ayahs": 21, "english_name_translation": "The Night"},
   {"number": 93, "english_name": "Ad-Duha", "name": "الضحى", "number_of_ayahs": 11, "english_name_translation": "The Morning Hours"},
@@ -108,12 +108,12 @@ const FALLBACK_SURAHS = [
   {"number": 97, "english_name": "Al-Qadr", "name": "القدر", "number_of_ayahs": 5, "english_name_translation": "The Power"},
   {"number": 98, "english_name": "Al-Bayyinah", "name": "البينة", "number_of_ayahs": 8, "english_name_translation": "The Clear Proof"},
   {"number": 99, "english_name": "Az-Zalzalah", "name": "الزلزلة", "number_of_ayahs": 8, "english_name_translation": "The Earthquake"},
-  {"number": 100, "english_name": "Al-Adiyat", "name": "العাদিয়াত", "number_of_ayahs": 11, "english_name_translation": "The Courser"},
+  {"number": 100, "english_name": "Al-Adiyat", "name": "العاديات", "number_of_ayahs": 11, "english_name_translation": "The Courser"},
   {"number": 101, "english_name": "Al-Qari'ah", "name": "القارعة", "number_of_ayahs": 11, "english_name_translation": "The Calamity"},
   {"number": 102, "english_name": "At-Takathur", "name": "التكاثر", "number_of_ayahs": 8, "english_name_translation": "The Rivalry in world increase"},
   {"number": 103, "english_name": "Al-Asr", "name": "العصر", "number_of_ayahs": 3, "english_name_translation": "The Declining Day"},
   {"number": 104, "english_name": "Al-Humazah", "name": "الهمزة", "number_of_ayahs": 9, "english_name_translation": "The Traducer"},
-  {"number": 105, "english_name": "Al-Fil", "name": "الفيل", "number_of_ayahs": 5, "english_name_translation": "The Elephant"},
+  {"number": 105, "english_name": "Al-Fil", "name": "الفিল", "number_of_ayahs": 5, "english_name_translation": "The Elephant"},
   {"number": 106, "english_name": "Quraysh", "name": "قريش", "number_of_ayahs": 4, "english_name_translation": "Quraysh"},
   {"number": 107, "english_name": "Al-Ma'un", "name": "الماعون", "number_of_ayahs": 7, "english_name_translation": "The Small Kindnesses"},
   {"number": 108, "english_name": "Al-Kawthar", "name": "الكوثر", "number_of_ayahs": 3, "english_name_translation": "The Abundance"},
@@ -122,7 +122,7 @@ const FALLBACK_SURAHS = [
   {"number": 111, "english_name": "Al-Masad", "name": "المسد", "number_of_ayahs": 5, "english_name_translation": "The Palm Fiber"},
   {"number": 112, "english_name": "Al-Ikhlas", "name": "الإخلاص", "number_of_ayahs": 4, "english_name_translation": "The Sincerity"},
   {"number": 113, "english_name": "Al-Falaq", "name": "الفلق", "number_of_ayahs": 5, "english_name_translation": "The Daybreak"},
-  {"number": 114, "english_name": "An-Nas", "name": "الناس", "number_of_ayahs": 6, "english_name_translation": "The Mankind"}
+  {"number": 114, "english_name": "An-Nas", "name": "الناس", "number_of_ayahs": 6, "english_name_translation": "Mankind"}
 ];
 
 const esc = (s) => {
@@ -135,31 +135,25 @@ const esc = (s) => {
     .replace(/'/g, "&#039;");
 };
 
-// Helper to read app.html
 const getAppTemplate = () => {
-  const possiblePaths = [
-    path.join(process.cwd(), "dist", "app.html"),
-    path.join(process.cwd(), "app.html"),
-    path.join("/var/task", "dist", "app.html"),
-    path.join("/var/task", "app.html")
-  ];
-  
-  for (const filePath of possiblePaths) {
-    try {
-      if (fs.existsSync(filePath)) {
-        console.log("[PRERENDER] Found template at:", filePath);
-        return fs.readFileSync(filePath, "utf8");
-      }
-    } catch (e) {}
+  // Use Vercel's absolute path for included files
+  const templatePath = path.join(process.cwd(), "dist", "app.html");
+  try {
+    if (fs.existsSync(templatePath)) {
+      console.log("[PRERENDER] Found template at:", templatePath);
+      return fs.readFileSync(templatePath, "utf8");
+    }
+  } catch (e) {
+    console.error("[PRERENDER] Error reading template:", e);
   }
   
-  console.error("[PRERENDER] Template not found in any location");
-  return \`<!DOCTYPE html><html><head><title>{{TITLE}}</title></head><body><div id="root">{{BODY}}</div></body></html>\`;
+  console.error("[PRERENDER] Template not found at:", templatePath);
+  return `<!DOCTYPE html><html><head><title>{{TITLE}}</title></head><body><div id="root">{{BODY}}</div></body></html>`;
 };
 
 export default async function handler(req, res) {
   const { path: routePath = "/" } = req.query;
-  console.log("[PRERENDER] Restoring Original UI for Path:", routePath);
+  console.log("[PRERENDER] Processing Path:", routePath);
   
   let title = "Noor – Prayer Times, Quran & More";
   let description = "Read authentic Quran, Hadith, Dua, Prayer Times, Qibla, Islamic Stories and Baby Names in Bengali with a fast and beautiful Islamic app.";
@@ -251,7 +245,7 @@ export default async function handler(req, res) {
             .select("ayah_number, text, bengali_translation")
             .eq("surah_number", surahNum)
             .order("ayah_number")
-            .limit(20);
+            .limit(100);
 
           const ayahsHtml = (ayahs || []).map(a => `
             <div class="p-4 border-b border-white/10">
@@ -270,7 +264,7 @@ export default async function handler(req, res) {
                 <span class="text-2xl font-arabic text-[hsl(45,93%,58%)]">${surah.name}</span>
               </header>
               <div class="max-w-3xl mx-auto">
-                ${ayahsHtml}
+                ${ayahsHtml || '<p class="p-8 text-center text-white/50">Ayahs not found.</p>'}
               </div>
             </div>
           `;
@@ -278,6 +272,46 @@ export default async function handler(req, res) {
           bodyContent = `<div class="min-h-screen bg-[hsl(158,64%,18%)] flex items-center justify-center text-white">Loading...</div>`;
         }
       }
+    }
+
+    // --- Hadith Root Page ---
+    else if (routePath === "/hadith") {
+      title = "Hadith Collections — হাদিস শরীফ | NOOR";
+      bodyContent = `
+        <div class="min-h-screen bg-background p-4">
+          <header class="mb-6 text-center">
+            <h1 class="text-2xl font-bold text-primary">Hadith Collections</h1>
+            <p class="text-muted-foreground">পবিত্র হাদিস শরীফ</p>
+          </header>
+          <div class="grid gap-4 max-w-2xl mx-auto">
+            <a href="/hadith/sahih-bukhari" class="p-6 bg-card border border-border rounded-2xl flex justify-between items-center">
+              <div>
+                <h3 class="text-xl font-bold">Sahih Al-Bukhari</h3>
+                <p class="text-sm text-muted-foreground">সহিহ বুখারী শরীফ</p>
+              </div>
+              <span class="text-2xl">→</span>
+            </a>
+          </div>
+        </div>
+      `;
+    }
+
+    // --- Hadith Book Page ---
+    else if (routePath === "/hadith/sahih-bukhari") {
+      title = "Sahih Al-Bukhari — সহিহ বুখারী | NOOR";
+      bodyContent = `
+        <div class="min-h-screen bg-background p-4">
+          <header class="mb-8 text-center">
+            <h1 class="text-2xl font-bold text-primary">Sahih Al-Bukhari</h1>
+            <p class="text-muted-foreground">Select Language</p>
+          </header>
+          <div class="grid gap-4 max-w-md mx-auto">
+            <a href="/hadith/sahih-bukhari/bangla" class="p-5 bg-card border border-border rounded-xl text-center font-bold">Bengali (বাংলা)</a>
+            <a href="/hadith/sahih-bukhari/english" class="p-5 bg-card border border-border rounded-xl text-center font-bold">English</a>
+            <a href="/hadith/sahih-bukhari/urdu" class="p-5 bg-card border border-border rounded-xl text-center font-bold">Urdu (اردو)</a>
+          </div>
+        </div>
+      `;
     }
 
     // --- Hadith Language Pages ---
@@ -303,10 +337,10 @@ export default async function handler(req, res) {
         <div class="min-h-screen bg-background p-4">
           <header class="mb-6 text-center">
             <h1 class="text-2xl font-bold text-primary">${title}</h1>
-            <p class="text-muted-foreground">Sahih Bukhari Hadith Collection</p>
+            <p class="text-muted-foreground">Chapters List</p>
           </header>
           <div class="max-w-2xl mx-auto">
-            ${chapterList}
+            ${chapterList || '<p class="text-center text-muted-foreground">No chapters found.</p>'}
           </div>
         </div>
       `;
@@ -332,7 +366,7 @@ export default async function handler(req, res) {
         <div class="min-h-screen bg-background p-4">
           <h1 class="text-2xl font-bold mb-6">Daily Duas</h1>
           <div class="grid gap-3 max-w-2xl mx-auto">
-            ${duaList}
+            ${duaList || '<p class="text-center text-muted-foreground">No duas found.</p>'}
           </div>
         </div>
       `;
@@ -364,7 +398,7 @@ export default async function handler(req, res) {
             <p class="mt-2">Authentic stories of the Prophets and Sahaba.</p>
           </section>
           <div class="p-4 max-w-4xl mx-auto">
-            ${storyList}
+            ${storyList || '<p class="text-center text-muted-foreground">No stories found.</p>'}
           </div>
         </div>
       `;
@@ -390,13 +424,27 @@ export default async function handler(req, res) {
       `;
     }
 
-    // --- Fallback ---
+    // --- Privacy/Terms/About ---
+    else if (["/privacy-policy", "/terms", "/about"].includes(routePath)) {
+      title = routePath === "/privacy-policy" ? "Privacy Policy | Noor" : routePath === "/terms" ? "Terms of Service | Noor" : "About Us | Noor";
+      bodyContent = `
+        <div class="min-h-screen bg-background p-6">
+          <div class="max-w-3xl mx-auto prose prose-emerald">
+            <h1 class="text-3xl font-bold mb-6">${title}</h1>
+            <p class="text-muted-foreground">This content is available in our mobile app and website.</p>
+            <p>Noor is dedicated to providing authentic Islamic content including Quran, Hadith, and Duas.</p>
+          </div>
+        </div>
+      `;
+    }
+
+    // --- Fallback for other routes ---
     if (!bodyContent) {
       bodyContent = `
         <div class="min-h-screen flex items-center justify-center p-4">
           <div class="text-center">
             <h1 class="text-2xl font-bold mb-2">${esc(title)}</h1>
-            <p class="text-muted-foreground">Loading...</p>
+            <p class="text-muted-foreground">Loading the full experience...</p>
           </div>
         </div>
       `;
@@ -408,6 +456,11 @@ export default async function handler(req, res) {
       .replace(/<title>[^<]*<\/title>/, `<title>${esc(title)}</title>`)
       .replace(/<meta name="description" content="[^"]*"/, `<meta name="description" content="${esc(description)}"`)
       .replace(/<link rel="canonical" href="[^"]*"/, `<link rel="canonical" href="${esc(canonicalUrl)}"`)
+      .replace(/<meta property="og:title" content="[^"]*"/, `<meta property="og:title" content="${esc(title)}"`)
+      .replace(/<meta property="og:description" content="[^"]*"/, `<meta property="og:description" content="${esc(description)}"`)
+      .replace(/<meta property="og:url" content="[^"]*"/, `<meta property="og:url" content="${esc(canonicalUrl)}"`)
+      .replace(/<meta name="twitter:title" content="[^"]*"/, `<meta name="twitter:title" content="${esc(title)}"`)
+      .replace(/<meta name="twitter:description" content="[^"]*"/, `<meta name="twitter:description" content="${esc(description)}"`)
       // Inject body into #root
       .replace('<div id="root"></div>', `<div id="root">${bodyContent}</div>`);
 
