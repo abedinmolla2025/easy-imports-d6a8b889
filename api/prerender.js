@@ -425,7 +425,7 @@ export default async function handler(req, res) {
                 <div class="absolute inset-0 border border-white/5 rounded-3xl pointer-events-none"></div>
                 <div class="p-8 text-center relative z-10">
                   <p class="text-amber-400 text-[10px] font-bold uppercase tracking-[0.2em] mb-4 opacity-80">আরবি</p>
-                  <p dir="rtl" class="text-3xl md:text-5xl font-arabic leading-[2.2] text-white">${esc(dua.content_arabic)}</p>
+                  <p dir="rtl" class="text-3xl md:text-5xl font-arabic leading-[2.2] text-white drop-shadow-md">${esc(dua.content_arabic)}</p>
                 </div>
               </div>
 
@@ -433,14 +433,14 @@ export default async function handler(req, res) {
               <div class="bg-white/5 border border-white/10 rounded-2xl p-6 relative overflow-hidden shadow-sm" style="background-image: ${ISLAMIC_PATTERN}">
                 <div class="absolute inset-0 border border-white/5 rounded-2xl pointer-events-none"></div>
                 <h2 class="text-[10px] font-bold text-amber-400 uppercase tracking-[0.2em] mb-3 opacity-80">উচ্চারণ</h2>
-                <p class="text-white/90 text-lg md:text-xl leading-relaxed">${esc(dua.content_pronunciation)}</p>
+                <p class="text-white text-xl md:text-2xl leading-[1.8] tracking-wide font-bangla">${esc(dua.content_pronunciation)}</p>
               </div>
 
               <!-- Meaning Card -->
               <div class="bg-gradient-to-br from-amber-400/10 to-transparent border border-amber-400/20 rounded-2xl p-6 relative overflow-hidden shadow-sm" style="background-image: ${ISLAMIC_PATTERN}, linear-gradient(to bottom right, rgba(251, 191, 36, 0.1), transparent)">
                 <div class="absolute inset-0 border border-white/5 rounded-2xl pointer-events-none"></div>
                 <h2 class="text-[10px] font-bold text-amber-400 uppercase tracking-[0.2em] mb-3 opacity-80">অর্থ</h2>
-                <p class="text-white text-lg md:text-xl leading-relaxed">${esc(dua.content)}</p>
+                <p class="text-white text-xl md:text-2xl leading-[1.8] tracking-wide font-bangla-serif">${esc(dua.content)}</p>
               </div>
               
               <!-- Virtues & Explanation -->
@@ -544,7 +544,18 @@ export default async function handler(req, res) {
 
     // Use actual app.html as base
     const appTemplate = getAppTemplate();
-    const finalHtml = inject(appTemplate, {
+    
+    // Inject custom styles for premium typography
+    const customStyles = `
+      <style>
+        .font-bangla { font-family: 'Noto Sans Bengali', 'Hind Siliguri', sans-serif !important; }
+        .font-bangla-serif { font-family: 'Noto Serif Bengali', serif !important; }
+        .font-arabic { font-family: 'Scheherazade New', 'Amiri', serif !important; }
+        [dir="rtl"] { text-align: right; }
+      </style>
+    `;
+    
+    const finalHtml = inject(appTemplate.replace('</head>', `${customStyles}</head>`), {
       title,
       description,
       canonical: canonicalUrl,
