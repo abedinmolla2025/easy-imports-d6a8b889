@@ -79,7 +79,9 @@ export default async function handler(req, res) {
           ${chapters?.map(c => `<li><a href="/hadith/sahih-bukhari/${lang}/chapter-${c.chapter_number}">${c.title_bn || c.title}</a> (${c.hadith_count} hadiths)</li>`).join("")}
         </ul>
         <h3>Sample Hadiths</h3>
-        ${sampleHadiths?.map(h => `<article><h4>Hadith ${h.hadith_number}</h4><p dir="rtl">${h.arabic}</p><p>${h[dbField]}</p></article>`).join("")}
+        ${sampleHadiths && sampleHadiths.length > 0 
+          ? sampleHadiths.map(h => `<article><h4>Hadith ${h.hadith_number}</h4><p dir="rtl">${h.arabic}</p><p>${h[dbField]}</p></article>`).join("") 
+          : "<p>No sample hadiths available at the moment.</p>"}
       `;
       
       jsonLd = {
