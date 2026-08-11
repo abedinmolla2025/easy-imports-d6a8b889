@@ -391,19 +391,8 @@ export default function BukhariLangPage() {
         .map(([id, count]) => ({ id, count }));
       
       setChapters(prev => {
-        // If we loaded a single chapter, update just that chapter in the list
-        if (selectedChapter && prev.length > 0) {
-          const newChapters = [...prev];
-          const idx = newChapters.findIndex(c => c.id === selectedChapter);
-          if (idx !== -1) {
-            newChapters[idx] = { id: selectedChapter, count: mapped.length };
-          } else {
-            newChapters.push({ id: selectedChapter, count: mapped.length });
-            newChapters.sort((a, b) => a.id - b.id);
-          }
-          return newChapters;
-        }
-        // Otherwise (JSON or full DB load), use the derived list
+        // If we already have a list (e.g. from kitabData), don't overwrite it with a partial list
+        if (selectedChapter && prev.length > 1) return prev;
         return chapArr;
       });
       
@@ -502,7 +491,9 @@ export default function BukhariLangPage() {
     return allHadiths.filter((h) => {
       if (selectedChapter !== null && h.chapterId !== selectedChapter) return false;
       if (!q) return true;
-      return h.translation.toLowerCase().includes(q) || h.arabic.includes(searchQuery) || String(h.number).includes(searchQuery);
+      const translation = h.translation || "";
+      const arabic = h.arabic || "";
+      return translation.toLowerCase().includes(q) || arabic.includes(searchQuery) || String(h.number).includes(searchQuery);
     });
   }, [allHadiths, searchQuery, selectedChapter]);
 
@@ -737,7 +728,14 @@ export default function BukhariLangPage() {
               ) : (
                 <div className="space-y-3">
                   {/* Use kitabData for the chapter list if available, otherwise fallback to derived chapters */}
-                  {(kitabData && kitabData.length > 0 ? kitabData.map(k => ({ id: k.chapter_number, count: k.hadith_count })) : chapters).map((chapter, index) => (
+                  {(kitabData && kitabData.length > 0 
+                    ? kitabData.map(k => ({ 
+                        id: k.chapter_number, 
+                        // Use kitabMap to ensure our overrides (like for Ch 97) are respected
+                        count: kitabMap.get(k.chapter_number)?.hadith_count ?? k.hadith_count 
+                      })) 
+                    : chapters
+                  ).map((chapter, index) => (
                     <motion.button key={chapter.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.01 }} onClick={() => openChapter(chapter.id)} className="w-full text-left bg-white/10 backdrop-blur-md rounded-2xl p-4 hover:bg-white/15 transition-all active:scale-[0.98] shadow-xl border border-white/20">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
