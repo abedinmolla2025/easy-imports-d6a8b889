@@ -135,6 +135,92 @@ const esc = (s) => {
     .replace(/'/g, "&#039;");
 };
 
+const ISLAMIC_PATTERN_HTML = ISLAMIC_PATTERN.replace(/"/g, "&quot;");
+const HADITH_CARD_STYLE = `background-image: ${ISLAMIC_PATTERN_HTML}, linear-gradient(to bottom right, hsl(158,55%,25%), hsl(158,64%,20%))`;
+
+const HADITH_LANG_META = {
+  bangla: { label: "বাংলা", title: "সহিহ বুখারী শরীফ", subtitle: "আরবি + বাংলা অনুবাদ", field: "bengali", file: null, rtl: false, read: "বিস্তারিত পড়ুন" },
+  english: { label: "English", title: "Sahih Al-Bukhari", subtitle: "Arabic + English Translation", field: "english", file: "/data/sahih_bukhari_en.json", rtl: false, read: "Read full details" },
+  urdu: { label: "اردو", title: "صحیح البخاری", subtitle: "عربی + اردو ترجمہ", field: "urdu", file: "/data/sahih_bukhari_ur.json", rtl: true, read: "تفصیل پڑھیں" },
+};
+
+const normalizeHadithLang = (value) => {
+  const raw = String(value || "").toLowerCase().trim();
+  if (raw === "bn" || raw === "bengali" || raw === "bangla") return "bangla";
+  if (raw === "en" || raw === "english") return "english";
+  if (raw === "ur" || raw === "urdu") return "urdu";
+  return null;
+};
+
+const flattenHadithBooks = (json) => Object.keys(json || {})
+  .sort((a, b) => (parseInt(a.replace(/\D/g, ""), 10) || 0) - (parseInt(b.replace(/\D/g, ""), 10) || 0))
+  .flatMap((key) => Array.isArray(json[key]) ? json[key] : []);
+
+async function loadHadithRowsSsr(lang, chapterId) {
+  const meta = HADITH_LANG_META[lang];
+  let rows = [];
+
+  if (meta.file) {
+    try {
+      const response = await fetch(`${SITE_ORIGIN}${meta.file}`, { signal: AbortSignal.timeout(7000) });
+      if (response.ok) {
+        const json = await response.json();
+        rows = flattenHadithBooks(json)
+          .filter((row) => row.arabic && row[meta.field] && (!chapterId || Number(row.chapter_id) === chapterId))
+          .slice(0, 40)
+          .map((row) => ({
+            id: row.id,
+            chapterId: Number(row.chapter_id),
+            number: Number(row.hadith_number),
+            arabic: row.arabic,
+            translation: row[meta.field],
+          }));
+      }
+    } catch (e) {}
+  }
+
+  if (rows.length === 0) {
+    let query = supabase
+      .from("hadiths")
+      .select(`id, chapter_id, hadith_number, arabic, ${meta.field}`)
+      .eq("book_key", "bukhari")
+      .not(meta.field, "is", null)
+      .order("chapter_id", { ascending: true })
+      .order("hadith_number", { ascending: true })
+      .range(0, 39);
+    if (chapterId) query = query.eq("chapter_id", chapterId);
+    const { data } = await query;
+    rows = (data || []).map((row) => ({
+      id: row.id,
+      chapterId: Number(row.chapter_id),
+      number: Number(row.hadith_number),
+      arabic: row.arabic,
+      translation: row[meta.field],
+    }));
+  }
+
+  return rows;
+}
+
+const getHadithChapterName = (chapter, lang) => {
+  if (!chapter) return `${lang === "bangla" ? "কিতাব" : lang === "urdu" ? "کتاب" : "Book"}`;
+  if (lang === "bangla") return chapter.title_bn || chapter.title;
+  if (lang === "urdu") return chapter.title_ar || chapter.title;
+  return chapter.title;
+};
+
+const hadithCardMarkup = (row, lang, meta, chapterMap) => `
+  <article class="relative bg-gradient-to-br from-[hsl(158,55%,25%)] to-[hsl(158,64%,20%)] rounded-2xl p-5 border border-white/10 hover:border-[hsl(45,93%,58%)]/50 shadow-lg transition-all overflow-hidden" style="${HADITH_CARD_STYLE}">
+    <div class="relative z-10 flex items-center justify-between mb-4">
+      <span class="text-xs font-bold text-[hsl(45,93%,58%)] px-2 py-1 bg-[hsl(45,93%,58%)]/15 rounded-lg border border-[hsl(45,93%,58%)]/20">${lang === "bangla" ? "হাদিস নং" : lang === "urdu" ? "حدیث نمبر" : "Hadith No"} ${row.number}</span>
+      <span class="text-[10px] text-[hsl(45,93%,58%)]/75 uppercase tracking-wider">${esc(getHadithChapterName(chapterMap.get(row.chapterId), lang))}</span>
+    </div>
+    <p dir="rtl" class="relative z-10 text-xl leading-[1.8] text-right mb-4 font-arabic line-clamp-3 text-white">${esc(row.arabic)}</p>
+    <p dir="${meta.rtl ? "rtl" : "ltr"}" class="relative z-10 text-base md:text-lg leading-[1.85] line-clamp-4 text-white font-bangla mb-4">${esc(row.translation)}</p>
+    <a href="/hadith/sahih-bukhari/${lang}/${row.chapterId}/${row.number}" class="relative z-10 w-full py-2.5 bg-[hsl(45,93%,58%)]/15 hover:bg-[hsl(45,93%,58%)] text-[hsl(45,93%,58%)] hover:text-[hsl(158,64%,15%)] rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 border border-[hsl(45,93%,58%)]/20">📖 ${meta.read}</a>
+  </article>
+`;
+
 const getAppTemplate = () => {
   const candidates = [
     path.join(process.cwd(), "dist", "app.html"),
@@ -313,6 +399,109 @@ export default async function handler(req, res) {
             `;
           }
         } catch (e) {}
+      }
+    }
+
+    // --- Sahih Bukhari language and chapter pages ---
+    else if (routePath === "/hadith/sahih-bukhari" || routePath.startsWith("/hadith/sahih-bukhari/")) {
+      const parts = routePath.split("/").filter(Boolean);
+      const rawLang = parts[2] || "";
+      const lang = normalizeHadithLang(rawLang);
+
+      if (!rawLang) {
+        title = "Sahih Al-Bukhari — বাংলা, English ও اردو | Noor";
+        description = "Read Sahih Al-Bukhari in Bengali, English and Urdu with Arabic text on Noor.";
+        bodyContent = `
+          <div class="min-h-screen bg-[hsl(158,64%,12%)] text-white pb-20" style="background-image: ${ISLAMIC_PATTERN_HTML}">
+            <header class="bg-gradient-to-b from-[hsl(158,55%,22%)] to-[hsl(158,55%,22%)]/95 p-8 text-center border-b border-white/10 relative overflow-hidden" style="background-image: ${ISLAMIC_PATTERN_HTML}">
+              <div class="relative z-10">
+                <h1 class="text-3xl font-bold mb-2">সহিহ বুখারী শরীফ</h1>
+                <p class="text-white/70">বিশ্বস্ত অনুবাদে হাদিস পড়ুন</p>
+              </div>
+            </header>
+            <main class="p-4 max-w-3xl mx-auto space-y-4">
+              ${[
+                ["bangla", "সহিহ বুখারী (বাংলা)", "আরবি + সম্পূর্ণ বাংলা অনুবাদ"],
+                ["english", "Sahih Al-Bukhari (English)", "Arabic + complete English translation"],
+                ["urdu", "صحیح البخاری (اردو)", "عربی متن کے ساتھ اردو ترجمہ"],
+              ].map(([slug, heading, sub]) => `
+                <a href="/hadith/sahih-bukhari/${slug}" class="relative flex items-center justify-between p-6 bg-gradient-to-br from-[hsl(158,55%,25%)] to-[hsl(158,64%,20%)] rounded-2xl border border-white/10 hover:border-[hsl(45,93%,58%)]/50 shadow-lg transition-all overflow-hidden group" style="${HADITH_CARD_STYLE}">
+                  <div class="relative z-10">
+                    <h2 class="text-xl font-bold text-white group-hover:text-[hsl(45,93%,58%)] transition-colors">${heading}</h2>
+                    <p class="text-sm text-white/70 mt-1">${sub}</p>
+                  </div>
+                  <span class="relative z-10 text-2xl text-[hsl(45,93%,58%)]">→</span>
+                </a>
+              `).join("")}
+            </main>
+          </div>
+        `;
+      } else if (!lang) {
+        title = "Hadith language not found | Noor";
+        bodyContent = `
+          <div class="min-h-screen bg-[hsl(158,64%,12%)] text-white p-8" style="background-image: ${ISLAMIC_PATTERN_HTML}">
+            <main class="max-w-2xl mx-auto text-center py-20">
+              <h1 class="text-2xl font-bold mb-3">ভাষা নির্বাচন সঠিক নয়</h1>
+              <p class="text-white/70 mb-6">বাংলা, English অথবা اردو নির্বাচন করুন।</p>
+              <a href="/hadith/sahih-bukhari" class="inline-flex px-5 py-3 rounded-xl bg-[hsl(45,93%,58%)] text-[hsl(158,64%,15%)] font-bold">ভাষা নির্বাচন করুন</a>
+            </main>
+          </div>
+        `;
+      } else {
+        const meta = HADITH_LANG_META[lang];
+        const chapterToken = parts[3] || "";
+        const hadithToken = parts[4] || "";
+        const chapterMatch = chapterToken.match(/^(?:chapter-)?(\\d+)$/);
+        const chapterId = chapterMatch ? Number(chapterMatch[1]) : null;
+        const hadithNumber = /^\\d+$/.test(hadithToken) ? Number(hadithToken) : null;
+        const { data: chapterData } = await supabase
+          .from("hadith_chapters")
+          .select("chapter_number, title, title_bn, title_ar, hadith_count")
+          .eq("book_id", "bukhari")
+          .order("chapter_number");
+        const chapterList = chapterData || [];
+        const chapterMap = new Map(chapterList.map((chapter) => [Number(chapter.chapter_number), chapter]));
+        const rows = await loadHadithRowsSsr(lang, chapterId);
+        const currentChapter = chapterId ? chapterMap.get(chapterId) : null;
+        const pageTitle = currentChapter ? `${getHadithChapterName(currentChapter, lang)} — ${meta.label} | Noor` : `${meta.title} — ${meta.label} | Noor`;
+        title = pageTitle;
+        description = `${meta.title} ${meta.subtitle}. Read authentic Hadith on Noor.`;
+        canonicalUrl = `${SITE_ORIGIN}${routePath}`;
+
+        const detail = hadithNumber ? rows.find((row) => row.number === hadithNumber) : null;
+        const chapterCards = chapterList.map((chapter) => `
+          <a href="/hadith/sahih-bukhari/${lang}/chapter-${chapter.chapter_number}" class="relative flex items-center gap-4 p-4 bg-gradient-to-br from-[hsl(158,55%,25%)] to-[hsl(158,64%,20%)] rounded-2xl border border-white/10 hover:border-[hsl(45,93%,58%)]/50 shadow-lg transition-all overflow-hidden group" style="${HADITH_CARD_STYLE}">
+            <span class="relative z-10 w-12 h-12 rounded-xl bg-[hsl(45,93%,58%)]/15 flex items-center justify-center text-[hsl(45,93%,58%)] font-bold border border-[hsl(45,93%,58%)]/25">${chapter.chapter_number}</span>
+            <span class="relative z-10 flex-1 min-w-0"><strong class="block truncate text-white group-hover:text-[hsl(45,93%,58%)]">${esc(getHadithChapterName(chapter, lang))}</strong><small class="text-white/65">${chapter.hadith_count || ""} ${lang === "bangla" ? "টি হাদিস" : lang === "urdu" ? "احادیث" : "Hadiths"}</small></span>
+            <span class="relative z-10 text-[hsl(45,93%,58%)]/70">→</span>
+          </a>
+        `).join("");
+        const cardRows = detail ? [detail] : rows;
+        const listMarkup = cardRows.length ? cardRows.map((row) => hadithCardMarkup(row, lang, meta, chapterMap)).join("") : `<div class="rounded-3xl border border-dashed border-white/10 bg-white/5 p-12 text-center text-white/60">${lang === "bangla" ? "হাদিস লোড হচ্ছে..." : lang === "urdu" ? "احادیث لوڈ ہو رہی ہیں..." : "Loading hadiths..."}</div>`;
+
+        bodyContent = `
+          <div class="min-h-screen bg-[hsl(158,64%,12%)] text-white pb-20" style="background-image: ${ISLAMIC_PATTERN_HTML}">
+            <header class="sticky top-0 z-30 bg-gradient-to-b from-[hsl(158,55%,22%)] to-[hsl(158,55%,22%)]/95 backdrop-blur-lg border-b border-white/10 p-4 relative overflow-hidden" style="background-image: ${ISLAMIC_PATTERN_HTML}">
+              <div class="max-w-4xl mx-auto flex items-center gap-3 relative z-10">
+                <a href="${chapterId ? `/hadith/sahih-bukhari/${lang}` : "/hadith/sahih-bukhari"}" class="p-2 bg-white/10 rounded-full text-white">←</a>
+                <div class="min-w-0 flex-1">
+                  <h1 class="text-xl font-bold truncate">${esc(currentChapter ? getHadithChapterName(currentChapter, lang) : meta.title)}</h1>
+                  <p class="text-xs text-[hsl(45,93%,58%)] font-medium">${esc(meta.subtitle)}</p>
+                </div>
+              </div>
+            </header>
+            <main class="max-w-4xl mx-auto p-4 space-y-6">
+              <nav class="flex gap-2 overflow-x-auto pb-1 scrollbar-hide" aria-label="Hadith languages">
+                ${Object.entries(HADITH_LANG_META).map(([slug, item]) => `<a href="/hadith/sahih-bukhari/${slug}${chapterId ? `/chapter-${chapterId}` : ""}" class="shrink-0 px-4 py-2 rounded-full text-sm font-medium ${slug === lang ? "bg-gradient-to-r from-[hsl(45,93%,58%)] to-[hsl(45,93%,48%)] text-[hsl(158,64%,15%)]" : "bg-white/10 text-white/70"}">${item.label}</a>`).join("")}
+              </nav>
+              ${!chapterId && !detail && chapterCards ? `<section><h2 class="text-lg font-bold mb-3">${lang === "bangla" ? "কিতাবসমূহ" : lang === "urdu" ? "کتب" : "Books (Kitab)"}</h2><div class="grid grid-cols-1 md:grid-cols-2 gap-3">${chapterCards}</div></section>` : ""}
+              <section class="space-y-4">
+                ${detail ? `<h2 class="text-lg font-bold">${lang === "bangla" ? "হাদিসের বিস্তারিত" : lang === "urdu" ? "حدیث کی تفصیل" : "Hadith details"}</h2>` : `<h2 class="text-lg font-bold">${currentChapter ? esc(getHadithChapterName(currentChapter, lang)) : (lang === "bangla" ? "সকল হাদিস" : lang === "urdu" ? "تمام احادیث" : "All Hadiths")}</h2>`}
+                ${listMarkup}
+              </section>
+            </main>
+          </div>
+        `;
       }
     }
 

@@ -8,6 +8,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Helmet } from "react-helmet-async";
 import BottomNavigation from "@/components/BottomNavigation";
 
+// Keep the Hadith visual language identical to the premium Dua cards.
+const ISLAMIC_PATTERN_1 = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='136' viewBox='0 0 160 136'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='0.05' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath stroke-width='3.4' d='M-10 29C10 7 39 4 59 17c16 11 18 32 5 44-13 11-34 7-38-8-3-13 9-24 22-19 16 6 21 27 12 43-11 22-35 31-60 22'/%3E%3Cpath stroke-width='2.7' d='M68-10C56 13 61 38 81 49c18 10 39 0 40-19 1-16-15-25-28-15-14 11-8 35 9 44 18 9 39 7 52-5'/%3E%3Cpath stroke-width='3.2' d='M82 61c18-20 49-22 68-5 16 14 13 40-7 50-17 9-36-1-37-18-1-15 16-25 29-16 16 11 17 36 3 54-15 20-44 27-69 14'/%3E%3Cpath stroke-width='2' d='M2 87c16-15 39-17 55-6M132 103c-8 8-10 19-4 29M45 112c9-10 24-12 36-5'/%3E%3C/g%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='13' cy='52' r='2.4'/%3E%3Ccircle cx='20' cy='48' r='1.5'/%3E%3Ccircle cx='72' cy='103' r='2.2'/%3E%3Cpath d='M34 8c6 7 6 15 0 22-6-7-6-15 0-22ZM102 122c8-10 17-10 25 0-8-4-17-4-25 0Z'/%3E%3C/g%3E%3Cg fill='%23ffffff' font-family='serif' text-anchor='middle' opacity='0.05'%3E%3Ctext x='44' y='55' font-size='17' transform='rotate(-18 44 55)'%3Eالله%3C/text%3E%3Ctext x='118' y='34' font-size='14' transform='rotate(13 118 34)'%3Eرب%3C/text%3E%3Ctext x='42' y='105' font-size='13'%3Eنور%3C/text%3E%3C/g%3E%3C/svg%3E")`;
+const ISLAMIC_PATTERN_2 = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='61' viewBox='0 0 72 61'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='1.45' stroke-opacity='0.03' stroke-linecap='round'%3E%3Cpath d='M-4 25c9-13 22-15 31-7 8 7 5 18-3 22-8 3-16-2-14-9 1-6 8-9 14-5 7 5 6 15-1 22-8 8-20 8-29 2M38-4c-6 11-3 21 5 26 9 4 18-2 18-10-1-7-8-10-13-6-5 5-2 14 5 18M39 42c9-10 22-10 30-2'/%3E%3C/g%3E%3C/svg%3E")`;
+const ISLAMIC_PATTERN = `${ISLAMIC_PATTERN_1}, ${ISLAMIC_PATTERN_2}`;
+const EMERALD_CARD_STYLE = {
+  backgroundImage: `${ISLAMIC_PATTERN}, linear-gradient(to bottom right, hsl(158,55%,25%), hsl(158,64%,20%))`,
+};
+
 // ── Types ────────────────────────────────────────────────────
 type LangSlug = "bangla" | "english" | "urdu";
 
@@ -553,7 +561,10 @@ export default function BukhariLangPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a1a1a] text-white pb-24">
+    <div
+      className="min-h-screen bg-[hsl(158,64%,12%)] text-white pb-24"
+      style={{ backgroundImage: ISLAMIC_PATTERN }}
+    >
       <Helmet>
         <title>{buildSeoTitle(normalizedLang, selectedChapter || undefined, selectedHadith?.number)}</title>
         <meta name="description" content={buildSeoDesc(normalizedLang, selectedChapter || undefined, selectedHadith?.number)} />
@@ -564,7 +575,10 @@ export default function BukhariLangPage() {
       </Helmet>
 
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-[#0a1a1a]/80 backdrop-blur-md border-b border-white/10 px-4 py-4">
+      <header
+        className="sticky top-0 z-50 bg-gradient-to-b from-[hsl(158,55%,22%)] to-[hsl(158,55%,22%)]/95 backdrop-blur-lg border-b border-white/10 px-4 py-4 relative overflow-hidden"
+        style={{ backgroundImage: ISLAMIC_PATTERN }}
+      >
         <div className="max-w-4xl mx-auto flex items-center gap-4">
           <button
             onClick={handleBack}
@@ -595,11 +609,11 @@ export default function BukhariLangPage() {
                   setSearchQuery(e.target.value);
                   setPage(1);
                 }}
-                className="bg-white/5 border-white/10 pl-10 h-12 rounded-xl focus:ring-[#10b981] transition-all"
+                className="bg-white/10 border-white/10 pl-10 h-12 rounded-xl focus:ring-[hsl(45,93%,58%)] transition-all placeholder:text-white/50"
               />
             </div>
 
-            <div className="flex p-1 bg-white/5 rounded-xl">
+            <div className="flex p-1 bg-[hsl(158,55%,22%)]/80 rounded-xl border border-white/10">
               <button
                 onClick={() => {
                   setActiveTab("chapters");
@@ -607,7 +621,7 @@ export default function BukhariLangPage() {
                   navigate(`/hadith/sahih-bukhari/${normalizedLang}`);
                 }}
                 className={`flex-1 py-2.5 text-sm font-medium rounded-lg transition-all ${
-                  activeTab === "chapters" ? "bg-[#10b981] text-white shadow-lg" : "text-white/60 hover:text-white"
+                  activeTab === "chapters" ? "bg-gradient-to-r from-[hsl(45,93%,58%)] to-[hsl(45,93%,48%)] text-[hsl(158,64%,15%)] shadow-lg" : "text-white/70 hover:text-white"
                 }`}
               >
                 {t.chapters}
@@ -615,7 +629,7 @@ export default function BukhariLangPage() {
               <button
                 onClick={() => setActiveTab("hadiths")}
                 className={`flex-1 py-2.5 text-sm font-medium rounded-lg transition-all ${
-                  activeTab === "hadiths" ? "bg-[#10b981] text-white shadow-lg" : "text-white/60 hover:text-white"
+                  activeTab === "hadiths" ? "bg-gradient-to-r from-[hsl(45,93%,58%)] to-[hsl(45,93%,48%)] text-[hsl(158,64%,15%)] shadow-lg" : "text-white/70 hover:text-white"
                 }`}
               >
                 {t.allHadiths} ({totalCount})
@@ -638,12 +652,13 @@ export default function BukhariLangPage() {
                 exit={{ opacity: 0, y: -20 }}
                 className="space-y-8"
               >
-                <div className="bg-white/5 rounded-3xl p-6 md:p-8 border border-white/10">
+                <div className="relative bg-gradient-to-br from-[hsl(158,55%,25%)] to-[hsl(158,64%,20%)] rounded-3xl p-6 md:p-8 border border-white/10 shadow-xl overflow-hidden"
+                  style={EMERALD_CARD_STYLE}>
                   <div className="flex items-center justify-between mb-8">
-                    <span className="px-4 py-1.5 bg-[#10b981]/20 text-[#10b981] rounded-full text-sm font-bold border border-[#10b981]/30">
+                    <span className="px-4 py-1.5 bg-[hsl(45,93%,58%)]/15 text-[hsl(45,93%,58%)] rounded-full text-sm font-bold border border-[hsl(45,93%,58%)]/30">
                       {t.hadithNo} {selectedHadith.number}
                     </span>
-                    <span className="text-white/40 text-sm font-medium">
+                    <span className="text-white/60 text-sm font-medium">
                       {t.chapter} {selectedHadith.chapterId}
                     </span>
                   </div>
@@ -651,18 +666,18 @@ export default function BukhariLangPage() {
                   <div className="space-y-10">
                     <div className="space-y-4">
                       <p
-                        className="text-3xl md:text-4xl leading-[1.8] text-right font-arabic"
+                        className="text-3xl md:text-4xl leading-[1.8] text-right font-arabic text-white"
                         dir="rtl"
                       >
                         {selectedHadith.arabic}
                       </p>
                     </div>
 
-                    <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+                    <div className="h-px bg-gradient-to-r from-transparent via-[hsl(45,93%,58%)]/30 to-transparent" />
 
                     <div className="space-y-4">
                       <p
-                        className={`text-lg md:text-xl leading-relaxed text-white/90 ${
+                        className={`text-lg md:text-xl leading-[1.9] text-white font-bangla ${
                           isRtl ? "text-right font-arabic" : ""
                         }`}
                         dir={isRtl ? "rtl" : "ltr"}
@@ -683,20 +698,21 @@ export default function BukhariLangPage() {
                   <button
                     key={chap.id}
                     onClick={() => handleChapterClick(chap.id)}
-                    className="flex items-center gap-4 p-4 bg-white/5 hover:bg-white/10 rounded-2xl border border-white/10 transition-all group text-left"
+                    className="relative flex items-center gap-4 p-4 bg-gradient-to-br from-[hsl(158,55%,25%)] to-[hsl(158,64%,20%)] hover:from-[hsl(158,55%,28%)] hover:to-[hsl(158,64%,23%)] rounded-2xl border border-white/10 shadow-lg transition-all group text-left overflow-hidden"
+                    style={EMERALD_CARD_STYLE}
                   >
-                    <div className="w-12 h-12 rounded-xl bg-[#10b981]/10 flex items-center justify-center text-[#10b981] font-bold group-hover:bg-[#10b981] group-hover:text-white transition-colors">
+                    <div className="w-12 h-12 rounded-xl bg-[hsl(45,93%,58%)]/15 flex items-center justify-center text-[hsl(45,93%,58%)] font-bold border border-[hsl(45,93%,58%)]/25 group-hover:bg-[hsl(45,93%,58%)] group-hover:text-[hsl(158,64%,15%)] transition-colors">
                       {chap.id}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-bold truncate group-hover:text-[#10b981] transition-colors">
+                      <h3 className="font-bold truncate text-white group-hover:text-[hsl(45,93%,58%)] transition-colors">
                         {getChapterName(chap.id, normalizedLang, kitabMap)}
                       </h3>
-                      <p className="text-xs text-white/40">
+                      <p className="text-xs text-white/65">
                         {chap.count} {t.hadiths}
                       </p>
                     </div>
-                    <ChevronRight className="w-5 h-5 text-white/20 group-hover:text-[#10b981] transition-colors" />
+                    <ChevronRight className="w-5 h-5 text-[hsl(45,93%,58%)]/60 group-hover:text-[hsl(45,93%,58%)] transition-colors" />
                   </button>
                 ))}
               </motion.div>
@@ -711,24 +727,25 @@ export default function BukhariLangPage() {
                     {pagedHadiths.map((h) => (
                       <div
                         key={h.id}
-                        className="bg-white/5 rounded-2xl p-5 border border-white/10 hover:border-[#10b981]/50 transition-all group"
+                        className="relative bg-gradient-to-br from-[hsl(158,55%,25%)] to-[hsl(158,64%,20%)] rounded-2xl p-5 border border-white/10 hover:border-[hsl(45,93%,58%)]/50 shadow-lg transition-all group overflow-hidden"
+                        style={EMERALD_CARD_STYLE}
                       >
                         <div className="flex items-center justify-between mb-4">
-                          <span className="text-xs font-bold text-[#10b981] px-2 py-1 bg-[#10b981]/10 rounded-lg">
+                          <span className="text-xs font-bold text-[hsl(45,93%,58%)] px-2 py-1 bg-[hsl(45,93%,58%)]/15 rounded-lg border border-[hsl(45,93%,58%)]/20">
                             {t.hadithNo} {h.number}
                           </span>
-                          <span className="text-[10px] text-white/30 uppercase tracking-wider">
+                          <span className="text-[10px] text-[hsl(45,93%,58%)]/75 uppercase tracking-wider">
                             {getChapterName(h.chapterId, normalizedLang, kitabMap)}
                           </span>
                         </div>
                         <p
-                          className="text-xl leading-[1.8] text-right mb-4 font-arabic line-clamp-2 text-white/60"
+                          className="text-xl leading-[1.8] text-right mb-4 font-arabic line-clamp-2 text-white"
                           dir="rtl"
                         >
                           {h.arabic}
                         </p>
                         <p
-                          className={`text-sm leading-relaxed line-clamp-3 text-white/80 mb-4 ${
+                          className={`text-base md:text-lg leading-[1.85] line-clamp-3 text-white font-bangla mb-4 ${
                             isRtl ? "text-right font-arabic" : ""
                           }`}
                           dir={isRtl ? "rtl" : "ltr"}
@@ -737,7 +754,7 @@ export default function BukhariLangPage() {
                         </p>
                         <button
                           onClick={() => handleReadDetails(h)}
-                          className="w-full py-2.5 bg-white/5 hover:bg-[#10b981] text-white/60 hover:text-white rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2"
+                          className="w-full py-2.5 bg-[hsl(45,93%,58%)]/15 hover:bg-[hsl(45,93%,58%)] text-[hsl(45,93%,58%)] hover:text-[hsl(158,64%,15%)] rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 border border-[hsl(45,93%,58%)]/20"
                         >
                           {t.readDetails}
                         </button>
@@ -746,14 +763,14 @@ export default function BukhariLangPage() {
                     {totalCount > pagedHadiths.length && (
                       <button
                         onClick={() => setPage((p) => p + 1)}
-                        className="w-full py-4 bg-[#10b981]/10 hover:bg-[#10b981] text-[#10b981] hover:text-white rounded-2xl font-bold transition-all border border-[#10b981]/20"
+                        className="w-full py-4 bg-[hsl(45,93%,58%)]/15 hover:bg-[hsl(45,93%,58%)] text-[hsl(45,93%,58%)] hover:text-[hsl(158,64%,15%)] rounded-2xl font-bold transition-all border border-[hsl(45,93%,58%)]/30"
                       >
                         {t.loadMore}
                       </button>
                     )}
                   </>
                 ) : (
-                  <div className="text-center py-20 bg-white/5 rounded-3xl border border-dashed border-white/10">
+                  <div className="text-center py-20 bg-gradient-to-br from-[hsl(158,55%,25%)] to-[hsl(158,64%,20%)] rounded-3xl border border-dashed border-white/10" style={EMERALD_CARD_STYLE}>
                     <BookOpen className="w-12 h-12 text-white/10 mx-auto mb-4" />
                     <p className="text-white/40">{t.noResults}</p>
                   </div>
