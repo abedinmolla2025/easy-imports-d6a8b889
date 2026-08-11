@@ -602,10 +602,7 @@ const DuaPage = () => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className="sticky top-0 z-50 bg-gradient-to-b from-[hsl(158,55%,22%)] to-[hsl(158,55%,22%)]/95 backdrop-blur-lg border-b border-white/10 relative overflow-hidden"
-        style={{ 
-          backgroundImage: `${ISLAMIC_PATTERN}, linear-gradient(to bottom, hsl(158,55%,22%), hsl(158,55%,22%))`,
-          backgroundSize: '80px 68px, 36px 30.5px, auto'
-        }}
+        style={{ backgroundImage: `${ISLAMIC_PATTERN}, linear-gradient(to bottom, hsl(158,55%,22%), hsl(158,55%,22%))` }}
       >
         <div className="flex items-center gap-3 px-4 py-4">
           <button
@@ -803,10 +800,7 @@ const DuaPage = () => {
                     <Link
                       to={`/dua/${daily.slug}`}
                       className="block p-4 rounded-2xl bg-gradient-to-br from-[hsl(45,93%,58%)]/20 to-[hsl(45,93%,48%)]/5 border border-[hsl(45,93%,58%)]/40 hover:border-[hsl(45,93%,58%)] transition overflow-hidden relative shadow-lg"
-                      style={{ 
-                        backgroundImage: `${ISLAMIC_PATTERN}, linear-gradient(to bottom right, hsla(45,93%,58%,0.2), hsla(45,93%,48%,0.05))`,
-                        backgroundSize: '80px 68px, 36px 30.5px, auto'
-                      }}
+                      style={{ backgroundImage: `${ISLAMIC_PATTERN}, linear-gradient(to bottom right, hsla(45,93%,58%,0.2), hsla(45,93%,48%,0.05))` }}
                     >
                       <div className="absolute inset-0 border border-white/5 rounded-2xl pointer-events-none" />
                       <div className="flex items-center gap-2 mb-2">

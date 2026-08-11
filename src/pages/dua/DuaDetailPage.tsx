@@ -590,10 +590,7 @@ const DuaDetailPage = () => {
         {dua.content_arabic && (
           <section 
             className="relative bg-gradient-to-br from-[hsl(158,55%,25%)] to-[hsl(158,64%,20%)] rounded-3xl p-6 border border-white/10 shadow-xl overflow-hidden group"
-            style={{ 
-              backgroundImage: `${ISLAMIC_PATTERN}, linear-gradient(to bottom right, hsl(158,55%,25%), hsl(158,64%,20%))`,
-              backgroundSize: '80px 68px, 36px 30.5px, auto'
-            }}
+            style={{ backgroundImage: `${ISLAMIC_PATTERN}, linear-gradient(to bottom right, hsl(158,55%,25%), hsl(158,64%,20%))` }}
           >
             <div className="absolute inset-0 border border-white/5 rounded-3xl pointer-events-none" />
             <div className="absolute top-0 right-0 w-32 h-32 bg-[hsl(45,93%,58%)]/10 rounded-full blur-2xl" />
@@ -614,10 +611,7 @@ const DuaDetailPage = () => {
         {text.pronunciation && (
           <section 
             className="bg-white/5 rounded-2xl p-5 border border-white/10 relative overflow-hidden shadow-sm"
-            style={{ 
-              backgroundImage: ISLAMIC_PATTERN,
-              backgroundSize: '80px 68px, 36px 30.5px'
-            }}
+            style={{ backgroundImage: ISLAMIC_PATTERN }}
           >
             <div className="absolute inset-0 border border-white/5 rounded-2xl pointer-events-none" />
             <h2 className="flex items-center gap-2 text-xs font-medium text-[hsl(45,93%,58%)] uppercase tracking-wide mb-3">
@@ -633,10 +627,7 @@ const DuaDetailPage = () => {
         {text.meaning && (
           <section 
             className="bg-gradient-to-br from-[hsl(45,93%,58%)]/10 to-transparent rounded-2xl p-5 border border-[hsl(45,93%,58%)]/20 relative overflow-hidden shadow-sm"
-            style={{ 
-              backgroundImage: `${ISLAMIC_PATTERN}, linear-gradient(to bottom right, hsla(45,93%,58%,0.1), transparent)`,
-              backgroundSize: '80px 68px, 36px 30.5px, auto'
-            }}
+            style={{ backgroundImage: `${ISLAMIC_PATTERN}, linear-gradient(to bottom right, hsla(45,93%,58%,0.1), transparent)` }}
           >
             <div className="absolute inset-0 border border-white/5 rounded-2xl pointer-events-none" />
             <h2 className="flex items-center gap-2 text-xs font-medium text-[hsl(45,93%,58%)] uppercase tracking-wide mb-3">
