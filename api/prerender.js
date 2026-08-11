@@ -14,7 +14,7 @@ const FALLBACK_SURAHS = [
   {"number": 5, "english_name": "Al-Ma'idah", "name": "المائدة", "number_of_ayahs": 120},
   {"number": 6, "english_name": "Al-An'am", "name": "الأنعام", "number_of_ayahs": 165},
   {"number": 7, "english_name": "Al-A'raf", "name": "الأعراف", "number_of_ayahs": 206},
-  {"number": 8, "english_name": "Al-Anfal", "name": "الأنفাল", "number_of_ayahs": 75},
+  {"number": 8, "english_name": "Al-Anfal", "name": "الأنفال", "number_of_ayahs": 75},
   {"number": 9, "english_name": "At-Tawbah", "name": "التوبة", "number_of_ayahs": 129},
   {"number": 10, "english_name": "Yunus", "name": "يونس", "number_of_ayahs": 109},
   {"number": 11, "english_name": "Hud", "name": "هود", "number_of_ayahs": 123},
@@ -25,7 +25,7 @@ const FALLBACK_SURAHS = [
   {"number": 16, "english_name": "An-Nahl", "name": "النحل", "number_of_ayahs": 128},
   {"number": 17, "english_name": "Al-Isra", "name": "الإسراء", "number_of_ayahs": 111},
   {"number": 18, "english_name": "Al-Kahf", "name": "الكهف", "number_of_ayahs": 110},
-  {"number": 19, "english_name": "Maryam", "name": "মরম", "number_of_ayahs": 98},
+  {"number": 19, "english_name": "Maryam", "name": "مريم", "number_of_ayahs": 98},
   {"number": 20, "english_name": "Ta-Ha", "name": "طه", "number_of_ayahs": 135},
   {"number": 21, "english_name": "Al-Anbiya", "name": "الأنبياء", "number_of_ayahs": 112},
   {"number": 22, "english_name": "Al-Hajj", "name": "الحج", "number_of_ayahs": 78},
@@ -96,7 +96,7 @@ const FALLBACK_SURAHS = [
   {"number": 87, "english_name": "Al-A'la", "name": "الأعلى", "number_of_ayahs": 19},
   {"number": 88, "english_name": "Al-Ghashiyah", "name": "الغاشية", "number_of_ayahs": 26},
   {"number": 89, "english_name": "Al-Fajr", "name": "الفجر", "number_of_ayahs": 30},
-  {"number": 90, "english_name": "Al-Balad", "name": "البلد", "number_of_ayahs": 20},
+  {"number": 90, "english_name": "Al-Balad", "name": "البلদ", "number_of_ayahs": 20},
   {"number": 91, "english_name": "Ash-Shams", "name": "الشمس", "number_of_ayahs": 15},
   {"number": 92, "english_name": "Al-Layl", "name": "الليل", "number_of_ayahs": 21},
   {"number": 93, "english_name": "Ad-Duha", "name": "الضحى", "number_of_ayahs": 11},
@@ -106,7 +106,7 @@ const FALLBACK_SURAHS = [
   {"number": 97, "english_name": "Al-Qadr", "name": "القدر", "number_of_ayahs": 5},
   {"number": 98, "english_name": "Al-Bayyinah", "name": "البينة", "number_of_ayahs": 8},
   {"number": 99, "english_name": "Az-Zalzalah", "name": "الزلزلة", "number_of_ayahs": 8},
-  {"number": 100, "english_name": "Al-Adiyat", "name": "العাদিয়াত", "number_of_ayahs": 11},
+  {"number": 100, "english_name": "Al-Adiyat", "name": "العاديات", "number_of_ayahs": 11},
   {"number": 101, "english_name": "Al-Qari'ah", "name": "القارعة", "number_of_ayahs": 11},
   {"number": 102, "english_name": "At-Takathur", "name": "التكاثر", "number_of_ayahs": 8},
   {"number": 103, "english_name": "Al-Asr", "name": "العصر", "number_of_ayahs": 3},
@@ -223,7 +223,7 @@ const BASE_HTML = `<!doctype html>
 
 export default async function handler(req, res) {
   const { path = "/" } = req.query;
-  console.log("[PRERENDER] Path:", path);
+  console.log("[PRERENDER] Processing Path:", path);
   
   let title = "Noor – Prayer Times, Quran & More";
   let description = "Read authentic Quran, Hadith, Dua, Prayer Times, Qibla, Islamic Stories and Baby Names in Bengali with a fast and beautiful Islamic app.";
@@ -294,28 +294,31 @@ export default async function handler(req, res) {
         title = `Surah ${surah.english_name} (${surah.name}) - Read Online | Noor`;
         description = `Read Surah ${surah.english_name} with Arabic text and Bengali translation. Surah ${surahNum} contains ${surah.number_of_ayahs} ayahs.`;
         
-        const { data: ayahs } = await supabase
-          .from("quran_ayahs")
-          .select("ayah_number, text, bengali_translation")
-          .eq("surah_number", surahNum)
-          .order("ayah_number")
-          .limit(20);
-
-        const ayahsHtml = (ayahs || []).map(a => `
-          <div class="ayah">
-            <p class="arabic" dir="rtl">${esc(a.text)}</p>
-            <p class="translation">${esc(a.bengali_translation)}</p>
-            <span style="color: #6b7280; font-size: 0.8rem;">Ayah ${a.ayah_number}</span>
-          </div>
-        `).join("");
-
-        bodyContent = `
-          <nav class="breadcrumb"><a href="/quran">Quran</a> &gt; Surah ${surah.english_name}</nav>
-          <h1>Surah ${surah.english_name} (${surah.name})</h1>
-          <div class="content-list">
-            ${ayahsHtml}
-          </div>
-        `;
+        try {
+          const apiRes = await fetch(`https://api.alquran.cloud/v1/surah/${surahNum}/bn.bengali`);
+          const apiData = await apiRes.json();
+          
+          if (apiData.code === 200) {
+            const ayahsHtml = apiData.data.ayahs.slice(0, 30).map(a => `
+              <div class="ayah">
+                <p class="arabic" dir="rtl">${esc(a.text)}</p>
+                <p class="translation">${esc(a.text)}</p>
+                <span style="color: #6b7280; font-size: 0.8rem;">Ayah ${a.numberInSurah}</span>
+              </div>
+            `).join("");
+            
+            bodyContent = `
+              <nav class="breadcrumb"><a href="/quran">Quran</a> &gt; Surah ${surah.english_name}</nav>
+              <h1>Surah ${surah.english_name} (${surah.name})</h1>
+              <div class="content-list">
+                ${ayahsHtml}
+              </div>
+            `;
+          }
+        } catch (e) {
+          console.error("Quran API Error:", e);
+          bodyContent = `<h1>Surah ${surah.english_name}</h1><p>Loading ayahs...</p>`;
+        }
       }
     }
 
