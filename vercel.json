@@ -58,6 +58,11 @@
    ]
   }
  ],
+ "functions": {
+  "api/prerender.js": {
+   "includeFiles": "dist/app.html"
+  }
+ },
  "rewrites": [
   {
    "source": "/sitemap.xml",

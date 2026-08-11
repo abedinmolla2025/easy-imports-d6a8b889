@@ -137,13 +137,24 @@ const esc = (s) => {
 
 // Helper to read app.html
 const getAppTemplate = () => {
-  try {
-    const filePath = path.join(process.cwd(), "dist", "app.html");
-    return fs.readFileSync(filePath, "utf8");
-  } catch (e) {
-    console.error("Template read error:", e);
-    return `<!DOCTYPE html><html><head><title>{{TITLE}}</title></head><body><div id="root">{{BODY}}</div></body></html>`;
+  const possiblePaths = [
+    path.join(process.cwd(), "dist", "app.html"),
+    path.join(process.cwd(), "app.html"),
+    path.join("/var/task", "dist", "app.html"),
+    path.join("/var/task", "app.html")
+  ];
+  
+  for (const filePath of possiblePaths) {
+    try {
+      if (fs.existsSync(filePath)) {
+        console.log("[PRERENDER] Found template at:", filePath);
+        return fs.readFileSync(filePath, "utf8");
+      }
+    } catch (e) {}
   }
+  
+  console.error("[PRERENDER] Template not found in any location");
+  return \`<!DOCTYPE html><html><head><title>{{TITLE}}</title></head><body><div id="root">{{BODY}}</div></body></html>\`;
 };
 
 export default async function handler(req, res) {
