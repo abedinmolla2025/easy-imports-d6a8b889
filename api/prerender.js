@@ -172,7 +172,7 @@ export default async function handler(req, res) {
                     </div>
                     <div>
                       <h1 class="font-bold tracking-widest text-sm uppercase">NOOR</h1>
-                      <p class="text-[9px] uppercase tracking-widest opacity-70">Islamic App</p>
+                      <p class="text-[9px] uppercase tracking-widest opacity-70">Your Islamic Companion</p>
                     </div>
                   </div>
                   <div class="bg-white/10 rounded-full px-2 py-1 text-[10px]">Loading location...</div>
