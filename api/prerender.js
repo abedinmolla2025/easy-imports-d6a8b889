@@ -26,7 +26,7 @@ const FALLBACK_SURAHS = [
   {"number": 15, "english_name": "Al-Hijr", "name": "الحجر", "number_of_ayahs": 99, "english_name_translation": "The Rocky Tract"},
   {"number": 16, "english_name": "An-Nahl", "name": "النحل", "number_of_ayahs": 128, "english_name_translation": "The Bee"},
   {"number": 17, "english_name": "Al-Isra", "name": "الإسراء", "number_of_ayahs": 111, "english_name_translation": "The Night Journey"},
-  {"number": 18, "english_name": "Al-Kahf", "name": "الكهف", "number_of_ayahs": 110, "english_name_translation": "The Cave"},
+  {"number": 18, "english_name": "Al-Kahf", "name": "الكهফ", "number_of_ayahs": 110, "english_name_translation": "The Cave"},
   {"number": 19, "english_name": "Maryam", "name": "مريم", "number_of_ayahs": 98, "english_name_translation": "Maryam"},
   {"number": 20, "english_name": "Ta-Ha", "name": "طه", "number_of_ayahs": 135, "english_name_translation": "Ta-Ha"},
   {"number": 21, "english_name": "Al-Anbiya", "name": "الأنبياء", "number_of_ayahs": 112, "english_name_translation": "The Prophets"},
@@ -108,18 +108,18 @@ const FALLBACK_SURAHS = [
   {"number": 97, "english_name": "Al-Qadr", "name": "القدر", "number_of_ayahs": 5, "english_name_translation": "The Power"},
   {"number": 98, "english_name": "Al-Bayyinah", "name": "البينة", "number_of_ayahs": 8, "english_name_translation": "The Clear Proof"},
   {"number": 99, "english_name": "Az-Zalzalah", "name": "الزلزلة", "number_of_ayahs": 8, "english_name_translation": "The Earthquake"},
-  {"number": 100, "english_name": "Al-Adiyat", "name": "العাদিয়াত", "number_of_ayahs": 11, "english_name_translation": "The Courser"},
+  {"number": 100, "english_name": "Al-Adiyat", "name": "العاديات", "number_of_ayahs": 11, "english_name_translation": "The Courser"},
   {"number": 101, "english_name": "Al-Qari'ah", "name": "القارعة", "number_of_ayahs": 11, "english_name_translation": "The Calamity"},
   {"number": 102, "english_name": "At-Takathur", "name": "التكاثر", "number_of_ayahs": 8, "english_name_translation": "The Rivalry in world increase"},
   {"number": 103, "english_name": "Al-Asr", "name": "العصر", "number_of_ayahs": 3, "english_name_translation": "The Declining Day"},
   {"number": 104, "english_name": "Al-Humazah", "name": "الهمزة", "number_of_ayahs": 9, "english_name_translation": "The Traducer"},
   {"number": 105, "english_name": "Al-Fil", "name": "الفيل", "number_of_ayahs": 5, "english_name_translation": "The Elephant"},
-  {"number": 106, "english_name": "Quraysh", "name": "قريশ", "number_of_ayahs": 4, "english_name_translation": "Quraysh"},
+  {"number": 106, "english_name": "Quraysh", "name": "قريش", "number_of_ayahs": 4, "english_name_translation": "Quraysh"},
   {"number": 107, "english_name": "Al-Ma'un", "name": "الماعون", "number_of_ayahs": 7, "english_name_translation": "The Small Kindnesses"},
   {"number": 108, "english_name": "Al-Kawthar", "name": "الكوثر", "number_of_ayahs": 3, "english_name_translation": "The Abundance"},
   {"number": 109, "english_name": "Al-Kafirun", "name": "الكافرون", "number_of_ayahs": 6, "english_name_translation": "The Disbelievers"},
   {"number": 110, "english_name": "An-Nasr", "name": "النصر", "number_of_ayahs": 3, "english_name_translation": "The Divine Support"},
-  {"number": 111, "english_name": "Al-Masad", "name": "المسদ", "number_of_ayahs": 5, "english_name_translation": "The Palm Fiber"},
+  {"number": 111, "english_name": "Al-Masad", "name": "المسد", "number_of_ayahs": 5, "english_name_translation": "The Palm Fiber"},
   {"number": 112, "english_name": "Al-Ikhlas", "name": "الإخلاص", "number_of_ayahs": 4, "english_name_translation": "The Sincerity"},
   {"number": 113, "english_name": "Al-Falaq", "name": "الفلق", "number_of_ayahs": 5, "english_name_translation": "The Daybreak"},
   {"number": 114, "english_name": "An-Nas", "name": "الناس", "number_of_ayahs": 6, "english_name_translation": "Mankind"}
@@ -144,7 +144,7 @@ const getAppTemplate = () => {
   } catch (e) {
     console.error("[PRERENDER] Error reading template:", e);
   }
-  return `<!DOCTYPE html><html><head><title>{{TITLE}}</title></head><body><div id="root">{{BODY}}</div></body></html>`;
+  return `<!DOCTYPE html><html><head><title>{{TITLE}}</title></head><body><div id="root"></div></body></html>`;
 };
 
 export default async function handler(req, res) {
@@ -163,32 +163,80 @@ export default async function handler(req, res) {
         <div class="min-h-screen bg-background pb-20 w-full overflow-x-hidden">
           <main class="w-full px-3 py-4">
             <div class="space-y-4">
-              <section class="text-center py-8">
-                <h1 class="text-4xl font-bold text-primary mb-2">NOOR</h1>
-                <p class="text-muted-foreground">Your Islamic Companion</p>
+              <!-- Original Hero Structure -->
+              <section class="relative overflow-hidden rounded-2xl border border-white/10 shadow-xl bg-gradient-to-br from-emerald-600 via-teal-600 to-emerald-700 p-4 text-white">
+                <div class="flex items-center justify-between mb-4">
+                  <div class="flex items-center gap-2">
+                    <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center border border-white/30">
+                      <span class="font-bold">N</span>
+                    </div>
+                    <div>
+                      <h1 class="font-bold tracking-widest text-sm uppercase">NOOR</h1>
+                      <p class="text-[9px] uppercase tracking-widest opacity-70">Islamic App</p>
+                    </div>
+                  </div>
+                  <div class="bg-white/10 rounded-full px-2 py-1 text-[10px]">Loading location...</div>
+                </div>
+                <div class="flex justify-between items-end">
+                  <div>
+                    <p class="text-[9px] uppercase tracking-widest text-amber-400 font-bold mb-1">Current Prayer</p>
+                    <h2 class="text-3xl font-bold">Fajr</h2>
+                  </div>
+                  <div class="text-right">
+                    <p class="text-2xl font-light opacity-80">05:00 AM</p>
+                  </div>
+                </div>
               </section>
-              <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                <a href="/quran" class="p-6 rounded-2xl bg-card border border-border flex flex-col items-center gap-3">
-                  <span class="font-bold">Quran</span>
+
+              <!-- Feature Grid -->
+              <div class="grid grid-cols-4 gap-3 py-2">
+                <a href="/quran" class="flex flex-col items-center gap-1">
+                  <div class="w-14 h-14 bg-emerald-500/20 rounded-2xl flex items-center justify-center text-2xl shadow-lg border border-white/10">📖</div>
+                  <span class="text-[10px] font-medium opacity-70">Quran</span>
                 </a>
-                <a href="/hadith" class="p-6 rounded-2xl bg-card border border-border flex flex-col items-center gap-3">
-                  <span class="font-bold">Hadith</span>
+                <a href="/hadith" class="flex flex-col items-center gap-1">
+                  <div class="w-14 h-14 bg-amber-500/20 rounded-2xl flex items-center justify-center text-2xl shadow-lg border border-white/10">📜</div>
+                  <span class="text-[10px] font-medium opacity-70">Hadith</span>
                 </a>
-                <a href="/dua" class="p-6 rounded-2xl bg-card border border-border flex flex-col items-center gap-3">
-                  <span class="font-bold">Dua</span>
+                <a href="/dua" class="flex flex-col items-center gap-1">
+                  <div class="w-14 h-14 bg-blue-500/20 rounded-2xl flex items-center justify-center text-2xl shadow-lg border border-white/10">🤲</div>
+                  <span class="text-[10px] font-medium opacity-70">Dua</span>
                 </a>
-                <a href="/stories" class="p-6 rounded-2xl bg-card border border-border flex flex-col items-center gap-3">
-                  <span class="font-bold">Stories</span>
+                <a href="/stories" class="flex flex-col items-center gap-1">
+                  <div class="w-14 h-14 bg-purple-500/20 rounded-2xl flex items-center justify-center text-2xl shadow-lg border border-white/10">✨</div>
+                  <span class="text-[10px] font-medium opacity-70">Stories</span>
                 </a>
-                <a href="/prayer-times" class="p-6 rounded-2xl bg-card border border-border flex flex-col items-center gap-3">
-                  <span class="font-bold">Prayer</span>
-                </a>
-                <a href="/qibla" class="p-6 rounded-2xl bg-card border border-border flex flex-col items-center gap-3">
-                  <span class="font-bold">Qibla</span>
-                </a>
+              </div>
+
+              <!-- Content Sections -->
+              <div class="space-y-4 mt-6">
+                <div class="bg-card p-4 rounded-2xl border border-border">
+                  <h3 class="font-bold mb-2">Daily Hadith</h3>
+                  <p class="text-sm text-muted-foreground italic">"The best among you is the one who learns the Quran and teaches it."</p>
+                </div>
               </div>
             </div>
           </main>
+          
+          <!-- Bottom Navigation -->
+          <nav class="fixed bottom-0 inset-x-0 bg-background/80 backdrop-blur-lg border-t border-border flex justify-around py-3 z-50">
+            <a href="/" class="flex flex-col items-center gap-1 text-primary">
+              <span class="text-xl">🏠</span>
+              <span class="text-[10px]">Home</span>
+            </a>
+            <a href="/quran" class="flex flex-col items-center gap-1 text-muted-foreground">
+              <span class="text-xl">📖</span>
+              <span class="text-[10px]">Quran</span>
+            </a>
+            <a href="/hadith" class="flex flex-col items-center gap-1 text-muted-foreground">
+              <span class="text-xl">📜</span>
+              <span class="text-[10px]">Hadith</span>
+            </a>
+            <a href="/settings" class="flex flex-col items-center gap-1 text-muted-foreground">
+              <span class="text-xl">⚙️</span>
+              <span class="text-[10px]">Settings</span>
+            </a>
+          </nav>
         </div>
       `;
     }
@@ -227,7 +275,7 @@ export default async function handler(req, res) {
       `;
     }
 
-    // --- Quran Surah Pages (using alquran.cloud API) ---
+    // --- Quran Surah Pages ---
     else if (routePath.match(/^\/quran\/\d+$/)) {
       const surahNum = parseInt(routePath.split("/")[2]);
       const surah = FALLBACK_SURAHS.find(s => s.number === surahNum);
@@ -292,56 +340,6 @@ export default async function handler(req, res) {
               </div>
               <span class="text-2xl">→</span>
             </a>
-          </div>
-        </div>
-      `;
-    }
-
-    // --- Hadith Book Page ---
-    else if (routePath === "/hadith/sahih-bukhari") {
-      title = "Sahih Al-Bukhari — সহিহ বুখারী | NOOR";
-      bodyContent = `
-        <div class="min-h-screen bg-background p-4">
-          <header class="mb-8 text-center">
-            <h1 class="text-2xl font-bold text-primary">Sahih Al-Bukhari</h1>
-            <p class="text-muted-foreground">Select Language</p>
-          </header>
-          <div class="grid gap-4 max-w-md mx-auto">
-            <a href="/hadith/sahih-bukhari/bangla" class="p-5 bg-card border border-border rounded-xl text-center font-bold">Bengali (বাংলা)</a>
-            <a href="/hadith/sahih-bukhari/english" class="p-5 bg-card border border-border rounded-xl text-center font-bold">English</a>
-            <a href="/hadith/sahih-bukhari/urdu" class="p-5 bg-card border border-border rounded-xl text-center font-bold">Urdu (اردو)</a>
-          </div>
-        </div>
-      `;
-    }
-
-    // --- Hadith Language Pages ---
-    else if (routePath.match(/^\/hadith\/sahih-bukhari\/(bangla|english|urdu)$/)) {
-      const lang = routePath.split("/")[3];
-      const langLabels = { bangla: "সহিহ বুখারী শরীফ", english: "Sahih Al-Bukhari", urdu: "صحیح البخاری" };
-      title = langLabels[lang] || "Sahih Bukhari";
-      
-      const { data: chapters } = await supabase
-        .from("hadith_chapters")
-        .select("chapter_number, title, title_bn")
-        .eq("book_id", "bukhari")
-        .order("chapter_number");
-
-      const chapterList = (chapters || []).map(c => `
-        <a href="/hadith/sahih-bukhari/${lang}/chapter-${c.chapter_number}" class="flex items-center justify-between p-4 bg-card border border-border rounded-xl mb-2">
-          <span class="font-medium">${c.chapter_number}. ${lang === 'bangla' ? (c.title_bn || c.title) : c.title}</span>
-          <span class="text-muted-foreground">→</span>
-        </a>
-      `).join("");
-
-      bodyContent = `
-        <div class="min-h-screen bg-background p-4">
-          <header class="mb-6 text-center">
-            <h1 class="text-2xl font-bold text-primary">${title}</h1>
-            <p class="text-muted-foreground">Chapters List</p>
-          </header>
-          <div class="max-w-2xl mx-auto">
-            ${chapterList || '<p class="text-center text-muted-foreground">No chapters found.</p>'}
           </div>
         </div>
       `;
@@ -420,20 +418,6 @@ export default async function handler(req, res) {
               <p class="mb-4">Email: <a href="mailto:support@noorapp.in" class="text-primary">support@noorapp.in</a></p>
               <p class="text-sm text-muted-foreground">We typically respond within 24-48 hours.</p>
             </section>
-          </div>
-        </div>
-      `;
-    }
-
-    // --- Privacy/Terms/About ---
-    else if (["/privacy-policy", "/terms", "/about"].includes(routePath)) {
-      title = routePath === "/privacy-policy" ? "Privacy Policy | Noor" : routePath === "/terms" ? "Terms of Service | Noor" : "About Us | Noor";
-      bodyContent = `
-        <div class="min-h-screen bg-background p-6">
-          <div class="max-w-3xl mx-auto prose prose-emerald">
-            <h1 class="text-3xl font-bold mb-6">${title}</h1>
-            <p class="text-muted-foreground">This content is available in our mobile app and website.</p>
-            <p>Noor is dedicated to providing authentic Islamic content including Quran, Hadith, and Duas.</p>
           </div>
         </div>
       `;
