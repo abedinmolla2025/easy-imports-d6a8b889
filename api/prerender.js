@@ -113,7 +113,7 @@ const getCategoryIcon = (cat) => {
   return CATEGORY_ICONS[cat] || "🤲";
 };
 
-const ISLAMIC_PATTERN = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cpath d='M30 0l2.5 7.5L40 10l-7.5 2.5L30 20l-2.5-7.5L20 10l7.5-2.5L30 0zm0 40l2.5 7.5L40 50l-7.5 2.5L30 60l-2.5-7.5L20 50l7.5-2.5L30 40zM0 30l7.5-2.5L10 20l2.5 7.5L20 30l-7.5 2.5L10 40l-2.5-7.5L0 30zm40 0l7.5-2.5L50 20l2.5 7.5L60 30l-7.5 2.5L50 40l-2.5-7.5L40 30z' fill='%23ffffff' fill-opacity='0.05'/%3E%3C/svg%3E")`;
+const ISLAMIC_PATTERN = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='0.5' stroke-opacity='0.08'%3E%3Cpath d='M0 0l20 20m40 0l20-20M0 80l20-20m40 0l20 20M40 0l20 20m0 40l-20 20m-20-20l-20 20m0-80l20 20'/%3E%3Cpath d='M20 20h40v40H20z'/%3E%3Cpath d='M40 0v20m0 40v20M0 40h20m40 0h20'/%3E%3Cpath d='M20 20L0 40l20 20 20-20-20-20zm40 0l20 20-20 20-20-20 20-20z'/%3E%3C/g%3E%3C/svg%3E")`;
 
 const FALLBACK_SURAHS = [
   {"number": 1, "english_name": "Al-Fatiha", "name": "الفاتحة", "number_of_ayahs": 7, "english_name_translation": "The Opening"},
@@ -421,7 +421,8 @@ export default async function handler(req, res) {
             
             <main class="max-w-3xl mx-auto p-4 space-y-6">
               <!-- Arabic Card -->
-              <div class="relative bg-gradient-to-br from-[hsl(158,55%,25%)] to-[hsl(158,64%,20%)] border border-amber-400/20 rounded-3xl shadow-lg overflow-hidden" style="background-image: ${ISLAMIC_PATTERN}, linear-gradient(to bottom right, hsl(158,55%,25%), hsl(158,64%,20%))">
+              <div class="relative bg-gradient-to-br from-[hsl(158,55%,25%)] to-[hsl(158,64%,20%)] border border-white/10 rounded-3xl shadow-xl overflow-hidden" style="background-image: ${ISLAMIC_PATTERN}, linear-gradient(to bottom right, hsl(158,55%,25%), hsl(158,64%,20%))">
+                <div class="absolute inset-0 border border-white/5 rounded-3xl pointer-events-none"></div>
                 <div class="p-8 text-center relative z-10">
                   <p class="text-amber-400 text-[10px] font-bold uppercase tracking-[0.2em] mb-4 opacity-80">আরবি</p>
                   <p dir="rtl" class="text-3xl md:text-5xl font-arabic leading-[2.2] text-white">${esc(dua.content_arabic)}</p>
@@ -430,12 +431,14 @@ export default async function handler(req, res) {
 
               <!-- Pronunciation Card -->
               <div class="bg-white/5 border border-white/10 rounded-2xl p-6 relative overflow-hidden shadow-sm" style="background-image: ${ISLAMIC_PATTERN}">
+                <div class="absolute inset-0 border border-white/5 rounded-2xl pointer-events-none"></div>
                 <h2 class="text-[10px] font-bold text-amber-400 uppercase tracking-[0.2em] mb-3 opacity-80">উচ্চারণ</h2>
                 <p class="text-white/90 text-lg md:text-xl leading-relaxed">${esc(dua.content_pronunciation)}</p>
               </div>
 
               <!-- Meaning Card -->
               <div class="bg-gradient-to-br from-amber-400/10 to-transparent border border-amber-400/20 rounded-2xl p-6 relative overflow-hidden shadow-sm" style="background-image: ${ISLAMIC_PATTERN}, linear-gradient(to bottom right, rgba(251, 191, 36, 0.1), transparent)">
+                <div class="absolute inset-0 border border-white/5 rounded-2xl pointer-events-none"></div>
                 <h2 class="text-[10px] font-bold text-amber-400 uppercase tracking-[0.2em] mb-3 opacity-80">অর্থ</h2>
                 <p class="text-white text-lg md:text-xl leading-relaxed">${esc(dua.content)}</p>
               </div>

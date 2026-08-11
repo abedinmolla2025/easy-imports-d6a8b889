@@ -141,6 +141,8 @@ const getCategoryIcon = (category: string): string => {
   return CATEGORY_ICONS[category] || "🤲";
 };
 
+const ISLAMIC_PATTERN = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='0.5' stroke-opacity='0.08'%3E%3Cpath d='M0 0l20 20m40 0l20-20M0 80l20-20m40 0l20 20M40 0l20 20m0 40l-20 20m-20-20l-20 20m0-80l20 20'/%3E%3Cpath d='M20 20h40v40H20z'/%3E%3Cpath d='M40 0v20m0 40v20M0 40h20m40 0h20'/%3E%3Cpath d='M20 20L0 40l20 20 20-20-20-20zm40 0l20 20-20 20-20-20 20-20z'/%3E%3C/g%3E%3C/svg%3E")`;
+
 const slugifyCategory = (s: string) =>
   s
     .toLowerCase()
@@ -598,7 +600,7 @@ const DuaPage = () => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className="sticky top-0 z-50 bg-gradient-to-b from-[hsl(158,55%,22%)] to-[hsl(158,55%,22%)]/95 backdrop-blur-lg border-b border-white/10 relative overflow-hidden"
-        style={{ backgroundImage: ISLAMIC_PATTERN }}
+        style={{ backgroundImage: `${ISLAMIC_PATTERN}, linear-gradient(to bottom, hsl(158,55%,22%), hsl(158,55%,22%))` }}
       >
         <div className="flex items-center gap-3 px-4 py-4">
           <button
@@ -795,9 +797,10 @@ const DuaPage = () => {
                   return (
                     <Link
                       to={`/dua/${daily.slug}`}
-                      className="block p-4 rounded-2xl bg-gradient-to-br from-[hsl(45,93%,58%)]/20 to-[hsl(45,93%,48%)]/5 border border-[hsl(45,93%,58%)]/40 hover:border-[hsl(45,93%,58%)] transition overflow-hidden relative"
-                      style={{ backgroundImage: ISLAMIC_PATTERN }}
+                      className="block p-4 rounded-2xl bg-gradient-to-br from-[hsl(45,93%,58%)]/20 to-[hsl(45,93%,48%)]/5 border border-[hsl(45,93%,58%)]/40 hover:border-[hsl(45,93%,58%)] transition overflow-hidden relative shadow-lg"
+                      style={{ backgroundImage: `${ISLAMIC_PATTERN}, linear-gradient(to bottom right, hsla(45,93%,58%,0.2), hsla(45,93%,48%,0.05))` }}
                     >
+                      <div className="absolute inset-0 border border-white/5 rounded-2xl pointer-events-none" />
                       <div className="flex items-center gap-2 mb-2">
                         <Sparkles className="w-4 h-4 text-[hsl(45,93%,58%)]" />
                         <span className="text-[11px] font-semibold uppercase tracking-wide text-[hsl(45,93%,58%)]">
