@@ -463,12 +463,12 @@ export default async function handler(req, res) {
       const categories = [...new Set((duas || []).map(d => d.category))].filter(Boolean);
 
       const categoryList = categories.map(cat => `
-        <a href="/dua/category/${cat.toLowerCase().replace(/ /g, '-')}" class="p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-amber-400/30 transition-all flex flex-col items-center text-center">
+        <a href="/dua/category/${cat.toLowerCase().replace(/ /g, '-')}" class="shrink-0 w-32 p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-amber-400/30 transition-all flex flex-col items-center text-center">
           <div class="w-10 h-10 rounded-xl bg-amber-400/10 flex items-center justify-center text-xl mb-2">
             ${getCategoryIcon(cat)}
           </div>
-          <p class="text-sm font-bold text-white">${esc(getCategoryLabel(cat))}</p>
-          <p class="text-[10px] text-white/40 mt-1 uppercase tracking-wider">সব দোয়া দেখুন →</p>
+          <p class="text-xs font-bold text-white line-clamp-1">${esc(getCategoryLabel(cat))}</p>
+          <p class="text-[9px] text-white/40 mt-1 uppercase tracking-wider whitespace-nowrap">সব দোয়া দেখুন →</p>
         </a>
       `).join("");
 
@@ -479,8 +479,8 @@ export default async function handler(req, res) {
             <p class="text-white/70 max-w-md mx-auto">দৈনন্দিন জীবনের প্রয়োজনীয় দোয়া ও জিকিরসমূহ</p>
           </header>
           <div class="p-4 max-w-4xl mx-auto">
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              ${categoryList || '<p class="text-center p-8 text-white/50 col-span-full">দোয়া লোড হচ্ছে...</p>'}
+            <div class="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
+              ${categoryList || '<p class="text-center p-8 text-white/50 w-full">দোয়া লোড হচ্ছে...</p>'}
             </div>
           </div>
         </div>

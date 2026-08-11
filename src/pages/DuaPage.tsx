@@ -818,22 +818,22 @@ const DuaPage = () => {
                   );
                 })()}
 
-                {/* All category cards in grid style with icons */}
+                {/* Horizontal scrollable category cards */}
                 {!searchQuery && categories.length > 0 && (
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide -mx-4 px-4">
                     {categories.map((cat) => (
                       <Link
                         key={`seo-cat-${cat}`}
                         to={`/dua/category/${slugifyCategory(cat)}`}
-                        className="p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-[hsl(45,93%,58%)]/30 transition-all group flex flex-col items-center text-center"
+                        className="shrink-0 w-32 p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-[hsl(45,93%,58%)]/30 transition-all group flex flex-col items-center text-center"
                       >
                         <div className="w-10 h-10 rounded-xl bg-[hsl(45,93%,58%)]/10 flex items-center justify-center text-xl mb-2 group-hover:scale-110 transition-transform">
                           {getCategoryIcon(cat)}
                         </div>
-                        <p className="text-sm font-bold text-white group-hover:text-[hsl(45,93%,58%)] transition-colors">
+                        <p className="text-xs font-bold text-white group-hover:text-[hsl(45,93%,58%)] transition-colors line-clamp-1">
                           {getCategoryLabel(cat, language)}
                         </p>
-                        <p className="text-[10px] text-white/40 mt-1 uppercase tracking-wider">
+                        <p className="text-[9px] text-white/40 mt-1 uppercase tracking-wider whitespace-nowrap">
                           {UI_LABELS.viewAllDuas[language]}
                         </p>
                       </Link>
