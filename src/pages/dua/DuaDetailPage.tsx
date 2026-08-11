@@ -501,7 +501,8 @@ const DuaDetailPage = () => {
       <motion.header
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="sticky top-0 z-50 bg-gradient-to-b from-[hsl(158,55%,22%)] to-[hsl(158,55%,22%)]/95 backdrop-blur-lg border-b border-white/10"
+        className="sticky top-0 z-50 bg-gradient-to-b from-[hsl(158,55%,22%)] to-[hsl(158,55%,22%)]/95 backdrop-blur-lg border-b border-white/10 relative overflow-hidden"
+        style={{ backgroundImage: ISLAMIC_PATTERN }}
       >
         <div className="flex items-center gap-3 px-4 py-4">
           <button

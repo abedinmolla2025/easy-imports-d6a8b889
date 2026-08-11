@@ -463,8 +463,8 @@ export default async function handler(req, res) {
       const categories = [...new Set((duas || []).map(d => d.category))].filter(Boolean);
 
       const categoryList = categories.map(cat => `
-        <a href="/dua/category/${cat.toLowerCase().replace(/ /g, '-')}" class="shrink-0 w-32 p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-amber-400/30 transition-all flex flex-col items-center text-center">
-          <div class="w-10 h-10 rounded-xl bg-amber-400/10 flex items-center justify-center text-xl mb-2">
+        <a href="/dua/category/${cat.toLowerCase().replace(/ /g, '-')}" class="shrink-0 w-32 p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-amber-400/30 transition-all flex flex-col items-center text-center relative overflow-hidden" style="background-image: ${ISLAMIC_PATTERN}">
+          <div class="w-10 h-10 rounded-xl bg-amber-400/10 flex items-center justify-center text-xl mb-2 relative z-10">
             ${getCategoryIcon(cat)}
           </div>
           <p class="text-xs font-bold text-white line-clamp-1">${esc(getCategoryLabel(cat))}</p>
@@ -474,9 +474,11 @@ export default async function handler(req, res) {
 
       bodyContent = `
         <div class="min-h-screen bg-[hsl(158,64%,18%)]">
-          <header class="bg-gradient-to-br from-[hsl(158,55%,22%)] to-[hsl(158,64%,15%)] p-10 text-white text-center border-b border-white/10">
-            <h1 class="text-4xl font-bold mb-3">দোয়া সংকলন</h1>
-            <p class="text-white/70 max-w-md mx-auto">দৈনন্দিন জীবনের প্রয়োজনীয় দোয়া ও জিকিরসমূহ</p>
+          <header class="bg-gradient-to-br from-[hsl(158,55%,22%)] to-[hsl(158,64%,15%)] p-10 text-white text-center border-b border-white/10 relative overflow-hidden" style="background-image: ${ISLAMIC_PATTERN}, linear-gradient(to bottom right, hsl(158,55%,22%), hsl(158,64%,15%))">
+            <div class="relative z-10">
+              <h1 class="text-4xl font-bold mb-3">দোয়া সংকলন</h1>
+              <p class="text-white/70 max-w-md mx-auto">দৈনন্দিন জীবনের প্রয়োজনীয় দোয়া ও জিকিরসমূহ</p>
+            </div>
           </header>
           <div class="p-4 max-w-4xl mx-auto">
             <div class="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
