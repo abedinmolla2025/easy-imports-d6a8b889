@@ -71,6 +71,58 @@ const LANGUAGE_LABELS: Record<DuaLang, string> = {
   urdu: "اردو",
 };
 
+const CATEGORY_MAP: Record<string, string> = {
+  "Balanced Life": "ভারসাম্যপূর্ণ জীবন",
+  "Character": "চরিত্র",
+  "Daily": "দৈনন্দিন",
+  "Death": "মৃত্যু",
+  "Evening": "সন্ধ্যা",
+  "Faith": "ঈমান",
+  "Family": "পরিবার",
+  "Fasting": "রোজা",
+  "Food": "খাবার",
+  "Forgiveness": "ক্ষমা",
+  "Gratitude": "কৃতজ্ঞতা",
+  "Guidance": "হেদায়েত",
+  "Hajj": "হজ",
+  "Healing": "আরোগ্য",
+  "Health": "স্বাস্থ্য",
+  "Hereafter": "পরকাল",
+  "Hope": "আশা",
+  "Journey": "সফর",
+  "Justice": "ইনসাফ",
+  "Knowledge": "জ্ঞান",
+  "Legacy": "উত্তরাধিকার",
+  "Masjid": "মসজিদ",
+  "Morning": "সকাল",
+  "Names of Allah": "আল্লাহর নাম",
+  "Parents": "পিতা-মাতা",
+  "Praise": " প্রশংসা",
+  "Promise": "প্রতিশ্রুতি",
+  "Protection": "সুরক্ষা",
+  "Quran": "কুরআন",
+  "Ramadan": "রমজান",
+  "Remembrance": "জিকির",
+  "Repentance": "তওবা",
+  "Responsibility": "দায়িত্ব",
+  "Ruqyah": "রুকইয়াহ",
+  "Salah": "নামাজ",
+  "Sleep": "ঘুম",
+  "Steadfastness": "অবিচলতা",
+  "Submission": "আত্মসমর্পণ",
+  "Tawhid": "তাওহীদ",
+  "Travel": "ভ্রমণ",
+  "Weather": "আবহাওয়া",
+  "Wisdom": "প্রজ্ঞা",
+  "Worship": "ইবাদত",
+  "Wudu": "ওযু",
+};
+
+const getCategoryLabel = (cat: string | null) => {
+  if (!cat) return "সাধারণ";
+  return CATEGORY_MAP[cat] || cat;
+};
+
 const LANG_SUFFIX: Record<DuaLang, "" | "_en" | "_hi" | "_ur"> = {
   bengali: "",
   english: "_en",
@@ -496,7 +548,7 @@ const DuaDetailPage = () => {
                 to={`/dua/category/${slugifyCategory(dua.category)}`}
                 className="hover:text-[hsl(45,93%,58%)]"
               >
-                {dua.category}
+                {getCategoryLabel(dua.category)}
               </Link>
             </>
           )}
@@ -521,7 +573,7 @@ const DuaDetailPage = () => {
               to={`/dua/category/${slugifyCategory(dua.category)}`}
               className="mt-2 inline-block text-sm text-[hsl(45,93%,58%)] hover:underline"
             >
-              বিভাগ: {dua.category} →
+              বিভাগ: {getCategoryLabel(dua.category)} →
             </Link>
           )}
         </header>

@@ -8,6 +8,58 @@ const SUPABASE_ANON_KEY = process.env.VITE_SUPABASE_ANON_KEY || process.env.SUPA
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+const CATEGORY_MAP = {
+  "Balanced Life": "ভারসাম্যপূর্ণ জীবন",
+  "Character": "চরিত্র",
+  "Daily": "দৈনন্দিন",
+  "Death": "মৃত্যু",
+  "Evening": "সন্ধ্যা",
+  "Faith": "ঈমান",
+  "Family": "পরিবার",
+  "Fasting": "রোজা",
+  "Food": "খাবার",
+  "Forgiveness": "ক্ষমা",
+  "Gratitude": "কৃতজ্ঞতা",
+  "Guidance": "হেদায়েত",
+  "Hajj": "হজ",
+  "Healing": "আরোগ্য",
+  "Health": "স্বাস্থ্য",
+  "Hereafter": "পরকাল",
+  "Hope": "আশা",
+  "Journey": "সফর",
+  "Justice": "ইনসাফ",
+  "Knowledge": "জ্ঞান",
+  "Legacy": "উত্তরাধিকার",
+  "Masjid": "মসজিদ",
+  "Morning": "সকাল",
+  "Names of Allah": "আল্লাহর নাম",
+  "Parents": "পিতা-মাতা",
+  "Praise": "প্রশংসা",
+  "Promise": "প্রতিশ্রুতি",
+  "Protection": "সুরক্ষা",
+  "Quran": "কুরআন",
+  "Ramadan": "রমজান",
+  "Remembrance": "জিকির",
+  "Repentance": "তওবা",
+  "Responsibility": "দায়িত্ব",
+  "Ruqyah": "রুকইয়াহ",
+  "Salah": "নামাজ",
+  "Sleep": "ঘুম",
+  "Steadfastness": "অবিচলতা",
+  "Submission": "আত্মসমর্পণ",
+  "Tawhid": "তাওহীদ",
+  "Travel": "ভ্রমণ",
+  "Weather": "আবহাওয়া",
+  "Wisdom": "প্রজ্ঞা",
+  "Worship": "ইবাদত",
+  "Wudu": "ওযু",
+};
+
+const getCategoryLabel = (cat) => {
+  if (!cat) return "সাধারণ";
+  return CATEGORY_MAP[cat] || cat;
+};
+
 const FALLBACK_SURAHS = [
   {"number": 1, "english_name": "Al-Fatiha", "name": "الفاتحة", "number_of_ayahs": 7, "english_name_translation": "The Opening"},
   {"number": 2, "english_name": "Al-Baqarah", "name": "البقرة", "number_of_ayahs": 286, "english_name_translation": "The Cow"},
@@ -361,7 +413,7 @@ export default async function handler(req, res) {
         <a href="/dua/${d.slug}" class="flex items-center justify-between p-4 bg-card border border-border rounded-2xl mb-3 hover:shadow-md transition-all group">
           <div class="flex-1">
             <h3 class="font-bold text-lg group-hover:text-primary transition-colors">${esc(d.title)}</h3>
-            <p class="text-xs text-muted-foreground uppercase tracking-wider mt-1">${esc(d.category || "General")}</p>
+            <p class="text-xs text-muted-foreground uppercase tracking-wider mt-1">${esc(getCategoryLabel(d.category))}</p>
           </div>
           <span class="text-primary opacity-50 group-hover:opacity-100 transition-opacity">→</span>
         </a>
