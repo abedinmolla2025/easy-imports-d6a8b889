@@ -268,50 +268,55 @@ export default async function handler(req, res) {
     // --- Homepage ---
     if (routePath === "/") {
       bodyContent = `
-        <div class="min-h-screen bg-background pb-20 w-full overflow-x-hidden">
-          <main class="w-full px-3 py-4">
-            <div class="space-y-4">
-              <section class="relative overflow-hidden rounded-2xl border border-white/10 shadow-xl bg-gradient-to-br from-emerald-600 via-teal-600 to-emerald-700 p-4 text-white">
-                <div class="flex items-center justify-between mb-4">
-                  <div class="flex items-center gap-2">
-                    <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center border border-white/30">
-                      <span class="font-bold">N</span>
-                    </div>
-                    <div>
-                      <h1 class="font-bold tracking-widest text-sm uppercase">NOOR</h1>
-                      <p class="text-[9px] uppercase tracking-widest opacity-70">Your Islamic Companion</p>
-                    </div>
-                  </div>
+        <div class="min-h-screen bg-[hsl(158,64%,12%)] pb-20 w-full overflow-x-hidden" style="background-image: ${ISLAMIC_PATTERN_HTML}">
+          <main class="w-full px-4 py-6 space-y-8 animate-pulse">
+            <!-- Hero Skeleton -->
+            <div class="relative w-full aspect-[16/10] md:aspect-[21/9] rounded-3xl bg-emerald-900/20 border border-white/5 overflow-hidden">
+              <div class="absolute inset-0 flex flex-col items-center justify-center gap-3">
+                <div class="w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30">
+                  <span class="text-emerald-500 font-bold text-xl">N</span>
                 </div>
-                <div class="flex justify-between items-end">
-                  <div>
-                    <p class="text-[9px] uppercase tracking-widest text-amber-400 font-bold mb-1">Current Prayer</p>
-                    <h2 class="text-3xl font-bold">Fajr</h2>
-                  </div>
-                  <div class="text-right">
-                    <p class="text-2xl font-light opacity-80">05:00 AM</p>
-                  </div>
-                </div>
-              </section>
-
-              <div class="grid grid-cols-4 gap-3 py-2">
-                <a href="/quran" class="flex flex-col items-center gap-1">
-                  <div class="w-14 h-14 bg-emerald-500/20 rounded-2xl flex items-center justify-center text-2xl shadow-lg border border-white/10">📖</div>
-                  <span class="text-[10px] font-medium opacity-70">Quran</span>
-                </a>
-                <a href="/hadith" class="flex flex-col items-center gap-1">
-                  <div class="w-14 h-14 bg-amber-500/20 rounded-2xl flex items-center justify-center text-2xl shadow-lg border border-white/10">📜</div>
-                  <span class="text-[10px] font-medium opacity-70">Hadith</span>
-                </a>
-                <a href="/dua" class="flex flex-col items-center gap-1">
-                  <div class="w-14 h-14 bg-blue-500/20 rounded-2xl flex items-center justify-center text-2xl shadow-lg border border-white/10">🤲</div>
-                  <span class="text-[10px] font-medium opacity-70">Dua</span>
-                </a>
-                <a href="/stories" class="flex flex-col items-center gap-1">
-                  <div class="w-14 h-14 bg-purple-500/20 rounded-2xl flex items-center justify-center text-2xl shadow-lg border border-white/10">✨</div>
-                  <span class="text-[10px] font-medium opacity-70">Stories</span>
-                </a>
+                <p class="text-emerald-500/40 text-[10px] uppercase tracking-[0.3em] font-bold">Initializing Noor...</p>
               </div>
+              <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full animate-[shimmer_3s_infinite]"></div>
+            </div>
+
+            <!-- Quick Access Grid -->
+            <div class="grid grid-cols-4 gap-4">
+              ${[1, 2, 3, 4].map(() => `
+                <div class="flex flex-col items-center gap-2">
+                  <div class="w-16 h-16 bg-white/5 rounded-2xl border border-white/10 relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full animate-[shimmer_2s_infinite]"></div>
+                  </div>
+                  <div class="h-2 w-10 bg-white/10 rounded-full"></div>
+                </div>
+              `).join("")}
+            </div>
+
+            <!-- Featured Card Skeleton -->
+            <div class="relative bg-gradient-to-br from-[hsl(45,93%,58%)]/20 to-[hsl(45,93%,48%)]/5 rounded-3xl p-6 border border-[hsl(45,93%,58%)]/30 overflow-hidden shadow-xl">
+              <div class="flex items-center gap-2 mb-4">
+                <div class="w-4 h-4 bg-[hsl(45,93%,58%)]/30 rounded-full"></div>
+                <div class="h-3 w-24 bg-[hsl(45,93%,58%)]/20 rounded-full"></div>
+              </div>
+              <div class="space-y-3">
+                <div class="h-5 w-3/4 bg-white/20 rounded-lg"></div>
+                <div class="h-4 w-full bg-white/10 rounded-lg"></div>
+                <div class="h-4 w-2/3 bg-white/10 rounded-lg"></div>
+              </div>
+              <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full animate-[shimmer_3s_infinite]"></div>
+            </div>
+
+            <!-- Secondary Grid -->
+            <div class="grid grid-cols-2 gap-4">
+              ${[1, 2].map(() => `
+                <div class="relative bg-white/5 rounded-2xl p-5 border border-white/10 overflow-hidden">
+                  <div class="h-4 w-20 bg-white/10 rounded mb-3"></div>
+                  <div class="h-3 w-full bg-white/5 rounded mb-2"></div>
+                  <div class="h-3 w-4/5 bg-white/5 rounded"></div>
+                  <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full animate-[shimmer_2s_infinite]"></div>
+                </div>
+              `).join("")}
             </div>
           </main>
         </div>
