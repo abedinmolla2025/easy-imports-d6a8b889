@@ -239,7 +239,10 @@ async function deliver(
         // android via FCM (only when credentials exist)
         const tokenRow = JSON.parse(String(t.token || "{}"));
         const deviceToken = tokenRow.token || tokenRow.fcm_token || String(t.token);
-        await fetch("https://fcm.googleapis.com/v1/projects/nur-app-fe998/messages:send", {
+        const sa = JSON.parse(FCM_JSON);
+        const projectId = sa.project_id;
+        
+        const fcmRes = await fetch(`https://fcm.googleapis.com/v1/projects/${projectId}/messages:send`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -248,11 +251,34 @@ async function deliver(
           body: JSON.stringify({
             message: {
               token: deviceToken,
-              notification: { title: opts.title, body: opts.body },
-              android: { priority: "high" },
+              notification: { 
+                title: opts.title, 
+                body: opts.body,
+                ...(opts.imageUrl ? { image: opts.imageUrl } : {}),
+              },
+              data: {
+                title: opts.title,
+                body: opts.body,
+                ...(opts.imageUrl ? { image_url: opts.imageUrl } : {}),
+                ...(opts.deepLink ? { deep_link: opts.deepLink } : {}),
+              },
+              android: { 
+                priority: "high",
+                notification: {
+                  icon: "notification_icon",
+                  color: "#0d9f6e",
+                  sound: "default",
+                }
+              },
             },
           }),
         });
+        
+        if (!fcmRes.ok) {
+          const errorText = await fcmRes.text();
+          throw new Error(`FCM error ${fcmRes.status}: ${errorText}`);
+        }
+        
         sent++;
       }
     } catch (e) {

@@ -214,6 +214,124 @@ async function sendWebPushMessage(opts: {
   }
 }
 
+// --------------- FCM (Android/iOS) via Firebase v1 API ---------------
+
+let cachedFcmToken: { token: string; expires: number } | null = null;
+
+async function getFcmAccessToken(): Promise<string> {
+  if (cachedFcmToken && Date.now() < cachedFcmToken.expires - 60_000) {
+    return cachedFcmToken.token;
+  }
+
+  const fcmJson = (Deno.env.get("FCM_SERVICE_ACCOUNT_JSON") ?? "").trim();
+  if (!fcmJson) throw new Error("Missing FCM_SERVICE_ACCOUNT_JSON");
+
+  const sa = JSON.parse(fcmJson);
+  const now = Math.floor(Date.now() / 1000);
+  
+  const jwtHeader = btoa(JSON.stringify({ alg: "RS256", typ: "JWT" })).replace(/=+$/, "");
+  const claims = btoa(JSON.stringify({
+    iss: sa.client_email,
+    scope: "https://www.googleapis.com/auth/firebase.messaging",
+    aud: "https://oauth2.googleapis.com/token",
+    exp: now + 3600,
+    iat: now,
+  })).replace(/=+$/, "");
+
+  const sigBuf = await crypto.subtle.sign(
+    "RSASSA-PKCS1-v1_5",
+    await crypto.subtle.importKey(
+      "pkcs8", 
+      pemToBuffer(sa.private_key), 
+      { name: "RSASSA-PKCS1-v1_5", hash: "SHA-256" }, 
+      false, 
+      ["sign"]
+    ),
+    new TextEncoder().encode(`${jwtHeader}.${claims}`),
+  );
+
+  const signature = btoa(String.fromCharCode(...new Uint8Array(sigBuf)))
+    .replace(/=+$/, "").replace(/\+/g, "-").replace(/\//g, "_");
+
+  const r = await fetch("https://oauth2.googleapis.com/token", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
+      assertion: `${jwtHeader}.${claims}.${signature}`,
+    }),
+  });
+
+  const j = await r.json();
+  if (!j.access_token) throw new Error(`FCM token fetch failed: ${JSON.stringify(j)}`);
+  
+  cachedFcmToken = { token: j.access_token, expires: now * 1000 + 3600_000 };
+  return j.access_token;
+}
+
+function pemToBuffer(pem: string): ArrayBuffer {
+  const b64 = pem.replace(/-----[^-]+-----/g, "").replace(/\s+/g, "");
+  const bin = atob(b64);
+  const bytes = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+  return bytes.buffer;
+}
+
+async function sendFcmMessage(opts: {
+  deviceToken: string;
+  title: string;
+  body: string;
+  imageUrl: string | null;
+  deepLink: string | null;
+}) {
+  const accessToken = await getFcmAccessToken();
+  const fcmJson = (Deno.env.get("FCM_SERVICE_ACCOUNT_JSON") ?? "").trim();
+  const sa = JSON.parse(fcmJson);
+  const projectId = sa.project_id;
+
+  const res = await fetch(`https://fcm.googleapis.com/v1/projects/${projectId}/messages:send`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify({
+      message: {
+        token: opts.deviceToken,
+        notification: {
+          title: opts.title,
+          body: opts.body,
+          ...(opts.imageUrl ? { image: opts.imageUrl } : {}),
+        },
+        data: {
+          title: opts.title,
+          body: opts.body,
+          ...(opts.imageUrl ? { image_url: opts.imageUrl } : {}),
+          ...(opts.deepLink ? { deep_link: opts.deepLink } : {}),
+        },
+        android: {
+          priority: "high",
+          notification: {
+            icon: "notification_icon",
+            color: "#0d9f6e",
+            sound: "default",
+          }
+        }
+      },
+    }),
+  });
+
+  if (!res.ok) {
+    const errorBody = await res.text();
+    console.error("[fcm] Send failed", { status: res.status, errorBody });
+    throw new Error(`fcm_failed_${res.status}: ${errorBody}`);
+  }
+
+  const data = await res.json();
+  console.log("[fcm] Send succeeded", { messageId: data.name });
+  return data.name;
+}
+
 // --------------- Main handler ---------------
 
 Deno.serve(async (req) => {
@@ -344,31 +462,42 @@ Deno.serve(async (req) => {
       };
 
       try {
-        if (plat !== "web") {
-          console.log(`Skipping ${plat} token ${t.id} — FCM not configured`);
-          continue;
-        }
-
+        let providerMessageId: string | null = null;
         let endpoint: string | null = null;
         let endpointHost: string | null = null;
-        try {
-          const sub = JSON.parse(String(t.token));
-          endpoint = typeof sub?.endpoint === "string" ? sub.endpoint : null;
-          endpointHost = getHostFromUrl(endpoint);
-        } catch { /* ignore */ }
-        const browser = guessBrowserFromEndpointHost(endpointHost);
+        let browser: string | null = null;
 
-        const providerMessageId = await withRetry(async () => {
-          return await sendWebPushMessage({
-            subscriptionJson: String(t.token),
-            title: notif.title,
-            body: notif.body,
-            imageUrl: notif.image_url ?? null,
-            deepLink: notif.deep_link ?? null,
-            iconUrl: notif.icon_url ?? null,
-            badgeUrl: notif.badge_url ?? null,
-          });
-        }, { retries: 2, baseDelayMs: 450 });
+        if (plat === "web") {
+          try {
+            const sub = JSON.parse(String(t.token));
+            endpoint = typeof sub?.endpoint === "string" ? sub.endpoint : null;
+            endpointHost = getHostFromUrl(endpoint);
+          } catch { /* ignore */ }
+          browser = guessBrowserFromEndpointHost(endpointHost);
+
+          providerMessageId = await withRetry(async () => {
+            return await sendWebPushMessage({
+              subscriptionJson: String(t.token),
+              title: notif.title,
+              body: notif.body,
+              imageUrl: notif.image_url ?? null,
+              deepLink: notif.deep_link ?? null,
+              iconUrl: notif.icon_url ?? null,
+              badgeUrl: notif.badge_url ?? null,
+            });
+          }, { retries: 2, baseDelayMs: 450 });
+        } else {
+          // android/ios via FCM
+          providerMessageId = await withRetry(async () => {
+            return await sendFcmMessage({
+              deviceToken: String(t.token),
+              title: notif.title,
+              body: notif.body,
+              imageUrl: notif.image_url ?? null,
+              deepLink: notif.deep_link ?? null,
+            });
+          }, { retries: 2, baseDelayMs: 450 });
+        }
 
         await logDelivery({
           ...baseLog,
@@ -377,7 +506,7 @@ Deno.serve(async (req) => {
           subscription_endpoint: endpoint,
           endpoint_host: endpointHost,
           browser,
-          stage: "webpush_send",
+          stage: plat === "web" ? "webpush_send" : "fcm_send",
         });
 
         sent++;
