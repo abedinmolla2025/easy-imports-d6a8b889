@@ -20,7 +20,8 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import { RefreshCw, BellRing, History, Play, Trash2, Eye, CalendarPlus, ToggleLeft, ToggleRight } from "lucide-react";
+import { RefreshCw, BellRing, History, Play, Trash2, Eye, CalendarPlus, ToggleLeft, ToggleRight, Search, X } from "lucide-react";
+import StoryPickerPanel, { type ContentPickerItem } from "@/components/admin/StoryPickerPanel";
 
 /* ------------------------------------------------------------------
  * AdminSchedulers — automated scheduled push notification manager.
@@ -292,9 +293,10 @@ export default function AdminSchedulers() {
                   <Button size="sm" variant="outline" disabled={sending === s.id} onClick={() => testSend(s.id)}>
                     {sending === s.id ? <RefreshCw className="mr-1 h-3.5 w-3.5 animate-spin" /> : <Play className="mr-1 h-3.5 w-3.5" />} টেস্ট পাঠান
                   </Button>
-                  <Button size="sm" variant="ghost" onClick={() => toggleEnabled(s.id, !s.enabled)}>
-                    {s.enabled ? <ToggleRight className="h-4 w-4 text-green-600" /> : <ToggleLeft className="h-4 w-4 text-muted-foreground" />}
-                  </Button>
+                  <div className="flex items-center gap-2 px-2">
+                    <span className="text-[10px] font-medium text-muted-foreground uppercase">{s.enabled ? "On" : "Off"}</span>
+                    <Switch checked={s.enabled} onCheckedChange={(checked) => toggleEnabled(s.id, checked)} />
+                  </div>
                   <Button size="sm" variant="ghost" className="text-destructive" onClick={() => remove(s.id)}>
                     <Trash2 className="h-4 w-4" />
                   </Button>
@@ -526,12 +528,16 @@ function ScheduleDialog(props: {
             </Select>
           </div>
           <div className="flex items-center gap-3">
-            <Checkbox checked={form.content_auto ?? true} onCheckedChange={(v) => set("content_auto", v === true)} id="auto-content" />
+            <Checkbox checked={form.content_auto ?? true} onCheckedChange={(v) => {
+              set("content_auto", v === true);
+              if (v === true) set("content_id", null);
+            }} id="auto-content" />
             <Label htmlFor="auto-content">অটো কন্টেন্ট বেছে নেওয়া হবে (নতুন দোয়া/গল্প)</Label>
           </div>
-          {(form.content_auto ?? true) && (
+          
+          {(form.content_auto ?? true) ? (
             <div>
-              <Label>কন্টেন্ট টাইপ</Label>
+              <Label>অটো কন্টেন্ট টাইপ</Label>
               <Select value={form.content_type ?? "dua"} onValueChange={(v) => set("content_type", v)}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
@@ -539,6 +545,41 @@ function ScheduleDialog(props: {
                   <SelectItem value="story">📖 কাহিনী</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+          ) : (
+            <div className="space-y-3 rounded-lg border border-dashed p-3 bg-muted/30">
+              <Label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">ম্যানুয়াল কন্টেন্ট নির্বাচন</Label>
+              
+              {form.content_id ? (
+                <div className="flex items-center justify-between rounded-md border bg-background p-2">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <div className="h-8 w-8 rounded bg-primary/10 flex items-center justify-center shrink-0">
+                      {form.content_type === "dua" ? <BellRing className="h-4 w-4 text-primary" /> : <BookOpen className="h-4 w-4 text-primary" />}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-xs font-medium truncate">{form.content_id}</p>
+                      <p className="text-[10px] text-muted-foreground uppercase">{form.content_type}</p>
+                    </div>
+                  </div>
+                  <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => {
+                    set("content_id", null);
+                    set("content_type", null);
+                  }}>
+                    <X className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
+              ) : (
+                <p className="text-xs text-muted-foreground italic">নিচে থেকে একটি গল্প বা দোয়া বেছে নিন। এর ফলে নোটিফিকেশনে সঠিক Deep Link যুক্ত হবে।</p>
+              )}
+              
+              <div className="max-h-[300px] overflow-hidden">
+                <StoryPickerPanel onSelect={(item) => {
+                  set("content_id", item.id);
+                  set("content_type", item.content_type as any);
+                  // Optionally auto-fill overrides if empty
+                  if (!form.title_override) set("title_override", item.title);
+                }} />
+              </div>
             </div>
           )}
           <div>
