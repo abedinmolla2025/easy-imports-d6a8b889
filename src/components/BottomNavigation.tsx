@@ -1,12 +1,12 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Home, BookOpen, ScrollText, CalendarDays, Settings2, Bell } from "lucide-react";
 import type React from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useGlobalConfig } from "@/context/GlobalConfigContext";
+import PremiumIcon from "./PremiumIcon";
 
 interface NavItem {
-  icon: React.ReactNode;
+  iconName: 'home' | 'quran' | 'hadith' | 'calendar' | 'inbox' | 'settings';
   label: string;
   labelBn: string;
   id: string;
@@ -17,14 +17,14 @@ interface NavItem {
 const navItems: NavItem[] = [
   {
     id: "home",
-    icon: <Home className="w-5 h-5" />,
+    iconName: "home",
     label: "Home",
     labelBn: "হোম",
     path: "/",
   },
   {
     id: "quran",
-    icon: <BookOpen className="w-5 h-5" />,
+    iconName: "quran",
     label: "Quran",
     labelBn: "কুরআন",
     path: "/quran",
@@ -32,7 +32,7 @@ const navItems: NavItem[] = [
   },
   {
     id: "hadith",
-    icon: <ScrollText className="w-5 h-5" />,
+    iconName: "hadith",
     label: "Hadith",
     labelBn: "হাদিস",
     path: "/hadith",
@@ -40,7 +40,7 @@ const navItems: NavItem[] = [
   },
   {
     id: "calendar",
-    icon: <CalendarDays className="w-5 h-5" />,
+    iconName: "calendar",
     label: "Calendar",
     labelBn: "ক্যালেন্ডার",
     path: "/calendar",
@@ -48,14 +48,14 @@ const navItems: NavItem[] = [
   },
   {
     id: "notifications",
-    icon: <Bell className="w-5 h-5" />,
+    iconName: "inbox",
     label: "Inbox",
     labelBn: "ইনবক্স",
     path: "/notifications",
   },
   {
     id: "settings",
-    icon: <Settings2 className="w-5 h-5" />,
+    iconName: "settings",
     label: "Settings",
     labelBn: "সেটিংস",
     path: "/settings",
@@ -101,11 +101,11 @@ const BottomNavigation = () => {
                 )}
 
                 <motion.div
-                  className={`transition-transform ${active ? "scale-110" : "scale-100"}`}
+                  className="transition-transform"
                   animate={active ? { y: [0, -3, 0] } : { y: 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  {item.icon}
+                  <PremiumIcon name={item.iconName} active={active} className="w-7 h-7" />
                 </motion.div>
 
                 <span className={active ? "font-semibold" : undefined}>
