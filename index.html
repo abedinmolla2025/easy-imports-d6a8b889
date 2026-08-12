@@ -88,9 +88,36 @@
         window.addEventListener('load', () => {
           navigator.serviceWorker.register('/sw.js').then(reg => {
             console.log('SW registered:', reg.scope);
+            
+            // Check for updates every hour
+            setInterval(() => {
+              reg.update();
+            }, 60 * 60 * 1000);
+
+            reg.onupdatefound = () => {
+              const installingWorker = reg.installing;
+              if (installingWorker) {
+                installingWorker.onstatechange = () => {
+                  if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    // New content is available, but the old SW is still in control.
+                    // We can notify the user or just let the ErrorBoundary/Reload logic handle it
+                    // when they click a missing chunk.
+                    console.log('New content available, please refresh.');
+                  }
+                };
+              }
+            };
           }).catch(err => {
             console.warn('SW registration failed:', err);
           });
+        });
+
+        // Handle controller change (new SW takes over)
+        let refreshing = false;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          if (refreshing) return;
+          refreshing = true;
+          window.location.reload();
         });
       }
     </script>

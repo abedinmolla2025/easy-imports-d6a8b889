@@ -72,12 +72,21 @@ const BottomNavigation = () => {
 
   // Prefetch components to make transitions feel instant
   const handlePrefetch = (id: string) => {
+    const safeImport = (promise: Promise<any>) => {
+      promise.catch((err) => {
+        console.warn(`Prefetch failed for ${id}:`, err);
+        // If it's a chunk load error, it might be a new version.
+        // We don't force reload here to not interrupt the user, 
+        // but the ErrorBoundary or the global listener will handle it if they actually click.
+      });
+    };
+
     switch (id) {
-      case "quran": import("../pages/QuranPage"); break;
-      case "hadith": import("../pages/HadithPage"); break;
-      case "calendar": import("../pages/IslamicCalendarPage"); break;
-      case "settings": import("../pages/SettingsPage"); break;
-      case "notifications": import("../pages/NotificationsPage"); break;
+      case "quran": safeImport(import("../pages/QuranPage")); break;
+      case "hadith": safeImport(import("../pages/HadithPage")); break;
+      case "calendar": safeImport(import("../pages/IslamicCalendarPage")); break;
+      case "settings": safeImport(import("../pages/SettingsPage")); break;
+      case "notifications": safeImport(import("../pages/NotificationsPage")); break;
       default: break;
     }
   };

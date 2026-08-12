@@ -20,8 +20,15 @@ export const useQuizReminder = () => {
     const settingsStr = localStorage.getItem("quizReminderSettings");
     if (!settingsStr) return;
 
-    const settings: QuizReminderSettings = JSON.parse(settingsStr);
-    if (!settings.enabled) return;
+    let settings: QuizReminderSettings;
+    try {
+      settings = JSON.parse(settingsStr);
+    } catch (e) {
+      console.error("Failed to parse quiz reminder settings", e);
+      return;
+    }
+    
+    if (!settings || !settings.enabled) return;
 
     // Check every minute if it's time to send reminder
     const checkReminder = () => {
