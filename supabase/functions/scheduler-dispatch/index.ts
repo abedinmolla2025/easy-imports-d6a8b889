@@ -159,22 +159,58 @@ async function pickContent(
   const ct = opts.content_type ?? (preferDua ? "dua" : "story");
   const type = ct === "dua" ? "dua" : "story";
 
+  // Avoid repetition: Don't pick content sent in the last 7 days
   const recent = await svc
     .from("scheduler_notification_runs")
     .select("content_id")
-    .gte("run_at", new Date(Date.now() - 48 * 3600_000).toISOString())
+    .gte("run_at", new Date(Date.now() - 7 * 24 * 3600_000).toISOString())
     .eq("content_type", type)
-    .limit(25);
+    .limit(100);
   const recentIds = new Set(((recent.data as unknown[]) || []).map((r: any) => r.content_id));
 
-  const { data, error } = await svc
+  // Time-relevance: Filter by category if event type matches
+  let query = svc
     .from("admin_content")
-    .select("id, title, title_en, slug, content_type")
+    .select("id, title, title_en, slug, content_type, category")
     .eq("content_type", type)
-    .eq("status", "published")
-    .order("random()")
-    .limit(15);
-  if (error || !data?.length) return null;
+    .eq("status", "published");
+
+  if (type === "dua") {
+    if (opts.eventType === "morning") {
+      query = query.ilike("category", "%morning%");
+    } else if (opts.eventType === "evening") {
+      query = query.ilike("category", "%evening%");
+    } else if (opts.eventType === "sleep") {
+      query = query.ilike("category", "%sleep%");
+    } else if (opts.eventType === "jumuah") {
+      query = query.ilike("category", "%jumuah%");
+    }
+  }
+
+  const { data, error } = await query.order("random()").limit(20);
+  
+  if (error || !data?.length) {
+    // Fallback: If no category-specific content found, try generic published content of that type
+    const fallback = await svc
+      .from("admin_content")
+      .select("id, title, title_en, slug, content_type")
+      .eq("content_type", type)
+      .eq("status", "published")
+      .order("random()")
+      .limit(20);
+    
+    if (!fallback.data?.length) return null;
+    
+    const fresh = fallback.data.filter((d: any) => !recentIds.has(d.id));
+    const pick = fresh[0] ?? fallback.data[0];
+    return {
+      type,
+      title: String(pick.title || pick.title_en || ""),
+      slug: String(pick.slug || ""),
+      path: type === "dua" ? `/dua/${pick.slug}` : `/stories/${pick.slug}`,
+    };
+  }
+
   const fresh = data.filter((d: any) => !recentIds.has(d.id));
   const pick = fresh[0] ?? data[0];
 
