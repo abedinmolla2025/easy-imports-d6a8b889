@@ -282,58 +282,45 @@ export default async function handler(req, res) {
 
   try {
     // --- Homepage ---
+    // Keep the initial HTML useful and calm while the React app loads. The old
+    // implementation rendered a full-screen, patterned skeleton which looked
+    // like a broken home page on slower WebViews and TWA launches.
     if (routePath === "/") {
       bodyContent = `
-        <div class="min-h-screen bg-[hsl(158,64%,12%)] pb-20 w-full overflow-x-hidden" style="background-image: ${ISLAMIC_PATTERN_HTML}">
-          <main class="w-full px-4 py-6 space-y-8 animate-pulse">
-            <!-- Hero Skeleton -->
-            <div class="relative w-full aspect-[16/10] md:aspect-[21/9] rounded-3xl bg-emerald-900/20 border border-white/5 overflow-hidden">
-              <div class="absolute inset-0 flex flex-col items-center justify-center gap-3">
-                <div class="w-12 h-12 rounded-full bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30">
-                  <span class="text-emerald-500 font-bold text-xl">N</span>
-                </div>
-                <p class="text-emerald-500/40 text-[10px] uppercase tracking-[0.3em] font-bold">Initializing Noor...</p>
-              </div>
-              <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full animate-[shimmer_3s_infinite]"></div>
+        <div class="min-h-screen bg-background text-foreground pb-20 w-full overflow-x-hidden" data-noor-ssr-home>
+          <header class="border-b border-border bg-background/95">
+            <div class="max-w-3xl mx-auto px-4 py-7">
+              <p class="text-xs font-semibold uppercase tracking-[0.22em] text-primary">NOOR • ইসলামিক কম্প্যানিয়ন</p>
+              <h1 class="mt-2 text-2xl md:text-3xl font-bold tracking-tight">কুরআন, হাদীস, দোয়া ও নামাজের সময়</h1>
+              <p class="mt-2 max-w-xl text-sm leading-6 text-muted-foreground">বিশ্বস্ত ইসলামিক কনটেন্ট, দৈনিক আমল এবং প্রয়োজনীয় ইবাদতের সহায়তা—একটি সহজ ও সুন্দর অ্যাপে।</p>
             </div>
+          </header>
 
-            <!-- Quick Access Grid -->
-            <div class="grid grid-cols-4 gap-4">
-              ${[1, 2, 3, 4].map(() => `
-                <div class="flex flex-col items-center gap-2">
-                  <div class="w-16 h-16 bg-white/5 rounded-2xl border border-white/10 relative overflow-hidden">
-                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full animate-[shimmer_2s_infinite]"></div>
-                  </div>
-                  <div class="h-2 w-10 bg-white/10 rounded-full"></div>
-                </div>
-              `).join("")}
-            </div>
+          <main class="max-w-3xl mx-auto px-4 py-5 space-y-5">
+            <nav aria-label="প্রধান বিভাগ" class="grid grid-cols-2 gap-3">
+              <a href="/quran" class="rounded-2xl border border-border bg-card p-4 shadow-sm transition-colors hover:border-primary/40">
+                <span class="text-xs font-semibold text-primary">কুরআন</span>
+                <span class="mt-1 block text-sm font-medium">পবিত্র কুরআন পাঠ করুন</span>
+              </a>
+              <a href="/hadith" class="rounded-2xl border border-border bg-card p-4 shadow-sm transition-colors hover:border-primary/40">
+                <span class="text-xs font-semibold text-primary">হাদীস</span>
+                <span class="mt-1 block text-sm font-medium">সহিহ হাদীস পড়ুন</span>
+              </a>
+              <a href="/dua" class="rounded-2xl border border-border bg-card p-4 shadow-sm transition-colors hover:border-primary/40">
+                <span class="text-xs font-semibold text-primary">দোয়া</span>
+                <span class="mt-1 block text-sm font-medium">দৈনন্দিন দোয়া ও জিকির</span>
+              </a>
+              <a href="/prayer-times" class="rounded-2xl border border-border bg-card p-4 shadow-sm transition-colors hover:border-primary/40">
+                <span class="text-xs font-semibold text-primary">নামাজ</span>
+                <span class="mt-1 block text-sm font-medium">আজকের নামাজের সময়</span>
+              </a>
+            </nav>
 
-            <!-- Featured Card Skeleton -->
-            <div class="relative bg-gradient-to-br from-[hsl(45,93%,58%)]/20 to-[hsl(45,93%,48%)]/5 rounded-3xl p-6 border border-[hsl(45,93%,58%)]/30 overflow-hidden shadow-xl">
-              <div class="flex items-center gap-2 mb-4">
-                <div class="w-4 h-4 bg-[hsl(45,93%,58%)]/30 rounded-full"></div>
-                <div class="h-3 w-24 bg-[hsl(45,93%,58%)]/20 rounded-full"></div>
-              </div>
-              <div class="space-y-3">
-                <div class="h-5 w-3/4 bg-white/20 rounded-lg"></div>
-                <div class="h-4 w-full bg-white/10 rounded-lg"></div>
-                <div class="h-4 w-2/3 bg-white/10 rounded-lg"></div>
-              </div>
-              <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full animate-[shimmer_3s_infinite]"></div>
-            </div>
-
-            <!-- Secondary Grid -->
-            <div class="grid grid-cols-2 gap-4">
-              ${[1, 2].map(() => `
-                <div class="relative bg-white/5 rounded-2xl p-5 border border-white/10 overflow-hidden">
-                  <div class="h-4 w-20 bg-white/10 rounded mb-3"></div>
-                  <div class="h-3 w-full bg-white/5 rounded mb-2"></div>
-                  <div class="h-3 w-4/5 bg-white/5 rounded"></div>
-                  <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full animate-[shimmer_2s_infinite]"></div>
-                </div>
-              `).join("")}
-            </div>
+            <section class="rounded-2xl border border-primary/20 bg-primary/5 p-5">
+              <p class="text-xs font-semibold uppercase tracking-[0.18em] text-primary">আজকের স্মরণ</p>
+              <p class="mt-2 text-lg font-semibold">আল্লাহর স্মরণেই অন্তর প্রশান্ত হয়।</p>
+              <p class="mt-1 text-sm text-muted-foreground">নূরের সঙ্গে আপনার প্রতিদিনের ইবাদত আরও সহজ ও নিয়মিত করুন।</p>
+            </section>
           </main>
         </div>
       `;
