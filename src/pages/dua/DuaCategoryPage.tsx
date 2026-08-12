@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { ArrowLeft, BookOpen, ChevronRight, Sparkles } from "lucide-react";
+import { ArrowLeft, BookOpen, ChevronRight, Sparkles, Loader2 } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
 import { AdSlot } from "@/components/ads/AdSlot";
@@ -58,10 +59,10 @@ const UI_LABELS = {
     urdu: (c: number) => `${c} دعائیں — عربی، معنی اور فضائل کے ساتھ`,
   },
   loading: {
-    bengali: "লোড হচ্ছে...",
-    english: "Loading...",
-    hindi: "लोड हो रहा है...",
-    urdu: "لوڈ ہو رہا ہے...",
+    bengali: "Preparing Duas...",
+    english: "Preparing Duas...",
+    hindi: "Preparing Duas...",
+    urdu: "Preparing Duas...",
   },
   emptyCategory: {
     bengali: "এই বিভাগে কোনো দোয়া পাওয়া যায়নি।",
@@ -103,6 +104,27 @@ const slugify = (s: string) =>
 
 const truncate = (s: string, n: number) =>
   s.length > n ? s.slice(0, n - 1).trimEnd() + "…" : s;
+
+const DuaSkeleton = () => (
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-pulse">
+    {[1, 2, 3, 4].map((i) => (
+      <div key={i} className="relative bg-gradient-to-br from-[hsl(158,55%,25%)] to-[hsl(158,64%,20%)] rounded-2xl p-6 border border-white/10 shadow-lg overflow-hidden opacity-60">
+        <div className="flex items-center gap-3 mb-4">
+          <Skeleton className="h-10 w-10 bg-white/10 rounded-xl" />
+          <div className="flex-1 space-y-2">
+            <Skeleton className="h-4 w-1/2 bg-white/10 rounded" />
+            <Skeleton className="h-3 w-1/4 bg-white/5 rounded" />
+          </div>
+        </div>
+        <div className="space-y-2">
+          <Skeleton className="h-4 w-full bg-white/5 rounded" />
+          <Skeleton className="h-4 w-5/6 bg-white/5 rounded" />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full animate-[shimmer_3s_infinite]" />
+      </div>
+    ))}
+  </div>
+);
 
 const DuaCategoryPage = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -271,7 +293,16 @@ const DuaCategoryPage = () => {
         <AdSlot placement="web_dua_middle" />
 
         {loading ? (
-          <p className="text-white/70 text-sm py-8 text-center">{UI_LABELS.loading[language]}</p>
+          <div className="space-y-8">
+            <div className="flex flex-col items-center justify-center py-10 gap-3">
+              <div className="relative">
+                <Loader2 className="w-10 h-10 text-[hsl(45,93%,58%)] animate-spin" />
+                <Sparkles className="absolute -top-1 -right-1 w-4 h-4 text-[hsl(45,93%,58%)] animate-pulse" />
+              </div>
+              <p className="text-white/60 animate-pulse font-medium tracking-widest text-[10px] uppercase">Preparing Duas...</p>
+            </div>
+            <DuaSkeleton />
+          </div>
         ) : duas.length === 0 ? (
           <p className="text-white/70 text-sm py-8 text-center">
             {UI_LABELS.emptyCategory[language]}
