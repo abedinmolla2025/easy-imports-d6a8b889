@@ -54,51 +54,53 @@ type LogoPreset = {
   pushIcon: string;
 };
 
+const SUPABASE_STORAGE_URL = "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/branding/logo-presets";
+
 const LOGO_PRESETS: LogoPreset[] = [
   {
     key: "emerald-gold",
     label: "Emerald Gold",
     description: "Premium emerald with gold accents",
-    logo: "/assets/logos/logo-1-emerald-gold.svg",
-    appIcon: "/assets/logos/app-icon-1-emerald-gold.svg",
-    favicon: "/assets/logos/favicon-1-emerald-gold.svg",
-    pushIcon: "/assets/logos/push-notification-1-emerald-gold.svg",
+    logo: `${SUPABASE_STORAGE_URL}/logo-1-emerald-gold.svg`,
+    appIcon: `${SUPABASE_STORAGE_URL}/app-icon-1-emerald-gold.svg`,
+    favicon: `${SUPABASE_STORAGE_URL}/favicon-1-emerald-gold.svg`,
+    pushIcon: `${SUPABASE_STORAGE_URL}/push-notification-1-emerald-gold.svg`,
   },
   {
     key: "emerald-white",
     label: "Emerald White",
     description: "Clean emerald and white treatment",
-    logo: "/assets/logos/logo-2-emerald-white.svg",
-    appIcon: "/assets/logos/app-icon-2-emerald-white.svg",
-    favicon: "/assets/logos/favicon-2-emerald-white.svg",
-    pushIcon: "/assets/logos/push-notification-2-emerald-white.svg",
+    logo: `${SUPABASE_STORAGE_URL}/logo-2-emerald-white.svg`,
+    appIcon: `${SUPABASE_STORAGE_URL}/app-icon-2-emerald-white.svg`,
+    favicon: `${SUPABASE_STORAGE_URL}/favicon-2-emerald-white.svg`,
+    pushIcon: `${SUPABASE_STORAGE_URL}/push-notification-2-emerald-white.svg`,
   },
   {
     key: "navy-gold",
     label: "Navy Gold",
     description: "Deep navy with refined gold details",
-    logo: "/assets/logos/logo-3-navy-gold.svg",
-    appIcon: "/assets/logos/app-icon-3-navy-gold.svg",
-    favicon: "/assets/logos/favicon-3-navy-gold.svg",
-    pushIcon: "/assets/logos/push-notification-3-navy-gold.svg",
+    logo: `${SUPABASE_STORAGE_URL}/logo-3-navy-gold.svg`,
+    appIcon: `${SUPABASE_STORAGE_URL}/app-icon-3-navy-gold.svg`,
+    favicon: `${SUPABASE_STORAGE_URL}/favicon-3-navy-gold.svg`,
+    pushIcon: `${SUPABASE_STORAGE_URL}/push-notification-3-navy-gold.svg`,
   },
   {
     key: "ivory-outline",
     label: "Ivory Outline",
     description: "Light ivory outline for dark surfaces",
-    logo: "/assets/logos/logo-4-ivory-outline.svg",
-    appIcon: "/assets/logos/app-icon-4-ivory-outline.svg",
-    favicon: "/assets/logos/favicon-4-ivory-outline.svg",
-    pushIcon: "/assets/logos/push-notification-4-ivory-outline.svg",
+    logo: `${SUPABASE_STORAGE_URL}/logo-4-ivory-outline.svg`,
+    appIcon: `${SUPABASE_STORAGE_URL}/app-icon-4-ivory-outline.svg`,
+    favicon: `${SUPABASE_STORAGE_URL}/favicon-4-ivory-outline.svg`,
+    pushIcon: `${SUPABASE_STORAGE_URL}/push-notification-4-ivory-outline.svg`,
   },
   {
     key: "monochrome",
     label: "Monochrome",
     description: "Minimal one-color identity",
-    logo: "/assets/logos/logo-5-monochrome.svg",
-    appIcon: "/assets/logos/app-icon-5-monochrome.svg",
-    favicon: "/assets/logos/favicon-5-monochrome.svg",
-    pushIcon: "/assets/logos/push-notification-5-monochrome.svg",
+    logo: `${SUPABASE_STORAGE_URL}/logo-5-monochrome.svg`,
+    appIcon: `${SUPABASE_STORAGE_URL}/app-icon-5-monochrome.svg`,
+    favicon: `${SUPABASE_STORAGE_URL}/favicon-5-monochrome.svg`,
+    pushIcon: `${SUPABASE_STORAGE_URL}/push-notification-5-monochrome.svg`,
   },
 ];
 
