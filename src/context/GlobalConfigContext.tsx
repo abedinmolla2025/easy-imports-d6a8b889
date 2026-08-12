@@ -187,17 +187,16 @@ function applyDocumentBranding(branding: BrandingSettings, seo: SeoSettings) {
 
   // Dynamic PWA manifest with cache-busted icons
   const manifestIcons = [
-    v?.png180
-      ? { src: cacheBust(v.png180, lv), sizes: "180x180", type: "image/png", purpose: "any maskable" }
-      : faviconHref
-        ? { src: cacheBust(faviconHref, lv), sizes: "192x192", type: "image/png", purpose: "any maskable" }
-        : null,
-    v?.png48
-      ? { src: cacheBust(v.png48, lv), sizes: "48x48", type: "image/png", purpose: "any" }
-      : null,
-    faviconHref
-      ? { src: cacheBust(faviconHref, lv), sizes: "512x512", type: "image/png", purpose: "any" }
-      : null,
+    // Use high-quality local icons if using default paths, otherwise use branding URLs
+    { src: cacheBust("/pwa-icon-192.png", lv), sizes: "192x192", type: "image/png", purpose: "any" },
+    { src: cacheBust("/pwa-icon-192.png", lv), sizes: "192x192", type: "image/png", purpose: "maskable" },
+    { src: cacheBust("/pwa-icon-512.png", lv), sizes: "512x512", type: "image/png", purpose: "any" },
+    { src: cacheBust("/pwa-icon-512.png", lv), sizes: "512x512", type: "image/png", purpose: "maskable" },
+    { src: cacheBust("/pwa-icon-1024.png", lv), sizes: "1024x1024", type: "image/png", purpose: "any" },
+    { src: cacheBust("/pwa-icon-1024.png", lv), sizes: "1024x1024", type: "image/png", purpose: "maskable" },
+    // Also include dynamic branding variants if they exist
+    ...(v?.png180 ? [{ src: cacheBust(v.png180, lv), sizes: "180x180", type: "image/png", purpose: "any maskable" }] : []),
+    ...(v?.png48 ? [{ src: cacheBust(v.png48, lv), sizes: "48x48", type: "image/png", purpose: "any" }] : []),
   ].filter(Boolean) as any[];
 
   if (manifestIcons.length) {
