@@ -113,6 +113,11 @@ export default {
           from: { opacity: "0" },
           to: { opacity: "1" },
         },
+        "progress-loading": {
+          "0%": { transform: "translateX(-100%)" },
+          "50%": { transform: "translateX(0%)" },
+          "100%": { transform: "translateX(100%)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -120,6 +125,7 @@ export default {
         "pulse-soft": "pulse-soft 2s ease-in-out infinite",
         "float": "float 3s ease-in-out infinite",
         "fade-in": "fade-in 0.3s ease-out forwards",
+        "progress-loading": "progress-loading 1.5s ease-in-out infinite",
       },
     },
   },

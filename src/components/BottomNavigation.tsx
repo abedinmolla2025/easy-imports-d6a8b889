@@ -70,6 +70,18 @@ const BottomNavigation = () => {
 
   const isActive = (path: string) => location.pathname === path;
 
+  // Prefetch components to make transitions feel instant
+  const handlePrefetch = (id: string) => {
+    switch (id) {
+      case "quran": import("../pages/QuranPage"); break;
+      case "hadith": import("../pages/HadithPage"); break;
+      case "calendar": import("../pages/IslamicCalendarPage"); break;
+      case "settings": import("../pages/SettingsPage"); break;
+      case "notifications": import("../pages/NotificationsPage"); break;
+      default: break;
+    }
+  };
+
   // বড় স্ক্রিনে লুকিয়ে রেখে শুধু মোবাইল/ট্যাবের জন্য বটম ন্যাভবার
   if (!isMobile) return null;
 
@@ -85,6 +97,8 @@ const BottomNavigation = () => {
               <motion.button
                 key={item.id}
                 onClick={() => navigate(item.path)}
+                onMouseEnter={() => handlePrefetch(item.id)}
+                onTouchStart={() => handlePrefetch(item.id)}
                 whileTap={{ scale: 0.94 }}
                 className={`bottom-nav-item relative flex flex-1 flex-col items-center gap-1 rounded-2xl px-2 py-1.5 text-[11px] font-medium transition-all duration-200 sm:text-xs ${
                   active

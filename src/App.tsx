@@ -80,8 +80,27 @@ const AdminSchedulers = lazy(() => import("./pages/admin/AdminSchedulers"));
 const queryClient = new QueryClient();
 
 const LoadingFallback = () => (
-  <div className="min-h-screen flex items-center justify-center bg-[hsl(158,64%,18%)]">
-    <div className="text-white/70 text-sm">Loading...</div>
+  <div className="min-h-screen flex flex-col items-center justify-center bg-background/80 backdrop-blur-md">
+    {/* Top Progress Bar */}
+    <div className="fixed top-0 left-0 right-0 h-[3px] z-[9999] bg-primary/10 overflow-hidden">
+      <div className="h-full bg-primary animate-progress-loading w-[40%] rounded-r-full shadow-[0_0_8px_rgba(16,185,129,0.5)]"></div>
+    </div>
+
+    <div className="relative w-16 h-16">
+      <div className="absolute inset-0 border-4 border-primary/10 rounded-full"></div>
+      <div className="absolute inset-0 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30">
+          <span className="text-primary font-bold text-sm">N</span>
+        </div>
+      </div>
+    </div>
+    <div className="mt-6 flex flex-col items-center gap-1">
+      <div className="text-primary/60 text-[10px] font-bold tracking-[0.3em] uppercase animate-pulse">
+        Initializing
+      </div>
+      <div className="text-muted-foreground/40 text-[9px]">Please wait a moment</div>
+    </div>
   </div>
 );
 
