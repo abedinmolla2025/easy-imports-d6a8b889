@@ -234,22 +234,38 @@ const getAppTemplate = () => {
   return `<!DOCTYPE html><html><head><title>{{TITLE}}</title></head><body><div id="root"></div></body></html>`;
 };
 
-function inject(html, { title, description, canonical, body }) {
-  const tags = [
-    [`<title>${esc(title)}</title>`, /<title[^>]*>[\s\S]*?<\/title>/i],
-    [`<meta name="description" content="${esc(description)}" />`, /<meta\s+name=["']description["'][^>]*>/i],
-    [`<link rel="canonical" href="${esc(canonical)}" />`, /<link\s+rel=["']canonical["'][^>]*>/i],
-    [`<meta property="og:title" content="${esc(title)}" />`, /<meta\s+property=["']og:title["'][^>]*>/i],
-    [`<meta property="og:description" content="${esc(description)}" />`, /<meta\s+property=["']og:description["'][^>]*>/i],
-    [`<meta property="og:url" content="${esc(canonical)}" />`, /<meta\s+property=["']og:url["'][^>]*>/i],
-    [`<meta name="twitter:title" content="${esc(title)}" />`, /<meta\s+name=["']twitter:title["'][^>]*>/i],
-    [`<meta name="twitter:description" content="${esc(description)}" />`, /<meta\s+name=["']twitter:description["'][^>]*>/i],
+function inject(html, { title, description, canonical, ogImage, body }) {
+  // 1. Remove ALL existing meta/link/title tags that we want to override
+  // We use a very broad match to ensure nothing is missed
+  let cleanHtml = html
+    .replace(/<title[^>]*>[\s\S]*?<\/title>/gi, "")
+    .replace(/<meta\s+(name|property)=["'](description|og:title|og:description|og:url|og:image|og:image:secure_url|og:image:type|og:image:width|og:image:height|og:image:alt|twitter:title|twitter:description|twitter:image|twitter:card)["'][^>]*>/gi, "")
+    .replace(/<link\s+rel=["']canonical["'][^>]*>/gi, "");
+
+  // 2. Define new tags with explicit values
+  const newTags = [
+    `<title>${esc(title)}</title>`,
+    `<meta name="description" content="${esc(description)}" />`,
+    `<link rel="canonical" href="${esc(canonical)}" />`,
+    `<meta property="og:type" content="article" />`,
+    `<meta property="og:title" content="${esc(title)}" />`,
+    `<meta property="og:description" content="${esc(description)}" />`,
+    `<meta property="og:url" content="${esc(canonical)}" />`,
+    `<meta property="og:image" content="${esc(ogImage)}" />`,
+    `<meta property="og:image:secure_url" content="${esc(ogImage)}" />`,
+    `<meta property="og:image:width" content="1200" />`,
+    `<meta property="og:image:height" content="630" />`,
+    `<meta name="twitter:title" content="${esc(title)}" />`,
+    `<meta name="twitter:description" content="${esc(description)}" />`,
+    `<meta name="twitter:image" content="${esc(ogImage)}" />`,
+    `<meta name="twitter:card" content="summary_large_image" />`
   ];
-  for (const [replacement, pattern] of tags) {
-    html = pattern.test(html) ? html.replace(pattern, replacement) : html.replace("</head>", `${replacement}</head>`);
-  }
-  // Robust root injection
-  return html.replace(/<div\s+id=["']root["'][^>]*>[\s\S]*?<\/div>/i, `<div id="root">${body}</div>`);
+
+  // 3. Inject new tags at the top of the head for maximum visibility
+  cleanHtml = cleanHtml.replace("<head>", `<head>\n    ${newTags.join("\n    ")}`);
+
+  // 4. Inject body content
+  return cleanHtml.replace(/<div\s+id=["']root["'][^>]*>[\s\S]*?<\/div>/i, `<div id="root">${body}</div>`);
 }
 
 export default async function handler(req, res) {
@@ -706,6 +722,41 @@ export default async function handler(req, res) {
       `;
     }
 
+    // --- Story Detail Page ---
+    else if (routePath.startsWith("/stories/")) {
+      const slug = routePath.split("/")[2];
+      const { data: story } = await supabase
+        .from("admin_content")
+        .select("*")
+        .eq("slug", slug)
+        .eq("content_type", "story")
+        .eq("status", "published")
+        .maybeSingle();
+
+      if (story) {
+        title = `${story.title} | NoorApp`;
+        description = esc(story.content?.substring(0, 160) || "Read this beautiful Islamic story on NoorApp.");
+        
+        // Construct dynamic OG image URL from Supabase storage
+        const ogImage = `https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/${slug}.webp`;
+        req.storyOgImage = ogImage;
+
+        bodyContent = `
+          <div class="min-h-screen bg-background pb-24">
+            <article class="max-w-3xl mx-auto p-4 space-y-6">
+              <header class="space-y-4">
+                <h1 class="text-3xl font-bold">${esc(story.title)}</h1>
+                <img src="${ogImage}" alt="${esc(story.title)}" class="w-full rounded-2xl shadow-lg mb-6" />
+              </header>
+              <div class="prose prose-emerald max-w-none dark:prose-invert">
+                ${esc(story.content).replace(/\n/g, '<br/>')}
+              </div>
+            </article>
+          </div>
+        `;
+      }
+    }
+
     // --- Contact Page ---
     else if (routePath === "/contact") {
       title = "Contact Us | Noor";
@@ -770,12 +821,14 @@ export default async function handler(req, res) {
       title,
       description,
       canonical: canonicalUrl,
+      ogImage: req.storyOgImage || `${SITE_ORIGIN}/og-image.png`,
       body: bodyContent
     });
 
     res.setHeader("Content-Type", "text/html; charset=utf-8");
     res.setHeader("Cache-Control", "public, s-maxage=31536000, stale-while-revalidate=604800, max-age=3600");
-    res.setHeader("X-Noor-Prerender", "true");
+    res.setHeader("X-Noor-Prerender", "v101");
+    res.setHeader("X-Noor-OG-Image", req.storyOgImage || "default");
     res.status(200).send(finalHtml);
   } catch (error) {
     console.error("Prerender error:", error);

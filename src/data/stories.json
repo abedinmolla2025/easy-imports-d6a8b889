@@ -119,7 +119,8 @@
     },
     "audio": "",
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/umar-accepting-islam-story.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/umar-accepting-islam-story.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/umar-accepting-islam-story.webp"
   },
   {
     "id": 42,
@@ -241,7 +242,8 @@
     },
     "audio": "",
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/isra-miraj-night-journey.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/isra-miraj-night-journey.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/isra-miraj-night-journey.webp"
   },
   {
     "id": 37,
@@ -363,7 +365,8 @@
     },
     "audio": "",
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-yusuf-full-story.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-yusuf-full-story.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-yusuf-full-story.webp"
   },
   {
     "id": 21,
@@ -457,7 +460,8 @@
       "category": "/stories/prophets"
     },
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-hud-story-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-hud-story-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-hud-story-islam.webp"
   },
   {
     "id": 22,
@@ -542,7 +546,8 @@
       "category": "/stories/prophets"
     },
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-salih-story-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-salih-story-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-salih-story-islam.webp"
   },
   {
     "id": 23,
@@ -627,7 +632,8 @@
       "category": "/stories/prophets"
     },
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-lut-story-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-lut-story-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-lut-story-islam.webp"
   },
   {
     "id": 24,
@@ -712,7 +718,8 @@
       "category": "/stories/prophets"
     },
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-zakariyya-story-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-zakariyya-story-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-zakariyya-story-islam.webp"
   },
   {
     "id": 25,
@@ -797,7 +804,8 @@
       "category": "/stories/prophets"
     },
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/well-rumah-eternal-charity-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/well-rumah-eternal-charity-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/well-rumah-eternal-charity-islam.webp"
   },
   {
     "id": 26,
@@ -882,7 +890,8 @@
       "category": "/stories/prophets"
     },
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/abu-ubaidah-ibn-al-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/abu-ubaidah-ibn-al-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/abu-ubaidah-ibn-al-islam.webp"
   },
   {
     "id": 27,
@@ -967,7 +976,8 @@
       "category": "/stories/prophets"
     },
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/transformation-direction-divine-sovereignty-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/transformation-direction-divine-sovereignty-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/transformation-direction-divine-sovereignty-islam.webp"
   },
   {
     "id": 28,
@@ -1052,7 +1062,8 @@
       "category": "/stories/prophets"
     },
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/farewell-pilgrimage-perfection-faith-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/farewell-pilgrimage-perfection-faith-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/farewell-pilgrimage-perfection-faith-islam.webp"
   },
   {
     "id": 29,
@@ -1137,7 +1148,8 @@
       "category": "/stories/prophets"
     },
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/devotion-trial-jurayj-lesson-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/devotion-trial-jurayj-lesson-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/devotion-trial-jurayj-lesson-islam.webp"
   },
   {
     "id": 30,
@@ -1222,7 +1234,8 @@
       "category": "/stories/prophets"
     },
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/legacy-servant-anas-ibn-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/legacy-servant-anas-ibn-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/legacy-servant-anas-ibn-islam.webp"
   },
   {
     "id": 31,
@@ -1343,7 +1356,8 @@
     },
     "audio": "",
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-dawud-story-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-dawud-story-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-dawud-story-islam.webp"
   },
   {
     "id": 32,
@@ -1464,7 +1478,8 @@
     },
     "audio": "",
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-shuayb-story-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-shuayb-story-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-shuayb-story-islam.webp"
   },
   {
     "id": 33,
@@ -1585,7 +1600,8 @@
     },
     "audio": "",
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/umar-ibn-khattab-story-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/umar-ibn-khattab-story-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/umar-ibn-khattab-story-islam.webp"
   },
   {
     "id": 34,
@@ -1706,7 +1722,8 @@
     },
     "audio": "",
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/salman-farsi-story-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/salman-farsi-story-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/salman-farsi-story-islam.webp"
   },
   {
     "id": 35,
@@ -1827,7 +1844,8 @@
     },
     "audio": "",
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/people-of-cave-story-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/people-of-cave-story-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/people-of-cave-story-islam.webp"
   },
   {
     "id": 36,
@@ -1949,7 +1967,8 @@
     },
     "audio": "",
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-musa-pharaoh-story.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-musa-pharaoh-story.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-musa-pharaoh-story.webp"
   },
   {
     "id": 38,
@@ -2071,7 +2090,8 @@
     },
     "audio": "",
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-yunus-whale-story.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-yunus-whale-story.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-yunus-whale-story.webp"
   },
   {
     "id": 39,
@@ -2193,7 +2213,8 @@
     },
     "audio": "",
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-isa-birth-story.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-isa-birth-story.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-isa-birth-story.webp"
   },
   {
     "id": 40,
@@ -2315,7 +2336,8 @@
     },
     "audio": "",
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-lut-story.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-lut-story.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-lut-story.webp"
   },
   {
     "id": 2,
@@ -2400,7 +2422,8 @@
       "category": "/stories/prophets"
     },
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-nuh-story-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-nuh-story-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-nuh-story-islam.webp"
   },
   {
     "id": 1,
@@ -2485,7 +2508,8 @@
       "category": "/stories/prophets"
     },
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-adam-story-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-adam-story-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-adam-story-islam.webp"
   },
   {
     "id": 3,
@@ -2570,7 +2594,8 @@
       "category": "/stories/prophets"
     },
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-ibrahim-story-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-ibrahim-story-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-ibrahim-story-islam.webp"
   },
   {
     "id": 4,
@@ -2655,7 +2680,8 @@
       "category": "/stories/prophets"
     },
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-musa-story-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-musa-story-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-musa-story-islam.webp"
   },
   {
     "id": 5,
@@ -2740,7 +2766,8 @@
       "category": "/stories/prophets"
     },
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-yusuf-story-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-yusuf-story-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-yusuf-story-islam.webp"
   },
   {
     "id": 6,
@@ -2835,7 +2862,8 @@
       "category": "/stories/prophets"
     },
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/second-two-abu-bakr-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/second-two-abu-bakr-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/second-two-abu-bakr-islam.webp"
   },
   {
     "id": 7,
@@ -2920,7 +2948,8 @@
       "category": "/stories/prophets"
     },
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/triumph-truth-repentance-ka-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/triumph-truth-repentance-ka-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/triumph-truth-repentance-ka-islam.webp"
   },
   {
     "id": 8,
@@ -3005,7 +3034,8 @@
       "category": "/stories/prophets"
     },
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/battle-badr-preparation-supplication-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/battle-badr-preparation-supplication-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/battle-badr-preparation-supplication-islam.webp"
   },
   {
     "id": 9,
@@ -3090,7 +3120,8 @@
       "category": "/stories/prophets"
     },
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/manifest-victory-patience-divine-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/manifest-victory-patience-divine-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/manifest-victory-patience-divine-islam.webp"
   },
   {
     "id": 10,
@@ -3184,7 +3215,8 @@
       "category": "/stories/prophets"
     },
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/scholar-ummah-life-adab-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/scholar-ummah-life-adab-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/scholar-ummah-life-adab-islam.webp"
   },
   {
     "id": 11,
@@ -3269,7 +3301,8 @@
       "category": "/stories/prophets"
     },
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-yunus-story-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-yunus-story-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-yunus-story-islam.webp"
   },
   {
     "id": 12,
@@ -3354,7 +3387,8 @@
       "category": "/stories/prophets"
     },
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-ayyub-story-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-ayyub-story-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-ayyub-story-islam.webp"
   },
   {
     "id": 13,
@@ -3439,7 +3473,8 @@
       "category": "/stories/prophets"
     },
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-sulayman-story-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-sulayman-story-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-sulayman-story-islam.webp"
   },
   {
     "id": 14,
@@ -3524,7 +3559,8 @@
       "category": "/stories/prophets"
     },
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-isa-story-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-isa-story-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-isa-story-islam.webp"
   },
   {
     "id": 15,
@@ -3609,7 +3645,8 @@
       "category": "/stories/prophets"
     },
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/bilal-ibn-rabah-ra-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/bilal-ibn-rabah-ra-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/bilal-ibn-rabah-ra-islam.webp"
   },
   {
     "id": 16,
@@ -3694,7 +3731,8 @@
       "category": "/stories/prophets"
     },
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/first-envoy-mus-ab-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/first-envoy-mus-ab-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/first-envoy-mus-ab-islam.webp"
   },
   {
     "id": 17,
@@ -3779,7 +3817,8 @@
       "category": "/stories/prophets"
     },
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/grand-opening-conquest-makkah-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/grand-opening-conquest-makkah-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/grand-opening-conquest-makkah-islam.webp"
   },
   {
     "id": 18,
@@ -3864,7 +3903,8 @@
       "category": "/stories/prophets"
     },
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/radiance-innocence-incident-ifk-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/radiance-innocence-incident-ifk-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/radiance-innocence-incident-ifk-islam.webp"
   },
   {
     "id": 19,
@@ -3949,7 +3989,8 @@
       "category": "/stories/prophets"
     },
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/sacrifice-youth-ali-ibn-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/sacrifice-youth-ali-ibn-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/sacrifice-youth-ali-ibn-islam.webp"
   },
   {
     "id": 20,
@@ -4034,7 +4075,8 @@
       "category": "/stories/prophets"
     },
     "updated_at": "2024-01-01",
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/people-ditch-steadfast-faith-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/people-ditch-steadfast-faith-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/people-ditch-steadfast-faith-islam.webp"
   },
   {
     "slug": "test-story-manus",
@@ -4048,7 +4090,8 @@
       "meta_description": "",
       "canonical_url": "https://noorapp.in/stories/test-story-manus",
       "open_graph": {
-        "og:url": "https://noorapp.in/stories/test-story-manus"
+        "og:url": "https://noorapp.in/stories/test-story-manus",
+        "og:image": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/test-story-manus.webp"
       }
     },
     "updated_at": "2026-08-05T16:06:19.194223+00:00",
@@ -4073,7 +4116,8 @@
       "share_caption": "Check out this amazing story: একটি শিক্ষণীয় ইসলামিক গল্প: ঈমান ও আমলের গভীরতা বোঝার এক অনন্য উদাহরণ",
       "cta": "Read now on NoorApp"
     },
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/test-story-manus.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/test-story-manus.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/test-story-manus.webp"
   },
   {
     "slug": "abu-hurairah-father-of-kittens",
@@ -4155,7 +4199,8 @@
         "end_content"
       ]
     },
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/abu-hurairah-father-of-kittens.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/abu-hurairah-father-of-kittens.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/abu-hurairah-father-of-kittens.webp"
   },
   {
     "slug": "prophet-isa-miraculous-birth",
@@ -4237,7 +4282,8 @@
         "end_content"
       ]
     },
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-isa-miraculous-birth.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-isa-miraculous-birth.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-isa-miraculous-birth.webp"
   },
   {
     "slug": "abu-bakr-siddiq-companion-cave-islam",
@@ -4319,7 +4365,8 @@
         "end_content"
       ]
     },
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/abu-bakr-siddiq-companion-cave-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/abu-bakr-siddiq-companion-cave-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/abu-bakr-siddiq-companion-cave-islam.webp"
   },
   {
     "slug": "prophet-musa-khidr-story-islam",
@@ -4401,7 +4448,8 @@
         "end_content"
       ]
     },
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-musa-khidr-story-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-musa-khidr-story-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-musa-khidr-story-islam.webp"
   },
   {
     "slug": "ali-ibn-abi-talib-bravery-islam",
@@ -4483,7 +4531,8 @@
         "end_content"
       ]
     },
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/ali-ibn-abi-talib-bravery-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/ali-ibn-abi-talib-bravery-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/ali-ibn-abi-talib-bravery-islam.webp"
   },
   {
     "slug": "prophet-nuh-ark-story-islam",
@@ -4565,7 +4614,8 @@
         "end_content"
       ]
     },
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-nuh-ark-story-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-nuh-ark-story-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-nuh-ark-story-islam.webp"
   },
   {
     "slug": "bilal-ibn-rabah-steadfast-islam",
@@ -4647,7 +4697,8 @@
         "end_content"
       ]
     },
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/bilal-ibn-rabah-steadfast-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/bilal-ibn-rabah-steadfast-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/bilal-ibn-rabah-steadfast-islam.webp"
   },
   {
     "slug": "prophet-sulayman-ant-story-islam",
@@ -4729,7 +4780,8 @@
         "end_content"
       ]
     },
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-sulayman-ant-story-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-sulayman-ant-story-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-sulayman-ant-story-islam.webp"
   },
   {
     "slug": "khadija-bint-khuwaylid-support-islam",
@@ -4811,7 +4863,8 @@
         "end_content"
       ]
     },
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/khadija-bint-khuwaylid-support-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/khadija-bint-khuwaylid-support-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/khadija-bint-khuwaylid-support-islam.webp"
   },
   {
     "slug": "prophet-ibrahim-fire-story-islam",
@@ -4893,7 +4946,8 @@
         "end_content"
       ]
     },
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-ibrahim-fire-story-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-ibrahim-fire-story-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-ibrahim-fire-story-islam.webp"
   },
   {
     "slug": "abdullah-ibn-abbas-knowledge-islam",
@@ -4975,7 +5029,8 @@
         "end_content"
       ]
     },
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/abdullah-ibn-abbas-knowledge-islam.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/abdullah-ibn-abbas-knowledge-islam.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/abdullah-ibn-abbas-knowledge-islam.webp"
   },
   {
     "slug": "prophet-yunus-whale-story-detailed",
@@ -5057,7 +5112,8 @@
         "end_content"
       ]
     },
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-yunus-whale-story-detailed.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-yunus-whale-story-detailed.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-yunus-whale-story-detailed.webp"
   },
   {
     "slug": "prophet-muhammad-first-revelation",
@@ -5139,7 +5195,8 @@
         "end_content"
       ]
     },
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-muhammad-first-revelation.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-muhammad-first-revelation.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-muhammad-first-revelation.webp"
   },
   {
     "slug": "prophet-muhammad-journey-taif",
@@ -5221,7 +5278,8 @@
         "end_content"
       ]
     },
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-muhammad-journey-taif.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-muhammad-journey-taif.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-muhammad-journey-taif.webp"
   },
   {
     "slug": "prophet-muhammad-splitting-moon",
@@ -5303,7 +5361,8 @@
         "end_content"
       ]
     },
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-muhammad-splitting-moon.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-muhammad-splitting-moon.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-muhammad-splitting-moon.webp"
   },
   {
     "slug": "prophet-muhammad-treaty-hudaybiyyah",
@@ -5385,7 +5444,8 @@
         "end_content"
       ]
     },
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-muhammad-treaty-hudaybiyyah.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-muhammad-treaty-hudaybiyyah.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-muhammad-treaty-hudaybiyyah.webp"
   },
   {
     "slug": "prophet-muhammad-conquest-makkah-mercy",
@@ -5467,7 +5527,8 @@
         "end_content"
       ]
     },
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-muhammad-conquest-makkah-mercy.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-muhammad-conquest-makkah-mercy.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-muhammad-conquest-makkah-mercy.webp"
   },
   {
     "slug": "prophet-muhammad-spider-web-hijrah",
@@ -5549,7 +5610,8 @@
         "end_content"
       ]
     },
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-muhammad-spider-web-hijrah.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-muhammad-spider-web-hijrah.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-muhammad-spider-web-hijrah.webp"
   },
   {
     "slug": "prophet-muhammad-crying-palm-tree",
@@ -5631,7 +5693,8 @@
         "end_content"
       ]
     },
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-muhammad-crying-palm-tree.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-muhammad-crying-palm-tree.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-muhammad-crying-palm-tree.webp"
   },
   {
     "slug": "prophet-muhammad-night-hijrah-ali",
@@ -5713,7 +5776,8 @@
         "end_content"
       ]
     },
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-muhammad-night-hijrah-ali.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-muhammad-night-hijrah-ali.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-muhammad-night-hijrah-ali.webp"
   },
   {
     "slug": "prophet-muhammad-miracle-food-trench",
@@ -5795,7 +5859,8 @@
         "end_content"
       ]
     },
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-muhammad-miracle-food-trench.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-muhammad-miracle-food-trench.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-muhammad-miracle-food-trench.webp"
   },
   {
     "slug": "prophet-muhammad-farewell-sermon",
@@ -5877,7 +5942,8 @@
         "end_content"
       ]
     },
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-muhammad-farewell-sermon.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-muhammad-farewell-sermon.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/prophet-muhammad-farewell-sermon.webp"
   },
   {
     "slug": "eid-ul-adha-sacrifice-ibrahim",
@@ -5959,7 +6025,8 @@
         "end_content"
       ]
     },
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/eid-ul-adha-sacrifice-ibrahim.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/eid-ul-adha-sacrifice-ibrahim.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/eid-ul-adha-sacrifice-ibrahim.webp"
   },
   {
     "slug": "ashura-muharram-musa-victory",
@@ -6041,7 +6108,8 @@
         "end_content"
       ]
     },
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/ashura-muharram-musa-victory.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/ashura-muharram-musa-victory.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/ashura-muharram-musa-victory.webp"
   },
   {
     "slug": "lailatul-qadr-night-of-power",
@@ -6123,7 +6191,8 @@
         "end_content"
       ]
     },
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/lailatul-qadr-night-of-power.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/lailatul-qadr-night-of-power.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/lailatul-qadr-night-of-power.webp"
   },
   {
     "slug": "shab-e-barat-night-of-forgiveness",
@@ -6205,7 +6274,8 @@
         "end_content"
       ]
     },
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/shab-e-barat-night-of-forgiveness.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/shab-e-barat-night-of-forgiveness.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/shab-e-barat-night-of-forgiveness.webp"
   },
   {
     "slug": "eid-ul-fitr-reward-ramadan",
@@ -6287,7 +6357,8 @@
         "end_content"
       ]
     },
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/eid-ul-fitr-reward-ramadan.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/eid-ul-fitr-reward-ramadan.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/eid-ul-fitr-reward-ramadan.webp"
   },
   {
     "slug": "yawm-al-arafah-day-of-forgiveness",
@@ -6369,7 +6440,8 @@
         "end_content"
       ]
     },
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/yawm-al-arafah-day-of-forgiveness.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/yawm-al-arafah-day-of-forgiveness.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/yawm-al-arafah-day-of-forgiveness.webp"
   },
   {
     "slug": "hijri-new-year-spirit-migration",
@@ -6451,7 +6523,8 @@
         "end_content"
       ]
     },
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/hijri-new-year-spirit-migration.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/hijri-new-year-spirit-migration.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/hijri-new-year-spirit-migration.webp"
   },
   {
     "slug": "laylat-al-miraj-divine-journey",
@@ -6533,7 +6606,8 @@
         "end_content"
       ]
     },
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/laylat-al-miraj-divine-journey.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/laylat-al-miraj-divine-journey.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/laylat-al-miraj-divine-journey.webp"
   },
   {
     "slug": "ghadir-khumm-declaration-leadership",
@@ -6615,7 +6689,8 @@
         "end_content"
       ]
     },
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/ghadir-khumm-declaration-leadership.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/ghadir-khumm-declaration-leadership.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/ghadir-khumm-declaration-leadership.webp"
   },
   {
     "slug": "mawlid-al-nabi-birth-mercy",
@@ -6697,6 +6772,7 @@
         "end_content"
       ]
     },
-    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/mawlid-al-nabi-birth-mercy.webp"
+    "image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/mawlid-al-nabi-birth-mercy.webp",
+    "og_image_url": "https://llicfiepatzgllmjhzbw.supabase.co/storage/v1/object/public/og-images/stories/mawlid-al-nabi-birth-mercy.webp"
   }
 ]
