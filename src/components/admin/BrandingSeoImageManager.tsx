@@ -44,6 +44,64 @@ type FaviconVariants = {
   png180?: string;
 };
 
+type LogoPreset = {
+  key: string;
+  label: string;
+  description: string;
+  logo: string;
+  appIcon: string;
+  favicon: string;
+  pushIcon: string;
+};
+
+const LOGO_PRESETS: LogoPreset[] = [
+  {
+    key: "emerald-gold",
+    label: "Emerald Gold",
+    description: "Premium emerald with gold accents",
+    logo: "/assets/logos/logo-1-emerald-gold.svg",
+    appIcon: "/assets/logos/app-icon-1-emerald-gold.svg",
+    favicon: "/assets/logos/favicon-1-emerald-gold.svg",
+    pushIcon: "/assets/logos/push-notification-1-emerald-gold.svg",
+  },
+  {
+    key: "emerald-white",
+    label: "Emerald White",
+    description: "Clean emerald and white treatment",
+    logo: "/assets/logos/logo-2-emerald-white.svg",
+    appIcon: "/assets/logos/app-icon-2-emerald-white.svg",
+    favicon: "/assets/logos/favicon-2-emerald-white.svg",
+    pushIcon: "/assets/logos/push-notification-2-emerald-white.svg",
+  },
+  {
+    key: "navy-gold",
+    label: "Navy Gold",
+    description: "Deep navy with refined gold details",
+    logo: "/assets/logos/logo-3-navy-gold.svg",
+    appIcon: "/assets/logos/app-icon-3-navy-gold.svg",
+    favicon: "/assets/logos/favicon-3-navy-gold.svg",
+    pushIcon: "/assets/logos/push-notification-3-navy-gold.svg",
+  },
+  {
+    key: "ivory-outline",
+    label: "Ivory Outline",
+    description: "Light ivory outline for dark surfaces",
+    logo: "/assets/logos/logo-4-ivory-outline.svg",
+    appIcon: "/assets/logos/app-icon-4-ivory-outline.svg",
+    favicon: "/assets/logos/favicon-4-ivory-outline.svg",
+    pushIcon: "/assets/logos/push-notification-4-ivory-outline.svg",
+  },
+  {
+    key: "monochrome",
+    label: "Monochrome",
+    description: "Minimal one-color identity",
+    logo: "/assets/logos/logo-5-monochrome.svg",
+    appIcon: "/assets/logos/app-icon-5-monochrome.svg",
+    favicon: "/assets/logos/favicon-5-monochrome.svg",
+    pushIcon: "/assets/logos/push-notification-5-monochrome.svg",
+  },
+];
+
 function extForBlobType(type: string) {
   if (type === "image/webp") return "webp";
   if (type === "image/jpeg") return "jpg";
@@ -168,8 +226,38 @@ export function BrandingSeoImageManager(props: {
   const [cropSrc, setCropSrc] = useState<string | null>(null);
   const [cropMeta, setCropMeta] = useState<CropMeta | null>(null);
   const [saving, setSaving] = useState(false);
+  const [selectedPresetKey, setSelectedPresetKey] = useState<string | null>(null);
+
+  const activePresetKey = useMemo(
+    () =>
+      LOGO_PRESETS.find(
+        (preset) =>
+          preset.logo === branding?.logoUrl &&
+          preset.appIcon === branding?.iconUrl &&
+          preset.favicon === branding?.faviconUrl,
+      )?.key ?? null,
+    [branding?.faviconUrl, branding?.iconUrl, branding?.logoUrl],
+  );
 
   const isFaviconFlow = cropMeta?.field === "faviconUrl";
+
+  const applyLogoPreset = (preset: LogoPreset) => {
+    setSelectedPresetKey(preset.key);
+    setBranding((prev: any) => {
+      const next = {
+        ...prev,
+        logoUrl: preset.logo,
+        iconUrl: preset.appIcon,
+        faviconUrl: preset.favicon,
+        // Clear uploaded PNG variants so the selected preset favicon is used immediately.
+        faviconVariants: {},
+        logoVersion: String(Date.now()),
+      };
+      props.onAutoSaveSetting?.("branding", next);
+      return next;
+    });
+    toast({ title: `${preset.label} applied`, description: "The app branding has been switched." });
+  };
 
   const activePreset = useMemo(() => {
     if (!cropMeta) return PRESETS.square_1_1;
@@ -214,7 +302,70 @@ export function BrandingSeoImageManager(props: {
       <CardHeader>
         <CardTitle>Image Manager</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-5">
+        <section className="rounded-2xl border border-border bg-muted/20 p-4" aria-labelledby="logo-presets-title">
+          <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <h3 id="logo-presets-title" className="text-base font-semibold">Logo Style Presets</h3>
+              <p className="mt-1 text-xs text-muted-foreground">
+                পাঁচটি প্রস্তুত স্টাইল preview করুন এবং Apply করে যেকোনো সময় branding swap করুন। Upload & crop সিস্টেমটি আগের মতোই আছে।
+              </p>
+            </div>
+            <span className="rounded-full border border-border bg-background px-3 py-1 text-xs font-medium text-muted-foreground">
+              {LOGO_PRESETS.length} styles
+            </span>
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
+            {LOGO_PRESETS.map((preset) => {
+              const isActive = (selectedPresetKey ?? activePresetKey) === preset.key;
+              return (
+                <article
+                  key={preset.key}
+                  className={`rounded-xl border p-3 transition-colors ${
+                    isActive ? "border-primary bg-primary/5 ring-1 ring-primary/30" : "border-border bg-background"
+                  }`}
+                >
+                  <div className="mb-3 flex items-center justify-between gap-2">
+                    <div>
+                      <h4 className="text-sm font-semibold">{preset.label}</h4>
+                      <p className="mt-0.5 text-[11px] leading-4 text-muted-foreground">{preset.description}</p>
+                    </div>
+                    {isActive ? (
+                      <span className="shrink-0 rounded-full bg-primary/10 px-2 py-1 text-[10px] font-semibold text-primary">Active</span>
+                    ) : null}
+                  </div>
+
+                  <div className="grid grid-cols-4 gap-1.5 rounded-lg bg-slate-950/90 p-2">
+                    <div className="flex h-12 items-center justify-center rounded-md bg-emerald-950 p-1" title="Logo">
+                      <img src={preset.logo} alt={`${preset.label} logo`} className="max-h-full max-w-full object-contain" loading="lazy" />
+                    </div>
+                    <div className="flex h-12 items-center justify-center rounded-md bg-emerald-950 p-1" title="App icon">
+                      <img src={preset.appIcon} alt={`${preset.label} app icon`} className="h-10 w-10 object-contain" loading="lazy" />
+                    </div>
+                    <div className="flex h-12 items-center justify-center rounded-md bg-white p-1" title="Favicon">
+                      <img src={preset.favicon} alt={`${preset.label} favicon`} className="h-8 w-8 object-contain" loading="lazy" />
+                    </div>
+                    <div className="flex h-12 items-center justify-center rounded-md bg-emerald-950 p-1" title="Push notification icon">
+                      <img src={preset.pushIcon} alt={`${preset.label} push notification icon`} className="h-9 w-9 object-contain" loading="lazy" />
+                    </div>
+                  </div>
+
+                  <Button
+                    type="button"
+                    className="mt-3 w-full"
+                    variant={isActive ? "secondary" : "outline"}
+                    aria-pressed={isActive}
+                    onClick={() => applyLogoPreset(preset)}
+                  >
+                    {isActive ? "Applied" : "Apply style"}
+                  </Button>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+
         <div className="grid gap-4 lg:grid-cols-2">
           <ImageSlot
             title="Logo"
