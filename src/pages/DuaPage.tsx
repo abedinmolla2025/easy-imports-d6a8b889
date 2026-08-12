@@ -285,22 +285,32 @@ async function loadPublicDuaFallback(): Promise<Dua[]> {
   }
 }
 
+const CategorySkeleton = () => (
+  <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide -mx-4 px-4 animate-pulse">
+    {[1, 2, 3, 4, 5].map((i) => (
+      <div key={i} className="shrink-0 w-32 p-4 rounded-2xl bg-white/5 border border-white/10 flex flex-col items-center">
+        <div className="w-10 h-10 rounded-xl bg-white/10 mb-2" />
+        <div className="h-3 w-16 bg-white/10 rounded mb-1" />
+        <div className="h-2 w-10 bg-white/5 rounded" />
+      </div>
+    ))}
+  </div>
+);
+
 const DuaSkeleton = () => (
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-pulse">
-    {[1, 2, 3, 4].map((i) => (
-      <div key={i} className="relative bg-gradient-to-br from-[hsl(158,55%,25%)] to-[hsl(158,64%,20%)] rounded-2xl p-6 border border-white/10 shadow-lg overflow-hidden opacity-60" style={{ backgroundImage: ISLAMIC_PATTERN }}>
-        <div className="flex items-center gap-3 mb-4">
-          <Skeleton className="h-10 w-10 bg-white/10 rounded-xl" />
-          <div className="flex-1 space-y-2">
-            <Skeleton className="h-4 w-1/2 bg-white/10 rounded" />
-            <Skeleton className="h-3 w-1/4 bg-white/5 rounded" />
+  <div className="space-y-3 animate-pulse">
+    {[1, 2, 3, 4, 5, 6].map((i) => (
+      <div key={i} className="w-full p-4 rounded-2xl bg-gradient-to-br from-[hsl(158,55%,25%)] to-[hsl(158,64%,20%)] border border-white/10 opacity-60" style={{ backgroundImage: ISLAMIC_PATTERN }}>
+        <div className="flex items-center justify-between">
+          <div className="space-y-3 flex-1">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-full bg-white/10" />
+              <div className="h-4 w-1/2 bg-white/10 rounded" />
+            </div>
+            <div className="h-3 w-3/4 bg-white/5 rounded" />
           </div>
+          <div className="w-5 h-5 bg-white/10 rounded" />
         </div>
-        <div className="space-y-2">
-          <Skeleton className="h-4 w-full bg-white/5 rounded" />
-          <Skeleton className="h-4 w-5/6 bg-white/5 rounded" />
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full animate-[shimmer_3s_infinite]" />
       </div>
     ))}
   </div>
@@ -671,9 +681,13 @@ const DuaPage = () => {
       )}
 
       {loading && (
-        <div className="flex flex-col items-center justify-center py-20 gap-4">
-          <Loader2 className="w-10 h-10 text-[hsl(45,93%,58%)] animate-spin" />
-          <p className="text-white/60 animate-pulse font-medium tracking-wide">Loading Duas...</p>
+        <div className="p-4 space-y-6">
+          <div className="relative">
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 bg-white/10 rounded-full animate-pulse" />
+            <div className="h-12 w-full rounded-2xl bg-white/10 border border-white/10" />
+          </div>
+          <CategorySkeleton />
+          <DuaSkeleton />
         </div>
       )}
       {error && (
